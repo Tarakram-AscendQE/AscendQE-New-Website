@@ -8,10 +8,6 @@
     "build": "npm run build --prefix frontend && npm run build --prefix backend",
     "build:frontend": "npm run build --prefix frontend",
     "build:backend": "npm run build --prefix backend",
-    "preview": "npm run preview --prefix frontend"
-  },
-  "dependencies": {
-    "lucide-react": "^1.63.0",
-    "motion": "^14.7.1"
+    "start": "npm run start --prefix backend"
   }
 }
