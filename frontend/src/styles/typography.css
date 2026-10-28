@@ -1,0 +1,207 @@
+/* ── AscendQE Typography System ─────────────────────────────
+ * Based on Typography Guidelines: Inter across all UI elements
+ * Primary Heading Font: Inter (700 Bold / 600 SemiBold)
+ * Body & Lead Font: Inter (400 Regular / 400-500 Lead)
+ * Navigation, Buttons & Labels: Inter (600 SemiBold)
+ * ─────────────────────────────────────────────────────────── */
+
+:root {
+  --aqe-font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --aqe-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ── Base Layer Defaults ─────────────────────────────────── */
+  body {
+    font-family: var(--aqe-font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, .aqe-h1 {
+    font-family: var(--aqe-font-display);
+    font-weight: 700;
+    line-height: 1.14;
+    letter-spacing: -0.025em;
+    font-size: clamp(2.25rem, 4vw + 1rem, 3.875rem); /* 36px - 62px */
+  }
+
+  h2, .aqe-h2 {
+    font-family: var(--aqe-font-display);
+    font-weight: 700;
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    font-size: clamp(1.875rem, 2.5vw + 0.875rem, 3rem); /* 30px - 48px */
+  }
+
+  h3, .aqe-h3 {
+    font-family: var(--aqe-font-display);
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.015em;
+    font-size: clamp(1.5rem, 1.5vw + 0.875rem, 2.125rem); /* 24px - 34px */
+  }
+
+  h4, .aqe-h4 {
+    font-family: var(--aqe-font-display);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    font-size: clamp(1.125rem, 0.75vw + 0.875rem, 1.375rem); /* 18px - 22px */
+  }
+
+  p, .aqe-p {
+    font-family: var(--aqe-font-body);
+    font-size: clamp(0.9375rem, 0.25vw + 0.875rem, 1.0625rem); /* 15px - 17px */
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+/* ── Typography Utility Classes ──────────────────────────── */
+/* Display / Headings */
+.aqe-font-display {
+  font-family: var(--aqe-font-display) !important;
+}
+
+.aqe-font-body {
+  font-family: var(--aqe-font-body) !important;
+}
+
+/* Hero primary heading (Inter 700 Bold, avoids overly tight line-height) */
+.aqe-hero-heading {
+  font-family: var(--aqe-font-display);
+  font-weight: 700;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
+  font-size: clamp(2.375rem, 4.2vw + 1rem, 4rem); /* 38px - 64px */
+}
+
+/* Section main heading (Inter 700 Bold for major statements) */
+.aqe-section-heading {
+  font-family: var(--aqe-font-display);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  font-size: clamp(1.875rem, 2.8vw + 0.75rem, 3.125rem); /* 30px - 50px */
+}
+
+/* Sub-section / Feature heading (Inter 600 SemiBold) */
+.aqe-sub-heading {
+  font-family: var(--aqe-font-display);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: -0.015em;
+  font-size: clamp(1.5rem, 1.6vw + 0.75rem, 2.125rem); /* 24px - 34px */
+}
+
+/* Card & small module heading (Inter 600 SemiBold) */
+.aqe-card-heading {
+  font-family: var(--aqe-font-display);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.125rem, 0.6vw + 0.875rem, 1.375rem); /* 18px - 22px */
+}
+
+/* Large Intro / Lead Paragraph (Inter 400-500) */
+.aqe-intro {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(1.0625rem, 0.6vw + 0.875rem, 1.3125rem); /* 17px - 21px */
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* Standard Paragraph (Inter 400 Regular) */
+.aqe-paragraph {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(0.9375rem, 0.25vw + 0.875rem, 1.0625rem); /* 15px - 17px */
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Medium Text (Inter 500) */
+.aqe-text-medium {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(0.9375rem, 0.25vw + 0.875rem, 1.0625rem); /* 15px - 17px */
+  line-height: 1.55;
+  font-weight: 500;
+}
+
+/* Semi-Bold Text (Inter 600) */
+.aqe-text-semibold {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(0.9375rem, 0.25vw + 0.875rem, 1.0625rem); /* 15px - 17px */
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+/* Small Supporting Text (Inter 400) */
+.aqe-text-small {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(0.875rem, 0.15vw + 0.8rem, 0.9375rem); /* 14px - 15px */
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Navigation (Inter 600 SemiBold) */
+.aqe-nav-text {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(0.875rem, 0.2vw + 0.8rem, 0.96875rem); /* 14px - 15.5px */
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* Buttons (Inter 600 SemiBold) */
+.aqe-btn-text {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(0.90625rem, 0.25vw + 0.8rem, 1rem); /* 14.5px - 16px */
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+/* Labels / Eyebrows / Metadata (Inter 600 SemiBold, small, letter spaced, uppercase) */
+.aqe-label-text {
+  font-family: var(--aqe-font-body);
+  font-size: clamp(0.75rem, 0.15vw + 0.7rem, 0.84375rem); /* 12px - 13.5px */
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Metrics / Big Numbers (Inter 700 Bold) */
+.aqe-metric-number {
+  font-family: var(--aqe-font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  font-size: clamp(1.75rem, 1.4vw + 0.9rem, 2.35rem); /* ~28px - 38px */
+  letter-spacing: -0.02em;
+}
+
+/* ── Unified Small Sentence / Caption / Micro-Copy System ────────
+ * Inter 400 Regular: One single unified standard class for all small
+ * sentences, fine print, disclaimers, captions, and micro-copy across the UI.
+ * Standardized at 13px - 13.5px for crisp, high legibility.
+ */
+.aqe-caption,
+.aqe-fine,
+.aqe-disclaimer,
+.fine,
+.text-caption,
+.challenge-copy p,
+.hero-note,
+.proof-copy .terms,
+.journey-note,
+.coffee-small,
+.footer p,
+.console-footer,
+.guide-direction {
+  font-family: var(--aqe-font-body) !important;
+  font-size: clamp(13px, 0.2vw + 12.5px, 13.5px) !important;
+  line-height: 1.6;
+}
+
+
+
