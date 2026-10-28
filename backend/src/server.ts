@@ -19,19 +19,19 @@ try {
   // Ignore if exists
 }
 
-// Locate frontend dist folder with multiple candidate paths for dev, monorepo, and production containers
-const candidateDistPaths = [
-  path.resolve(currentDir, '../../frontend/dist'),
-  path.resolve(currentDir, '../frontend/dist'),
-  path.resolve(process.cwd(), 'frontend/dist'),
-  path.resolve(process.cwd(), '../frontend/dist'),
-  path.resolve(process.cwd(), 'dist'),
+// Locate static frontend assets (e.g. backend/public)
+const candidatePublicPaths = [
+  path.join(__dirname, 'public'),
+  path.join(__dirname, '../public'),
+  path.join(process.cwd(), 'public'),
+  path.join(process.cwd(), 'backend/public'),
+  path.resolve(__dirname, '../../frontend/dist'),
 ]
 
-let frontendDistPath = candidateDistPaths[0]
-for (const p of candidateDistPaths) {
+let publicDir = path.join(__dirname, 'public')
+for (const p of candidatePublicPaths) {
   if (fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))) {
-    frontendDistPath = p
+    publicDir = p
     break
   }
 }
@@ -49,11 +49,10 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, server-to-server)
       if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.ascendqe.com') || origin === 'https://ascendqe.com') {
         callback(null, true)
       } else {
-        callback(null, true) // Allow during development
+        callback(null, true)
       }
     },
     credentials: true,
@@ -62,7 +61,7 @@ app.use(
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
-// Dedicated root health check for hosting platforms (GoDaddy, AWS, Render)
+// Dedicated health check for hosting platforms (GoDaddy, AWS, Render)
 app.get('/health', (_req, res) => {
   res.status(200).json({
     status: 'healthy',
@@ -77,38 +76,37 @@ app.use('/uploads/blogs', express.static(config.uploadDir))
 // Mount Central API Router
 app.use('/api', apiRouter)
 
-// Serve the production React frontend
-app.use(express.static(frontendDistPath))
+// Serve the production React frontend from public folder
+app.use(express.static(publicDir))
 
 // React Router fallback: send the frontend for website routes
 app.get('*', (req, res, next) => {
-  // Don't return the React page for unknown API endpoints
   if (req.path === '/api' || req.path.startsWith('/api/')) {
     return next()
   }
 
-  const indexPath = path.join(frontendDistPath, 'index.html')
+  const indexPath = path.join(publicDir, 'index.html')
   if (fs.existsSync(indexPath)) {
     return res.sendFile(indexPath)
   }
 
-  // Safe fallback response if static build is pending so health checks never fail
   res.status(200).send('AscendQE Application Server is active and healthy.')
 })
 
 // Global Error Handler
 app.use(errorHandler)
 
+// Bind strictly to process.env.PORT provided by the host platform (GoDaddy, Render, Heroku)
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : config.port || 5000
 
-// Start listening immediately on 0.0.0.0 so platform health checks pass within milliseconds
+// Listen on 0.0.0.0 immediately so platform health checks pass
 app.listen(port, '0.0.0.0', () => {
   console.log(`🚀 AscendQE Server running on port ${port} (0.0.0.0)`)
   console.log(`📡 Health Check: http://localhost:${port}/health`)
-  console.log(`📂 Serving Frontend from: ${frontendDistPath}`)
+  console.log(`📂 Serving Frontend from: ${publicDir}`)
 })
 
-// Connect to database in the background so a slow DB handshake never blocks server startup
+// Connect to database in the background so slow connection doesn't block server startup
 connectDatabase().catch((err: any) => {
   console.warn('[Database] Background connection error:', err?.message || err)
 })
