@@ -16,17 +16,23 @@ if (fs.existsSync(backendEnvPath)) {
   dotenv.config()
 }
 
+// Detect if GoDaddy's hosting platform injected its default empty internal container DB (10.204.129.129 / db_vz38fik8va)
+const isGoDaddyInternal = 
+  !process.env.DB_HOST || 
+  process.env.DB_HOST === '10.204.129.129' || 
+  process.env.DB_NAME === 'db_vz38fik8va'
+
 export const config = {
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 5000,
   nodeEnv: process.env.NODE_ENV || 'development',
   jwtSecret: process.env.JWT_SECRET || 'ascendqe_dev_secret_key_2026',
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:3001',
   databaseUrl: process.env.DATABASE_URL || '',
-  dbHost: process.env.DB_HOST || '',
-  dbPort: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,
-  dbUser: process.env.DB_USER || '',
-  dbPassword: process.env.DB_PASSWORD || '',
-  dbName: process.env.DB_NAME || '',
+  dbHost: process.env.REMOTE_DB_HOST || (isGoDaddyInternal ? '184.168.113.192' : (process.env.DB_HOST || '184.168.113.192')),
+  dbPort: parseInt(process.env.REMOTE_DB_PORT || (isGoDaddyInternal ? '3306' : (process.env.DB_PORT || '3306')), 10),
+  dbUser: process.env.REMOTE_DB_USER || (isGoDaddyInternal ? 'ascendqe_admin' : (process.env.DB_USER || 'ascendqe_admin')),
+  dbPassword: process.env.REMOTE_DB_PASSWORD || (isGoDaddyInternal ? ']~4ueRo9XMAEYf-P' : (process.env.DB_PASSWORD || ']~4ueRo9XMAEYf-P')),
+  dbName: process.env.REMOTE_DB_NAME || (isGoDaddyInternal ? 'ascendqe_blogs' : (process.env.DB_NAME || 'ascendqe_blogs')),
   uploadDir: process.env.UPLOAD_DIR || path.resolve(process.cwd(), '../frontend/public/uploads/blogs'),
   uploadBaseUrl: process.env.UPLOAD_BASE_URL || '/uploads/blogs',
   awsRegion: process.env.AWS_REGION || 'ap-south-1',
