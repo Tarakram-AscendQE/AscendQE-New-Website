@@ -3,6 +3,7 @@
 
 import mysql, { Pool } from 'mysql2/promise'
 import { config } from './index.js'
+import { seedBlogs } from './seedData.js'
 
 export let pool: Pool | null = null
 
@@ -111,11 +112,41 @@ export async function initializeDatabaseTables(): Promise<void> {
       INSERT INTO admin_users (username, password_hash, is_active)
       VALUES 
         ('admin@ascendqe.com', ?, 1),
-        ('admin', ?, 1)
+        ('admin', ?, 1),
+        ('AQadmin', ?, 1),
+        ('Nag@ascendqe.com', ?, 1)
       ON DUPLICATE KEY UPDATE 
         password_hash = VALUES(password_hash),
         is_active = 1;
-    `, [defaultHash, defaultHash])
+    `, [defaultHash, defaultHash, defaultHash, defaultHash])
+
+    // 4. Ensure initial published blogs exist if blogs table is empty
+    const [blogRows]: any = await pool.execute('SELECT COUNT(*) as count FROM blogs')
+    const blogCount = blogRows?.[0]?.count || 0
+    if (blogCount === 0 && Array.isArray(seedBlogs) && seedBlogs.length > 0) {
+      console.log('📝 [Database] Blogs table is empty. Seeding initial published blogs...')
+      for (const b of seedBlogs) {
+        const contentStr = typeof b.content === 'object' ? JSON.stringify(b.content) : b.content
+        const tagsStr = Array.isArray(b.tags) ? JSON.stringify(b.tags) : (b.tags || '[]')
+        await pool.execute(
+          `INSERT INTO blogs (title, slug, excerpt, content, cover_image_url, tags, author_id, created_at, published_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+           ON DUPLICATE KEY UPDATE title = VALUES(title)`,
+          [
+            b.title,
+            b.slug,
+            b.excerpt || null,
+            contentStr,
+            b.cover_image_url || null,
+            tagsStr,
+            b.author_id || 1,
+            b.created_at ? new Date(b.created_at) : new Date(),
+            b.published_at ? new Date(b.published_at) : new Date(),
+          ]
+        )
+      }
+      console.log(`✅ [Database] Successfully seeded ${seedBlogs.length} published blogs.`)
+    }
 
     console.log('✅ [Database] Auto-migration complete: tables & admin user verified.')
   } catch (err: any) {
