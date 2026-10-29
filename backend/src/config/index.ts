@@ -16,11 +16,13 @@ if (fs.existsSync(backendEnvPath)) {
   dotenv.config()
 }
 
-// Detect if GoDaddy's hosting platform injected its default empty internal container DB (10.204.129.129 / db_vz38fik8va)
+// Detect if GoDaddy's hosting platform injected its default empty internal container DB (e.g. 10.x.x.x, db_*)
+// Any connection not specifically targeting the `ascendqe_blogs` database or on an internal 10.x IP is redirected.
 const isGoDaddyInternal = 
   !process.env.DB_HOST || 
-  process.env.DB_HOST === '10.204.129.129' || 
-  process.env.DB_NAME === 'db_vz38fik8va'
+  process.env.DB_HOST.startsWith('10.') || 
+  process.env.DB_NAME?.startsWith('db_') ||
+  process.env.DB_NAME !== 'ascendqe_blogs'
 
 export const config = {
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 5000,
