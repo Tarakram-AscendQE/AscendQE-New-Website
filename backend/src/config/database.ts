@@ -1,9 +1,9 @@
 // Database Connection Manager
 // Supports MySQL (GoDaddy / remote / local) with connection pooling and graceful fallback
 
+import https from 'node:https'
 import mysql, { Pool } from 'mysql2/promise'
 import { config } from './index.js'
-import { seedBlogs } from './seedData.js'
 
 export let pool: Pool | null = null
 
@@ -28,28 +28,53 @@ if (config.dbHost && config.dbUser) {
   })
 }
 
+// Fetch the container's public outbound IP so it can be whitelisted in cPanel Remote MySQL
+export function logContainerOutboundIp(): Promise<string> {
+  return new Promise((resolve) => {
+    try {
+      https.get('https://api.ipify.org', (res) => {
+        let ip = ''
+        res.on('data', (chunk) => { ip += chunk })
+        res.on('end', () => {
+          const cleanIp = ip.trim()
+          console.log(`🌐 [Container Outbound IP]: ${cleanIp}`)
+          console.log(`👉 Add "${cleanIp}" into cPanel > Remote MySQL > "Add Access Host" to allow connection!`)
+          resolve(cleanIp)
+        })
+      }).on('error', () => {
+        resolve('')
+      })
+    } catch {
+      resolve('')
+    }
+  })
+}
+
 export async function connectDatabase(): Promise<boolean> {
   if (!pool) {
     console.log('[Database] No DB configuration provided. Running in in-memory mode.')
     return false
   }
 
+  // Always log the container's outbound IP to assist with firewall whitelisting
+  logContainerOutboundIp().catch(() => {})
+
   try {
     console.log(`[Database] Attempting connection to GoDaddy MySQL at ${config.dbHost}:${config.dbPort} (Database: ${config.dbName})...`)
     const conn = await pool.getConnection()
-    console.log('✅ [Database] Connected successfully to GoDaddy MySQL database!')
+    console.log(`✅ [Database] Connected successfully to GoDaddy MySQL database (${config.dbName})!`)
     conn.release()
 
-    // Ensure essential tables and initial admin exist
+    // Ensure database table schemas exist
     await initializeDatabaseTables()
 
     return true
   } catch (err: any) {
     console.error('❌ [Database] Connection failed:', err.message)
     if (err.code === 'ETIMEDOUT' || err.code === 'ECONNREFUSED') {
-      console.error('👉 Tip: Check your GoDaddy cPanel "Remote MySQL" settings to make sure your IP is allowed.')
+      console.error('👉 Action required: In your cPanel "Remote MySQL" settings, add the [Container Outbound IP] shown above to the Access Hosts list.')
     } else if (err.code === 'ER_ACCESS_DENIED_ERROR') {
-      console.error('👉 Tip: Check your DB_USER, DB_PASSWORD, and ensure the user is assigned to the database in cPanel.')
+      console.error('👉 Action required: Check your DB_USER, DB_PASSWORD, and ensure the user is assigned to the database in cPanel.')
     }
     return false
   }
@@ -59,7 +84,7 @@ export async function initializeDatabaseTables(): Promise<void> {
   if (!pool) return
 
   try {
-    // 1. Create admin_users table
+    // 1. Ensure admin_users table structure exists (uses existing users directly from ascendqe_blogs)
     await pool.execute(`
       CREATE TABLE IF NOT EXISTS admin_users (
         user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,7 +96,7 @@ export async function initializeDatabaseTables(): Promise<void> {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     `)
 
-    // 2. Create blogs table
+    // 2. Ensure blogs table structure exists (uses existing blogs directly from ascendqe_blogs)
     await pool.execute(`
       CREATE TABLE IF NOT EXISTS blogs (
         blog_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -106,50 +131,8 @@ export async function initializeDatabaseTables(): Promise<void> {
       await pool.execute('ALTER TABLE blogs ADD COLUMN published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER updated_at')
     }
 
-    // 3. Ensure default admin users exist with verified bcrypt hash (AscendQE@2026)
-    const defaultHash = '$2a$10$8uVwnWorFserMOxDmP5wwuVguny8e7of4YS6ooZCkRF9grbhDfacK'
-    await pool.execute(`
-      INSERT INTO admin_users (username, password_hash, is_active)
-      VALUES 
-        ('admin@ascendqe.com', ?, 1),
-        ('admin', ?, 1),
-        ('AQadmin', ?, 1),
-        ('Nag@ascendqe.com', ?, 1)
-      ON DUPLICATE KEY UPDATE 
-        password_hash = VALUES(password_hash),
-        is_active = 1;
-    `, [defaultHash, defaultHash, defaultHash, defaultHash])
-
-    // 4. Ensure initial published blogs exist if blogs table is empty
-    const [blogRows]: any = await pool.execute('SELECT COUNT(*) as count FROM blogs')
-    const blogCount = blogRows?.[0]?.count || 0
-    if (blogCount === 0 && Array.isArray(seedBlogs) && seedBlogs.length > 0) {
-      console.log('📝 [Database] Blogs table is empty. Seeding initial published blogs...')
-      for (const b of seedBlogs) {
-        const contentStr = typeof b.content === 'object' ? JSON.stringify(b.content) : b.content
-        const tagsStr = Array.isArray(b.tags) ? JSON.stringify(b.tags) : (b.tags || '[]')
-        await pool.execute(
-          `INSERT INTO blogs (title, slug, excerpt, content, cover_image_url, tags, author_id, created_at, published_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-           ON DUPLICATE KEY UPDATE title = VALUES(title)`,
-          [
-            b.title,
-            b.slug,
-            b.excerpt || null,
-            contentStr,
-            b.cover_image_url || null,
-            tagsStr,
-            b.author_id || 1,
-            b.created_at ? new Date(b.created_at) : new Date(),
-            b.published_at ? new Date(b.published_at) : new Date(),
-          ]
-        )
-      }
-      console.log(`✅ [Database] Successfully seeded ${seedBlogs.length} published blogs.`)
-    }
-
-    console.log('✅ [Database] Auto-migration complete: tables & admin user verified.')
+    console.log('✅ [Database] Schema verified against ascendqe_blogs.')
   } catch (err: any) {
-    console.error('⚠️ [Database] Auto-migration notice:', err.message)
+    console.error('⚠️ [Database] Schema verification notice:', err.message)
   }
 }
