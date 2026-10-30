@@ -74,8 +74,10 @@ app.get('/health', (_req, res) => {
 // Static file serving for uploaded blog images
 app.use('/uploads/blogs', express.static(config.uploadDir))
 
-// Form submission endpoints (handles both legacy /send-mail.php and /apply-job.php in Node.js)
+// Form submission endpoints (handles both /send-mail, /send-mail.php, /apply-job, and /apply-job.php)
+app.post('/send-mail', handleContactEnquiry)
 app.post('/send-mail.php', handleContactEnquiry)
+app.post('/apply-job', resumeUpload.single('resume'), handleJobApplication)
 app.post('/apply-job.php', resumeUpload.single('resume'), handleJobApplication)
 
 // Mount Central API Router

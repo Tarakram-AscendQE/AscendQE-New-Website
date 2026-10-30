@@ -62,16 +62,47 @@ export const StartPage: React.FC = () => {
         formType: 'contact',
       };
 
-      const response = await fetch('/send-mail.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+      let response: Response;
+      try {
+        response = await fetch('/api/send-mail', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
 
-      const result = await response.json().catch(() => null);
+        // Fallback to legacy endpoint if /api/send-mail is not found (404)
+        if (response.status === 404) {
+          response = await fetch('/send-mail.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+        }
+      } catch (fetchErr) {
+        // Try fallback endpoint if /api/send-mail network call fails
+        response = await fetch('/send-mail.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
+      }
+
+      let result: any = null;
+      const responseText = await response.text();
+      try {
+        result = JSON.parse(responseText);
+      } catch {
+        result = null;
+      }
 
       if (response.ok && result?.success) {
         setSubmitSuccess(true);
@@ -86,7 +117,10 @@ export const StartPage: React.FC = () => {
       } else {
         const errorMsg =
           result?.message ||
-          'Failed to send enquiry. Please try again or contact hello@ascendqe.com directly.';
+          result?.error ||
+          (response.status
+            ? `Submission failed (HTTP ${response.status}). Please try again or contact hello@ascendqe.com.`
+            : 'Failed to send enquiry. Please try again or contact hello@ascendqe.com directly.');
         setSubmitError(errorMsg);
       }
     } catch (err) {

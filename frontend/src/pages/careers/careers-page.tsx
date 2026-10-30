@@ -195,15 +195,44 @@ export function CarrersPage() {
         formData.append('jobTitle', selectedPosition.title);
       }
 
-      const response = await fetch('/apply-job.php', {
-        method: 'POST',
-        body: formData, // fetch automatically sets the correct multipart/form-data headers
-      });
+      let response: Response;
+      try {
+        response = await fetch('/api/apply-job', {
+          method: 'POST',
+          body: formData, // fetch automatically sets multipart/form-data boundary
+        });
 
-      const data = await response.json();
+        // Fallback to legacy endpoint if /api/apply-job is not found (404)
+        if (response.status === 404) {
+          response = await fetch('/apply-job.php', {
+            method: 'POST',
+            body: formData,
+          });
+        }
+      } catch (fetchErr) {
+        // Try fallback endpoint if /api/apply-job network call fails
+        response = await fetch('/apply-job.php', {
+          method: 'POST',
+          body: formData,
+        });
+      }
 
-      if (!response.ok) {
-        throw new Error(data.message || data.error || 'Failed to submit application');
+      let data: any = null;
+      const responseText = await response.text();
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        data = null;
+      }
+
+      if (!response.ok || (data && data.success === false)) {
+        throw new Error(
+          data?.message ||
+          data?.error ||
+          (response.status
+            ? `Submission failed (HTTP ${response.status}). Please try again or contact hello@ascendqe.com.`
+            : 'Failed to submit application')
+        );
       }
 
       setSubmitMessage({
