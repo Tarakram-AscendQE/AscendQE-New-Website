@@ -133,24 +133,31 @@ export async function initializeDatabaseTables(): Promise<void> {
     }
 
     // 3. Ensure ONLY the 2 exact admin users from cPanel database exist
-    for (const u of seedUsers) {
-      await pool.execute(`
-        INSERT INTO admin_users (user_id, username, password_hash, is_active)
-        VALUES (?, ?, ?, 1)
-        ON DUPLICATE KEY UPDATE 
-          user_id = VALUES(user_id),
-          username = VALUES(username),
-          password_hash = VALUES(password_hash),
-          is_active = 1;
-      `, [u.user_id, u.username, u.password_hash])
-    }
-
-    // Clean up any extra users so that ONLY the 2 cPanel users exist in admin_users
+    // Step 3a: Remove all other users (admin, admin@ascendqe.com, etc.)
     await pool.execute(`
       DELETE FROM admin_users 
       WHERE LOWER(username) NOT IN ('nag@ascendqe.com', 'aqadmin')
     `)
-    console.log('✅ [Database] admin_users verified: exactly 2 users active (Nag@ascendqe.com, AQadmin).')
+
+    // Step 3b: Update/Insert Nag@ascendqe.com and AQadmin with their exact original hashes
+    for (const u of seedUsers) {
+      const [existing]: any = await pool.execute(
+        'SELECT user_id FROM admin_users WHERE LOWER(username) = LOWER(?) LIMIT 1',
+        [u.username]
+      )
+      if (existing && existing.length > 0) {
+        await pool.execute(
+          'UPDATE admin_users SET password_hash = ?, is_active = 1 WHERE user_id = ?',
+          [u.password_hash, existing[0].user_id]
+        )
+      } else {
+        await pool.execute(
+          'INSERT INTO admin_users (username, password_hash, is_active) VALUES (?, ?, 1)',
+          [u.username, u.password_hash]
+        )
+      }
+    }
+    console.log('✅ [Database] admin_users verified: exactly 2 users active (Nag@ascendqe.com, AQadmin) with original hashes.')
 
     // 4. Ensure initial published blogs exist if blogs table is empty
     const [blogRows]: any = await pool.execute('SELECT COUNT(*) as count FROM blogs')
