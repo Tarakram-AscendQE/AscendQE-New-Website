@@ -4626,14 +4626,14 @@ export const seedUsers = [
   {
     user_id: 1,
     username: "Nag@ascendqe.com",
-    password_hash: "$2a$10$8uVwnWorFserMOxDmP5wwuVguny8e7of4YS6ooZCkRF9grbhDfacK",
+    password_hash: "$2a$12$FMctVjxhCKU7qQxrUD3.Wel1AclSe9I3owZAPQ9JQC2ea5dAr4hbG",
     is_active: 1,
     created_at: "2026-10-26T19:45:10.000Z"
   },
   {
     user_id: 13,
     username: "AQadmin",
-    password_hash: "$2a$10$8uVwnWorFserMOxDmP5wwuVguny8e7of4YS6ooZCkRF9grbhDfacK",
+    password_hash: "$2a$12$OGBl9Sl1qhha0ua7Of0kg.FyCSriZ/65kpAArO7hwMY3KJhdo.YSi",
     is_active: 1,
     created_at: "2026-10-26T20:49:29.000Z"
   }
