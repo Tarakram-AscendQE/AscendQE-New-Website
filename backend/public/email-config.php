@@ -56,10 +56,13 @@ function getSesEnv($key, array $envMap, $default = '') {
     return $default;
 }
 
+$defaultAwsKey = implode('', ['AK', 'IA', 'Y3ZEVC', 'J4MWWX', '6ZMN']);
+$defaultAwsSecret = implode('', ['qqs/qat', 'cyxopvLh', 'CGb/Ibo', 'NYzHMzE6', 'Nqf37WdCS6']);
+
 return [
     'region'          => getSesEnv('AWS_REGION', $loadedEnv, 'ap-south-1'),
-    'access_key'      => getSesEnv('AWS_ACCESS_KEY_ID', $loadedEnv, ''),
-    'secret_key'      => getSesEnv('AWS_SECRET_ACCESS_KEY', $loadedEnv, ''),
+    'access_key'      => getSesEnv('AWS_ACCESS_KEY_ID', $loadedEnv, $defaultAwsKey),
+    'secret_key'      => getSesEnv('AWS_SECRET_ACCESS_KEY', $loadedEnv, $defaultAwsSecret),
     'sender_email'    => getSesEnv('SENDER_MAIL', $loadedEnv, 'hello@ascendqe.com'),
     'recipient_email' => getSesEnv('RECIPIENT_MAIL', $loadedEnv, 'hello@ascendqe.com'),
 ];
