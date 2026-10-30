@@ -237,7 +237,7 @@ export const Header: React.FC = () => {
             className="h-8 sm:h-9 w-auto object-contain"
           />
         </Link>
-        <nav aria-label="Main navigation" className="relative flex items-center gap-7">
+        <nav aria-label="Main navigation" className="relative hidden lg:flex items-center gap-7">
           <Link
             to="/"
             {...(currentPath === '/' || currentPath === '/index.html' ? { 'aria-current': 'page' } : {})}
@@ -325,13 +325,14 @@ export const Header: React.FC = () => {
           )}
         </nav>
 
-        <Link className="button small inline-flex items-center gap-1.5" to="/start">
+        <Link className="button small hidden sm:inline-flex items-center gap-1.5" to="/start">
           <span>Start with 100 free tests</span>
           <ArrowRight className="h-4 w-4" />
         </Link>
 
         <button
           id="menu-toggle"
+          className="lg:hidden"
           aria-label="Open menu"
           aria-expanded={isOpen ? 'true' : 'false'}
           onClick={() => setIsOpen((prev) => !prev)}
@@ -452,6 +453,18 @@ export const Header: React.FC = () => {
         <Link to="/docs" onClick={() => setIsOpen(false)}>
           Technical library
         </Link>
+
+        {/* Mobile CTA Button */}
+        <div className="pt-4 pb-2 px-1">
+          <Link
+            className="button small w-full flex items-center justify-center gap-2 text-center"
+            to="/start"
+            onClick={() => setIsOpen(false)}
+          >
+            <span>Start with 100 free tests</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
     </>
   );

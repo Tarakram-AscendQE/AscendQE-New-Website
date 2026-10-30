@@ -189,8 +189,8 @@ export function BlogArticle() {
         <p className="art-not-found-desc">
           The article you are looking for does not exist or may have been updated.
         </p>
-        <Link to="/thinking/" className="btn btn-primary" style={{ marginTop: '20px' }}>
-          ← Back to Thinking Stream
+        <Link to="/blogs" className="btn btn-primary" style={{ marginTop: '20px' }}>
+          ← Back to Insights
         </Link>
       </div>
     )

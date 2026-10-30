@@ -351,3 +351,30 @@
 .bd-btn-secondary { background: #fff; border: 1px solid #cbd5e1; color: #475569; font-size: 13px; padding: 6px 14px; border-radius: 6px; cursor: pointer; }
 .bd-btn-danger { background: #dc2626; border: none; color: #fff; font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: 6px; cursor: pointer; }
 .bd-btn-danger:hover { background: #b91c1c; }
+
+@media (max-width: 640px) {
+  .bd-topbar {
+    padding: 10px 14px;
+  }
+  .bd-topbar-inner {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .bd-portal-title, .bd-divider {
+    display: none;
+  }
+  .bd-site-link {
+    display: none;
+  }
+  .bd-main {
+    padding: 20px 14px 40px;
+  }
+  .bd-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bd-create-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

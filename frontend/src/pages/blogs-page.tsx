@@ -117,7 +117,7 @@ export function BlogsPage() {
             HERO SECTION
            ══════════════════════════════════════════════════════════════════ */}
         <section className="relative overflow-hidden bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_40%,#dceeff66,transparent_55%)] pt-14 pb-16 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-22 border-b border-[#DCE5F5]">
-          <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
             <Reveal delay={0.1} className="max-w-3xl">
               {/* Breadcrumb */}
               <p className="mb-6 aqe-caption text-[#69758a]">
@@ -153,8 +153,8 @@ export function BlogsPage() {
         {/* ══════════════════════════════════════════════════════════════════
             SEARCH & TOPIC FILTER CONTROLS
            ══════════════════════════════════════════════════════════════════ */}
-        <section className="relative bg-white border-b border-[#e5ebf5] py-5 sticky top-16 z-20 backdrop-blur-md bg-white/95">
-          <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+        <section className="relative bg-white border-b border-[#e5ebf5] py-5">
+          <div className="mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
             <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
               {/* Topic Filters (Horizontal Scrollable) */}
               <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none text-xs sm:text-sm">
@@ -182,7 +182,7 @@ export function BlogsPage() {
               </div>
 
               {/* Search Bar (Flex Container for Perfect Vertical Alignment) */}
-              <div className="flex items-center gap-2.5 h-[38px] px-3.5 rounded-xl border border-slate-200 bg-[#f8fafc] focus-within:border-[#1763ff] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1763ff]/15 transition-all shadow-sm min-w-[240px] md:w-72">
+              <div className="flex items-center gap-2.5 h-[38px] px-3.5 rounded-xl border border-slate-200 bg-[#f8fafc] focus-within:border-[#1763ff] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1763ff]/15 transition-all shadow-sm w-full md:w-72">
                 <Search
                   size={15}
                   className="text-slate-400 shrink-0 select-none pointer-events-none"
@@ -213,7 +213,7 @@ export function BlogsPage() {
             ARTICLES GRID
            ══════════════════════════════════════════════════════════════════ */}
         <section className="py-12 sm:py-16 lg:py-20">
-          <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
             {/* Loading Skeletons */}
             {loading && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">

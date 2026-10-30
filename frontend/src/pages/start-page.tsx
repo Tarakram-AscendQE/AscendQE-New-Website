@@ -141,7 +141,7 @@ export const StartPage: React.FC = () => {
               </h3>
 
           {/* Row 1: First Name & Last Name */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 my-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 my-5">
             <label className="!my-0">
               First Name
               <input
@@ -165,7 +165,7 @@ export const StartPage: React.FC = () => {
           </div>
 
           {/* Row 2: Work Email & Company */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 my-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 my-5">
             <label className="!my-0">
               Work Email
               <input
