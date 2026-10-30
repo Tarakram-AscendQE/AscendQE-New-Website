@@ -4,7 +4,7 @@
 import https from 'node:https'
 import mysql, { Pool } from 'mysql2/promise'
 import { config } from './index.js'
-import { seedBlogs } from './seedData.js'
+import { seedBlogs, seedUsers } from './seedData.js'
 
 export let pool: Pool | null = null
 
@@ -132,40 +132,54 @@ export async function initializeDatabaseTables(): Promise<void> {
       await pool.execute('ALTER TABLE blogs ADD COLUMN published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER updated_at')
     }
 
-    // 3. Ensure essential admin accounts exist with verified bcrypt hash (AscendQE@2026)
-    const defaultHash = '$2a$10$8uVwnWorFserMOxDmP5wwuVguny8e7of4YS6ooZCkRF9grbhDfacK'
+    // 3. Ensure ONLY the 2 exact admin users from cPanel database exist
+    for (const u of seedUsers) {
+      await pool.execute(`
+        INSERT INTO admin_users (user_id, username, password_hash, is_active)
+        VALUES (?, ?, ?, 1)
+        ON DUPLICATE KEY UPDATE 
+          user_id = VALUES(user_id),
+          username = VALUES(username),
+          password_hash = VALUES(password_hash),
+          is_active = 1;
+      `, [u.user_id, u.username, u.password_hash])
+    }
+
+    // Clean up any extra users so that ONLY the 2 cPanel users exist in admin_users
     await pool.execute(`
-      INSERT INTO admin_users (username, password_hash, is_active)
-      VALUES 
-        ('admin@ascendqe.com', ?, 1),
-        ('admin', ?, 1),
-        ('AQadmin', ?, 1),
-        ('Nag@ascendqe.com', ?, 1)
-      ON DUPLICATE KEY UPDATE 
-        password_hash = VALUES(password_hash),
-        is_active = 1;
-    `, [defaultHash, defaultHash, defaultHash, defaultHash])
+      DELETE FROM admin_users 
+      WHERE LOWER(username) NOT IN ('nag@ascendqe.com', 'aqadmin')
+    `)
+    console.log('✅ [Database] admin_users verified: exactly 2 users active (Nag@ascendqe.com, AQadmin).')
 
     // 4. Ensure initial published blogs exist if blogs table is empty
     const [blogRows]: any = await pool.execute('SELECT COUNT(*) as count FROM blogs')
     const blogCount = blogRows?.[0]?.count || 0
     if (blogCount === 0 && Array.isArray(seedBlogs) && seedBlogs.length > 0) {
-      console.log('📝 [Database] Blogs table is empty. Seeding initial published blogs...')
+      console.log('📝 [Database] Blogs table is empty. Seeding initial published blogs from cPanel...')
       for (const b of seedBlogs) {
         const contentStr = typeof b.content === 'object' ? JSON.stringify(b.content) : b.content
         const tagsStr = Array.isArray(b.tags) ? JSON.stringify(b.tags) : (b.tags || '[]')
         await pool.execute(
-          `INSERT INTO blogs (title, slug, excerpt, content, cover_image_url, tags, author_id, created_at, published_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-           ON DUPLICATE KEY UPDATE title = VALUES(title)`,
+          `INSERT INTO blogs (blog_id, author_id, title, slug, excerpt, content, cover_image_url, tags, created_at, published_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+           ON DUPLICATE KEY UPDATE 
+             title = VALUES(title),
+             slug = VALUES(slug),
+             excerpt = VALUES(excerpt),
+             content = VALUES(content),
+             cover_image_url = VALUES(cover_image_url),
+             tags = VALUES(tags),
+             author_id = VALUES(author_id)`,
           [
+            b.blog_id,
+            b.author_id || 13,
             b.title,
             b.slug,
             b.excerpt || null,
             contentStr,
             b.cover_image_url || null,
             tagsStr,
-            b.author_id || 1,
             b.created_at ? new Date(b.created_at) : new Date(),
             b.published_at ? new Date(b.published_at) : new Date(),
           ]
@@ -174,7 +188,7 @@ export async function initializeDatabaseTables(): Promise<void> {
       console.log(`✅ [Database] Successfully seeded ${seedBlogs.length} published blogs.`)
     }
 
-    console.log('✅ [Database] Schema and data verified.')
+    console.log('✅ [Database] Schema and data verified successfully.')
   } catch (err: any) {
     console.error('⚠️ [Database] Schema verification notice:', err.message)
   }

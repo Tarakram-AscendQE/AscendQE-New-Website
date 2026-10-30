@@ -4620,3 +4620,22 @@ export const seedBlogs = [
     "published_at": "2026-10-27T20:59:01.000Z"
   }
 ];
+
+// Seed data for the 2 official admin users from cPanel database
+export const seedUsers = [
+  {
+    user_id: 1,
+    username: "Nag@ascendqe.com",
+    password_hash: "$2a$10$8uVwnWorFserMOxDmP5wwuVguny8e7of4YS6ooZCkRF9grbhDfacK",
+    is_active: 1,
+    created_at: "2026-10-26T19:45:10.000Z"
+  },
+  {
+    user_id: 13,
+    username: "AQadmin",
+    password_hash: "$2a$10$8uVwnWorFserMOxDmP5wwuVguny8e7of4YS6ooZCkRF9grbhDfacK",
+    is_active: 1,
+    created_at: "2026-10-26T20:49:29.000Z"
+  }
+];
+
