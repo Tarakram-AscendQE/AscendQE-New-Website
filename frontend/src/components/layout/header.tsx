@@ -450,9 +450,11 @@ export const Header: React.FC = () => {
           )}
         </div>
 
+        {/* Technical library omitted to match desktop navigation
         <Link to="/docs" onClick={() => setIsOpen(false)}>
           Technical library
         </Link>
+        */}
 
         {/* Mobile CTA Button */}
         <div className="pt-4 pb-2 px-1">
