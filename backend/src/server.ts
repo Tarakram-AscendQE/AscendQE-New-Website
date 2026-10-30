@@ -8,6 +8,7 @@ import { config } from './config/index.js'
 import { connectDatabase } from './config/database.js'
 import { apiRouter } from './routes/index.js'
 import { errorHandler } from './middleware/errorHandler.js'
+import { handleContactEnquiry, handleJobApplication, resumeUpload } from './controllers/contactController.js'
 
 const app = express()
 const currentDir = typeof __dirname !== 'undefined' ? __dirname : process.cwd()
@@ -72,6 +73,10 @@ app.get('/health', (_req, res) => {
 
 // Static file serving for uploaded blog images
 app.use('/uploads/blogs', express.static(config.uploadDir))
+
+// Form submission endpoints (handles both legacy /send-mail.php and /apply-job.php in Node.js)
+app.post('/send-mail.php', handleContactEnquiry)
+app.post('/apply-job.php', resumeUpload.single('resume'), handleJobApplication)
 
 // Mount Central API Router
 app.use('/api', apiRouter)
