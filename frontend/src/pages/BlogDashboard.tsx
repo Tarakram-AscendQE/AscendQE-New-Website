@@ -23,6 +23,7 @@ export function BlogDashboard({ onWriteNew, onEditBlog, onViewBlog, onLogout }: 
   const [activeMenuId, setActiveMenuId] = useState<number | string | null>(null)
   const [deleteBlog, setDeleteBlog] = useState<BlogItem | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [failedImages, setFailedImages] = useState<Record<number, boolean>>({})
 
   const session = blogAuthService.getSession()
   const authorName = session?.displayName || session?.username || 'Admin'
@@ -178,8 +179,14 @@ export function BlogDashboard({ onWriteNew, onEditBlog, onViewBlog, onLogout }: 
                 <article key={blog.blog_id} className="bd-card">
                   {/* Media Thumbnail */}
                   <div className="bd-media" onClick={() => onViewBlog(blog)}>
-                    {blog.cover_image_url ? (
-                      <img src={blog.cover_image_url} alt={blog.title} className="bd-img" loading="lazy" />
+                    {blog.cover_image_url && !failedImages[blog.blog_id] ? (
+                      <img
+                        src={blog.cover_image_url}
+                        alt={blog.title}
+                        className="bd-img"
+                        loading="lazy"
+                        onError={() => setFailedImages((prev) => ({ ...prev, [blog.blog_id]: true }))}
+                      />
                     ) : (
                       <div className="bd-img-placeholder">
                         <FileText size={28} />

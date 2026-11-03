@@ -45,6 +45,7 @@ export function BlogsPage() {
   const [loading, setLoading] = useState<boolean>(true)
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [selectedTopic, setSelectedTopic] = useState<string>('All')
+  const [failedCovers, setFailedCovers] = useState<Record<number, boolean>>({})
 
   // Load published blogs from GoDaddy MySQL via backend API
   useEffect(() => {
@@ -285,12 +286,13 @@ export function BlogsPage() {
                           rel="noopener noreferrer"
                           className="block relative w-full aspect-[16/9] bg-[#f8fafc] border-b border-slate-100 overflow-hidden"
                         >
-                          {blog.cover_image_url ? (
+                          {blog.cover_image_url && !failedCovers[blog.blog_id] ? (
                             <img
                               src={blog.cover_image_url}
                               alt={blog.title}
                               className="w-full h-full object-contain bg-white group-hover:scale-105 transition-transform duration-500"
                               loading="lazy"
+                              onError={() => setFailedCovers((prev) => ({ ...prev, [blog.blog_id]: true }))}
                             />
                           ) : (
                             /* Geometric Abstract Branded Banner */

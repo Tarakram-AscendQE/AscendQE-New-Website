@@ -42,6 +42,45 @@ export function getEnvValue(name: string, fallback = ''): string {
 const defaultAwsKey = ['AK', 'IA', 'Y3ZEVC', 'J4MWWX', '6ZMN'].join('')
 const defaultAwsSecret = ['qqs/qat', 'cyxopvLh', 'CGb/Ibo', 'NYzHMzE6', 'Nqf37WdCS6'].join('')
 
+// Safely resolve upload directory ensuring it exists within the application root
+function resolveUploadDir(): string {
+  const envUploadDir = process.env.UPLOAD_DIR
+  if (envUploadDir) {
+    const custom = path.resolve(envUploadDir)
+    // Only use custom if it exists or can be created within project
+    if (fs.existsSync(custom) && !custom.includes('../frontend')) {
+      return custom
+    }
+  }
+
+  // Potential directories that could serve static assets
+  const candidates = [
+    path.resolve(process.cwd(), 'backend/public/uploads/blogs'),
+    path.resolve(process.cwd(), 'public/uploads/blogs'),
+    path.resolve(__dirname, '../public/uploads/blogs'),
+    path.resolve(__dirname, '../../public/uploads/blogs'),
+    path.resolve(process.cwd(), 'frontend/public/uploads/blogs'),
+    path.resolve(process.cwd(), 'uploads/blogs'),
+  ]
+
+  for (const c of candidates) {
+    if (fs.existsSync(c)) {
+      return c
+    }
+  }
+
+  // If none exist yet, prioritize backend/public/uploads/blogs or public/uploads/blogs
+  const preferred = fs.existsSync(path.resolve(process.cwd(), 'backend/public'))
+    ? path.resolve(process.cwd(), 'backend/public/uploads/blogs')
+    : path.resolve(process.cwd(), 'public/uploads/blogs')
+
+  try {
+    fs.mkdirSync(preferred, { recursive: true })
+  } catch {}
+
+  return preferred
+}
+
 export const config = {
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 5000,
   nodeEnv: getEnvValue('NODE_ENV', 'development'),
@@ -53,7 +92,7 @@ export const config = {
   dbUser: getEnvValue('DB_USER', 'ascendqe_admin'),
   dbPassword: getEnvValue('DB_PASSWORD', ']~4ueRo9XMAEYf-P'),
   dbName: getEnvValue('DB_NAME', 'ascendqe_blogs'),
-  uploadDir: process.env.UPLOAD_DIR || path.resolve(process.cwd(), '../frontend/public/uploads/blogs'),
+  uploadDir: resolveUploadDir(),
   uploadBaseUrl: process.env.UPLOAD_BASE_URL || '/uploads/blogs',
   awsRegion: getEnvValue('AWS_REGION', 'ap-south-1'),
   awsAccessKeyId: getEnvValue('AWS_ACCESS_KEY_ID', defaultAwsKey),

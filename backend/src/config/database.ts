@@ -123,7 +123,12 @@ export async function initializeDatabaseTables(): Promise<void> {
       await pool.execute('ALTER TABLE blogs ADD COLUMN excerpt TEXT NULL AFTER slug')
     }
     if (!existingCols.has('cover_image_url')) {
-      await pool.execute('ALTER TABLE blogs ADD COLUMN cover_image_url VARCHAR(1000) NULL AFTER content')
+      await pool.execute('ALTER TABLE blogs ADD COLUMN cover_image_url LONGTEXT NULL AFTER content')
+    } else {
+      // Ensure cover_image_url is LONGTEXT to reliably support URLs and base64 payloads across container restarts
+      try {
+        await pool.execute('ALTER TABLE blogs MODIFY COLUMN cover_image_url LONGTEXT NULL')
+      } catch {}
     }
     if (!existingCols.has('tags')) {
       await pool.execute('ALTER TABLE blogs ADD COLUMN tags LONGTEXT NULL AFTER cover_image_url')

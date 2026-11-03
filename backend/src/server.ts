@@ -71,8 +71,23 @@ app.get('/health', (_req, res) => {
   })
 })
 
-// Static file serving for uploaded blog images
-app.use('/uploads/blogs', express.static(config.uploadDir))
+// Static file serving for uploaded blog images (serve from configured uploadDir and all public candidates)
+const uploadStaticDirs = [
+  config.uploadDir,
+  path.join(publicDir, 'uploads/blogs'),
+  path.resolve(process.cwd(), 'backend/public/uploads/blogs'),
+  path.resolve(process.cwd(), 'public/uploads/blogs'),
+  path.resolve(process.cwd(), 'frontend/public/uploads/blogs'),
+  path.resolve(__dirname, '../public/uploads/blogs'),
+]
+
+for (const dir of Array.from(new Set(uploadStaticDirs))) {
+  try {
+    if (fs.existsSync(dir)) {
+      app.use('/uploads/blogs', express.static(dir))
+    }
+  } catch {}
+}
 
 // Form submission endpoints (handles both /send-mail, /send-mail.php, /apply-job, and /apply-job.php)
 app.post('/send-mail', handleContactEnquiry)
