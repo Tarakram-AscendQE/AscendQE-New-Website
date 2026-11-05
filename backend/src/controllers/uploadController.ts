@@ -67,6 +67,26 @@ export async function uploadImage(req: Request, res: Response): Promise<void> {
 
     const publicUrl = `${config.uploadBaseUrl}/${req.file.filename}`
 
+    // Synchronize file to secondary static locations so all static handlers can find it
+    try {
+      const secondaryDirs = [
+        path.resolve(process.cwd(), 'backend/public/uploads/blogs'),
+        path.resolve(process.cwd(), 'public/uploads/blogs'),
+        path.resolve(process.cwd(), 'frontend/public/uploads/blogs'),
+      ]
+      for (const sDir of secondaryDirs) {
+        if (sDir !== config.uploadDir) {
+          try {
+            fs.mkdirSync(sDir, { recursive: true })
+            const dest = path.join(sDir, req.file.filename)
+            if (!fs.existsSync(dest) && req.file.path) {
+              fs.copyFileSync(req.file.path, dest)
+            }
+          } catch {}
+        }
+      }
+    } catch {}
+
     res.status(200).json({
       success: true,
       message: 'Image uploaded successfully.',

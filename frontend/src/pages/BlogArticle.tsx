@@ -51,6 +51,7 @@ export function BlogArticle() {
   const [relatedBlogs, setRelatedBlogs] = useState<BlogItem[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [copied, setCopied] = useState<boolean>(false)
+  const [coverError, setCoverError] = useState<boolean>(false)
 
   // Initialize read-only Tiptap editor for rich content fidelity
   const editor = useEditor({
@@ -270,12 +271,13 @@ export function BlogArticle() {
           )}
 
           {/* Hero Cover Image */}
-          {blog.cover_image_url && (
+          {blog.cover_image_url && !coverError && (
             <div className="art-article-cover-wrap">
               <img
                 src={blog.cover_image_url}
                 alt={blog.title}
                 className="art-article-cover-img"
+                onError={() => setCoverError(true)}
               />
             </div>
           )}

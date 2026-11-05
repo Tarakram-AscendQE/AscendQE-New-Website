@@ -8,6 +8,9 @@ import {
   MessageSquareQuote,
   Mail,
   Box,
+  Layers,
+  CheckCircle2,
+  Rocket,
   ChevronDown,
   ChevronRight,
   ArrowRight,
@@ -51,62 +54,59 @@ const companyItems: DropdownItem[] = [
   },
 ];
 
-const platformItems: DropdownItem[] = [
+const availablePlatformItems: DropdownItem[] = [
   {
     name: 'AscendQE.AI',
     icon: Box,
     to: '/',
-    badge: 'Available',
-    badgeVariant: 'green',
   },
   {
     name: 'myDiya.AI',
     icon: Box,
     to: '/mydiya',
-    badge: 'Coming Soon',
-    badgeVariant: 'blue',
-  },
-  {
-    name: 'mySTLC.AI',
-    icon: Box,
-    to: '/mystlc',
-    badge: 'Coming Soon',
-    badgeVariant: 'blue',
   },
   {
     name: 'mySDET.AI',
     icon: Box,
     to: '/mysdet',
-    badge: 'Coming Soon',
-    badgeVariant: 'blue',
+  },
+  {
+    name: 'FinOpsHub.Live',
+    icon: Layers,
+    to: '/finopshub',
+  },
+  {
+    name: 'PRCheck.Live',
+    icon: CheckCircle2,
+    to: '/prcheck',
+  },
+];
+
+const upcomingProductItems: DropdownItem[] = [
+  {
+    name: 'mySTLC.AI',
+    icon: Box,
+    to: '/mystlc',
   },
   {
     name: 'myTEVV.AI',
     icon: Box,
     to: '/mytevv',
-    badge: 'Coming Soon',
-    badgeVariant: 'blue',
   },
   {
     name: 'myP95.AI',
     icon: Box,
     to: '/myp95',
-    badge: 'Coming Soon',
-    badgeVariant: 'blue',
   },
   {
     name: 'myUT.AI',
     icon: Box,
     to: '/myut',
-    badge: 'Coming Soon',
-    badgeVariant: 'blue',
   },
   {
     name: 'myTDM.AI',
     icon: Box,
     to: '/mytdm',
-    badge: 'Coming Soon',
-    badgeVariant: 'blue',
   },
 ];
 
@@ -159,36 +159,17 @@ export const Header: React.FC = () => {
     setIsMobileWhoWeAreOpen(false);
   }, [location.pathname]);
 
-  const renderItem = (item: DropdownItem) => {
+  const renderCompanyItem = (item: DropdownItem) => {
     const IconComponent = item.icon;
-    const isGreen = item.badgeVariant === 'green';
-    const badgeClass = isGreen
-      ? 'text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md'
-      : 'text-[11px] font-semibold text-[#1763ff] bg-[#eff4ff] border border-[#dbe6ff] px-2 py-0.5 rounded-md';
-
     const content = (
       <>
         <div className="flex items-center gap-3.5 min-w-0">
           <div className="h-10 w-10 rounded-xl bg-[#eff4ff] text-[#1763ff] flex items-center justify-center shrink-0 transition-colors group-hover:bg-[#1763ff] group-hover:text-white">
             <IconComponent className="h-5 w-5 stroke-[1.8]" />
           </div>
-          <div className="flex items-center gap-2 min-w-0">
-            <span
-              className={`text-[15px] font-semibold text-[#0b1831] group-hover:text-[#1763ff] transition-colors whitespace-nowrap ${
-                item.badge ? 'w-[108px] shrink-0' : ''
-              }`}
-            >
-              {item.name}
-            </span>
-            {item.badge && (
-              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <span className="text-slate-400 font-normal text-xs select-none">-</span>
-                <span className={badgeClass}>
-                  {item.badge}
-                </span>
-              </span>
-            )}
-          </div>
+          <span className="text-[15px] font-semibold text-[#0b1831] group-hover:text-[#1763ff] transition-colors whitespace-nowrap">
+            {item.name}
+          </span>
         </div>
         <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-[#1763ff] group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
       </>
@@ -202,27 +183,136 @@ export const Header: React.FC = () => {
       item.to.startsWith('mailto:')
     );
 
-    if (isExt) {
-      return (
-        <a
-          key={item.name}
-          href={item.to}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => setIsWhoWeAreOpen(false)}
-          className="group flex items-center justify-between p-2.5 rounded-xl transition-all duration-150 hover:bg-[#f2f6ff]"
-        >
-          {content}
-        </a>
-      );
-    }
+    const linkClasses =
+      'group flex items-center justify-between p-2.5 rounded-xl transition-all duration-150 hover:bg-[#f2f6ff]';
 
-    return (
+    return isExt ? (
+      <a
+        key={item.name}
+        href={item.to}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => setIsWhoWeAreOpen(false)}
+        className={linkClasses}
+      >
+        {content}
+      </a>
+    ) : (
       <Link
         key={item.name}
         to={item.to}
         onClick={() => setIsWhoWeAreOpen(false)}
-        className="group flex items-center justify-between p-2.5 rounded-xl transition-all duration-150 hover:bg-[#f2f6ff]"
+        className={linkClasses}
+      >
+        {content}
+      </Link>
+    );
+  };
+
+  const renderAvailableItem = (item: DropdownItem) => {
+    const IconComponent = item.icon;
+    const content = (
+      <>
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="h-8 w-8 rounded-lg bg-[#ebf2ff] text-[#1763ff] flex items-center justify-center shrink-0 transition-colors group-hover:bg-[#1763ff] group-hover:text-white">
+            <IconComponent className="h-4 w-4 stroke-[1.8]" />
+          </div>
+          <span className="text-[14px] font-semibold text-[#0b1831] group-hover:text-[#15803d] transition-colors whitespace-nowrap">
+            {item.name}
+          </span>
+        </div>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold text-[#15803d] bg-[#dcfce7] border border-[#bbf7d0]">
+            <CheckCircle2 className="h-3 w-3 fill-[#16a34a] text-white" />
+            <span>Available</span>
+          </span>
+          <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-[#15803d] group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+        </div>
+      </>
+    );
+
+    const isExt = Boolean(
+      item.isExternal ||
+      item.to.startsWith('http://') ||
+      item.to.startsWith('https://') ||
+      item.to.startsWith('//')
+    );
+
+    const linkClasses =
+      'group flex items-center justify-between px-3 py-2 rounded-xl bg-[#f4fcf6] hover:bg-[#eaf8ee] border border-[#e5f7ea] transition-all duration-150';
+
+    return isExt ? (
+      <a
+        key={item.name}
+        href={item.to}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => setIsWhoWeAreOpen(false)}
+        className={linkClasses}
+      >
+        {content}
+      </a>
+    ) : (
+      <Link
+        key={item.name}
+        to={item.to}
+        onClick={() => setIsWhoWeAreOpen(false)}
+        className={linkClasses}
+      >
+        {content}
+      </Link>
+    );
+  };
+
+  const renderUpcomingItem = (item: DropdownItem) => {
+    const IconComponent = item.icon;
+    const content = (
+      <>
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="h-7 w-7 rounded-lg bg-[#e0edff] text-[#1763ff] flex items-center justify-center shrink-0 transition-colors group-hover:bg-[#1763ff] group-hover:text-white">
+            <IconComponent className="h-3.5 w-3.5 stroke-[1.8]" />
+          </div>
+          <span className="text-[13.5px] font-semibold text-[#0b1831] group-hover:text-[#1763ff] transition-colors whitespace-nowrap">
+            {item.name}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="text-slate-400 font-normal text-xs select-none">-</span>
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-medium text-[#2563eb] bg-[#eef4ff] border border-[#dbe6fe]">
+            Coming Soon
+          </span>
+          <ChevronRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-[#1763ff] group-hover:translate-x-0.5 transition-all shrink-0 ml-1" />
+        </div>
+      </>
+    );
+
+    const isExt = Boolean(
+      item.isExternal ||
+      item.to.startsWith('http://') ||
+      item.to.startsWith('https://') ||
+      item.to.startsWith('//')
+    );
+
+    const linkClasses =
+      'group flex items-center justify-between px-2.5 py-1.5 rounded-xl hover:bg-white/80 transition-all duration-150';
+
+    return isExt ? (
+      <a
+        key={item.name}
+        href={item.to}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => setIsWhoWeAreOpen(false)}
+        className={linkClasses}
+      >
+        {content}
+      </a>
+    ) : (
+      <Link
+        key={item.name}
+        to={item.to}
+        onClick={() => setIsWhoWeAreOpen(false)}
+        className={linkClasses}
       >
         {content}
       </Link>
@@ -303,29 +393,46 @@ export const Header: React.FC = () => {
           {isWhoWeAreOpen && (
             <div
               ref={dropdownRef}
-              className="absolute top-[calc(100%+33px)] left-0 w-[780px] max-w-[95vw] bg-white rounded-2xl border border-slate-200/90 shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+              className="absolute top-[calc(100%+33px)] left-0 w-[840px] max-w-[95vw] bg-white rounded-2xl border border-slate-200/90 shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
               style={{
                 fontFamily: 'Inter, Arial, sans-serif',
               }}
             >
-              <div className="grid grid-cols-[1fr_auto_1.35fr] gap-5 items-stretch">
+              <div className="grid grid-cols-[1fr_auto_1.45fr] gap-6 items-stretch">
                 {/* Column 1: COMPANY */}
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1.5">
                   <div className="text-[11px] font-bold tracking-[1.5px] text-[#69758a] uppercase px-3 py-1 mb-1">
                     COMPANY
                   </div>
-                  {companyItems.map(renderItem)}
+                  {companyItems.map(renderCompanyItem)}
                 </div>
 
                 {/* Vertical Divider Line */}
                 <div className="w-[1px] bg-[#eceef5] my-1" aria-hidden="true" />
 
                 {/* Column 2: PLATFORMS */}
-                <div className="flex flex-col gap-1">
-                  <div className="text-[11px] font-bold tracking-[1.5px] text-[#69758a] uppercase px-3 py-1 mb-1">
+                <div className="flex flex-col gap-2">
+                  <div className="text-[11px] font-bold tracking-[1.5px] text-[#69758a] uppercase px-3 py-1 mb-0.5">
                     PLATFORMS
                   </div>
-                  {platformItems.map(renderItem)}
+
+                  {/* Available Platforms */}
+                  <div className="flex flex-col gap-1.5">
+                    {availablePlatformItems.map(renderAvailableItem)}
+                  </div>
+
+                  {/* Upcoming Products Card */}
+                  <div className="mt-2 rounded-2xl border border-[#dbe6fe] bg-[#f4f7fe] overflow-hidden">
+                    <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-[#e4eeff] border-b border-[#dbe6fe]/80">
+                      <Rocket className="h-4 w-4 text-[#1763ff]" />
+                      <span className="text-[13px] font-bold text-[#1763ff]">
+                        Upcoming Products
+                      </span>
+                    </div>
+                    <div className="p-1.5 flex flex-col gap-0.5">
+                      {upcomingProductItems.map(renderUpcomingItem)}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -417,47 +524,84 @@ export const Header: React.FC = () => {
               <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-3">
                 PLATFORMS
               </div>
-              {platformItems.map((item) => {
-                const isGreen = item.badgeVariant === 'green';
-                const mobileBadgeClass = isGreen
-                  ? 'font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded'
-                  : 'font-semibold text-[#1763ff] bg-[#eff4ff] border border-[#dbe6ff] px-1.5 py-0.5 rounded';
-
-                const inner = (
-                  <div className="flex items-center gap-2 w-full">
-                    <item.icon className="h-4 w-4 text-[#1763ff] shrink-0" />
-                    <span className={item.badge ? 'w-[100px] shrink-0' : ''}>{item.name}</span>
-                    {item.badge && (
-                      <span className="inline-flex items-center gap-1 text-[11px] whitespace-nowrap">
-                        <span className="text-slate-400 font-normal">-</span>
-                        <span className={mobileBadgeClass}>{item.badge}</span>
+              <div className="flex flex-col gap-1.5 mt-1">
+                {availablePlatformItems.map((item) => {
+                  const IconComponent = item.icon;
+                  const isExt = Boolean(
+                    item.isExternal ||
+                    item.to.startsWith('http://') ||
+                    item.to.startsWith('https://') ||
+                    item.to.startsWith('//')
+                  );
+                  const inner = (
+                    <div className="flex items-center justify-between w-full py-2 px-2.5 rounded-lg bg-[#f4fcf6] border border-[#e5f7ea] text-[13px] text-[#0b1831]">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <IconComponent className="h-4 w-4 text-[#1763ff] shrink-0" />
+                        <span className="font-semibold text-[#0b1831] truncate">{item.name}</span>
+                      </div>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-[#15803d] bg-[#dcfce7] border border-[#bbf7d0] shrink-0">
+                        <CheckCircle2 className="h-3 w-3 fill-[#16a34a] text-white" />
+                        <span>Available</span>
                       </span>
-                    )}
-                  </div>
-                );
+                    </div>
+                  );
+                  return isExt ? (
+                    <a
+                      key={item.name}
+                      href={item.to}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.name}
+                      to={item.to}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {inner}
+                    </Link>
+                  );
+                })}
+              </div>
 
-                return item.isExternal ? (
-                  <a
-                    key={item.name}
-                    href={item.to}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-1.5 px-2 text-[13px] text-[#0b1831] hover:text-[#1763ff]"
-                  >
-                    {inner}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.name}
-                    to={item.to}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-1.5 px-2 text-[13px] text-[#0b1831] hover:text-[#1763ff]"
-                  >
-                    {inner}
-                  </Link>
-                );
-              })}
+              {/* Mobile Upcoming Products */}
+              <div className="mt-2.5 rounded-xl border border-[#dbe6fe] bg-[#f4f7fe] overflow-hidden">
+                <div className="flex items-center gap-2 px-3 py-2 bg-[#e4eeff] border-b border-[#dbe6fe]/80">
+                  <Rocket className="h-3.5 w-3.5 text-[#1763ff]" />
+                  <span className="text-[12px] font-bold text-[#1763ff]">Upcoming Products</span>
+                </div>
+                <div className="p-1 flex flex-col gap-0.5">
+                  {upcomingProductItems.map((item) => {
+                    const IconComponent = item.icon;
+                    const inner = (
+                      <div className="flex items-center justify-between w-full py-1.5 px-2 text-[12px] text-[#0b1831]">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <IconComponent className="h-3.5 w-3.5 text-[#1763ff] shrink-0" />
+                          <span className="font-medium truncate">{item.name}</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className="text-slate-400 font-normal select-none">-</span>
+                          <span className="text-[10px] font-medium text-[#2563eb] bg-[#eef4ff] border border-[#dbe6fe] px-1.5 py-0.5 rounded-full">
+                            Coming Soon
+                          </span>
+                        </div>
+                      </div>
+                    );
+                    return (
+                      <Link
+                        key={item.name}
+                        to={item.to}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {inner}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
           )}
         </div>
