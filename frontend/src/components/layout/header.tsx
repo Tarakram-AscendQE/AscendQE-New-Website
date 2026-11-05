@@ -73,8 +73,7 @@ const availablePlatformItems: DropdownItem[] = [
   {
     name: 'FinOpsHub.Live',
     icon: Layers,
-    to: 'https://finopshub.live',
-    isExternal: true,
+    to: '/finopshub',
   },
   {
     name: 'PRCheck.Live',
