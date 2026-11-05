@@ -4,7 +4,13 @@
   max-width: 900px !important;
   margin-inline: auto !important;
   padding-inline: 24px !important;
-  padding-block: clamp(36px, 5vw, 64px) clamp(56px, 7vw, 96px);
+  padding-block: 122px clamp(56px, 7vw, 96px);
+}
+
+@media (max-width: 1023px) {
+  .art-article-page {
+    padding-top: 106px;
+  }
 }
 
 /* Breadcrumb Navigation */

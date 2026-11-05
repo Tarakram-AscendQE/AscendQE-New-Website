@@ -116,6 +116,8 @@ export const Header: React.FC = () => {
   const [isMobileWhoWeAreOpen, setIsMobileWhoWeAreOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
+  const isBlogReadingRoute = currentPath === '/blogs/login'
+    || /^\/(blog|blogs|article)\/.+/.test(currentPath);
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -229,7 +231,12 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm transition-all" style={{ backgroundColor: '#ffffff' }}>
+      <header
+        className={`${isBlogReadingRoute ? 'fixed' : 'sticky'} top-0 left-0 right-0 z-50 bg-white border-b border-slate-200 shadow-sm transition-all`}
+        style={isBlogReadingRoute
+          ? { position: 'fixed', top: 0, left: 0, right: 0, width: '100%', backgroundColor: '#ffffff' }
+          : { backgroundColor: '#ffffff', width: '100%' }}
+      >
         <Link className="brand flex items-center" to="/">
           <img
             src={logoImg}
@@ -342,7 +349,12 @@ export const Header: React.FC = () => {
       </header>
 
       {/* Mobile Navigation Drawer */}
-      <div id="mobile-menu" hidden={!isOpen}>
+      <div
+        id="mobile-menu"
+        className={isBlogReadingRoute ? 'aq-fixed-blog-mobile-menu' : undefined}
+        style={isBlogReadingRoute && isOpen ? { position: 'fixed', top: typeof window !== 'undefined' && window.innerWidth <= 1023 ? '70px' : '86px' } : undefined}
+        hidden={!isOpen}
+      >
         <Link to="/" onClick={() => setIsOpen(false)}>
           The platform
         </Link>

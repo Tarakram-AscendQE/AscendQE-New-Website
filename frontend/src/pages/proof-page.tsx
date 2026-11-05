@@ -4,6 +4,7 @@ import { Monitor, Workflow, Smartphone, Database, Route } from 'lucide-react';
 import { Reveal } from '@/shared';
 import { WorkflowVideoDialog } from '@/features/workflow/WorkflowVideoDialog';
 import agentsWorkVideo from '@/assets/videos/Agentic QE - AsendQE-how our agents works1.mp4';
+import { HeadMeta } from '@/components/seo/HeadMeta';
 
 const steps = [
   [
@@ -53,6 +54,11 @@ export const ProofPage: React.FC = () => {
 
   return (
     <main>
+      <HeadMeta
+        title="How Agentic AI Test Automation Works | AscendQE"
+        description="From test intent to AI test automation, AscendQE uses agentic AI and intelligent AI agents to automate enterprise testing, improve coverage, and accelerate releases."
+        canonicalPath="/proof"
+      />
       <section className="page-intro">
         <div className="eyebrow">HOW IT WORKS</div>
         <h1>

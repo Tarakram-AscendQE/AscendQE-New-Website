@@ -2,6 +2,7 @@ import { ScrollToTop } from "@/shared/ScrollToTop";
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "motion/react";
 import { Reveal, CursorGlow } from "../../../components/ui/shared";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 import { FileText, Search, Database, Play, Settings, BarChart3, BarChart2, Zap, Clock, Shield, Activity, PlayCircle, ArrowRight, TrendingUp } from "lucide-react";
 import mySDETLogo from "../../../assets/mySDET-assets/mySDET-logo.webp";
 import mySDETFlow from "../../../assets/mySDET-assets/mySDET-flow.webp";
@@ -240,6 +241,11 @@ export function MySDETPage() {
     <div className="min-h-screen bg-white overflow-x-hidden text-[#0f172a]">
       <CursorGlow />
       <main className="w-full overflow-x-hidden">
+        <HeadMeta
+          title="mySDET | AI-Powered Test Automation & SDET Platform | AscendQE"
+          description="mySDET empowers SDETs with AI-powered test automation, intelligent testing workflows, and engineering capabilities for faster, scalable software quality."
+          canonicalPath="/mysdet"
+        />
 
         {/* ── SECTION 1: HERO (DARK) ── */}
         <DarkSection>

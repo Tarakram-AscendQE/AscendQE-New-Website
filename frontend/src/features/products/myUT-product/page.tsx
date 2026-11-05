@@ -1,6 +1,7 @@
 import { ScrollToTop } from "@/shared/ScrollToTop";
 import { useEffect } from "react";
 import { Eyebrow, Reveal, CursorGlow } from "../../../components/ui/shared";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 import { GitBranch, GitPullRequest, Settings, BarChart, ShieldCheck, Zap, Clock, Shield, ArrowRight, Play, ArrowRight as ArrowRightIcon, Database, Share2, Infinity as InfinityIcon, Users, FileText, Code, Bug, Rocket, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import myUTLogo from "../../../assets/myUT-assets/myUT-logo.webp";
@@ -54,6 +55,11 @@ export function MyUTPage() {
     <div className="min-h-screen bg-white text-[#0f172a]">
       <CursorGlow />
       <main className="w-full">
+        <HeadMeta
+          title="myUT | AI-Powered Unit Testing & Test Automation | AscendQE"
+          description="myUT accelerates software quality with AI-powered unit testing, automated test generation, and intelligent test coverage for modern development teams."
+          canonicalPath="/myut"
+        />
         
         {/* ── SECTION 1: HERO (LIGHT) ── */}
         <DarkSection>

@@ -5,7 +5,9 @@ import { HomePage } from '../pages/home-page';
 import { ProofPage } from '../pages/proof-page';
 import { PayoffPage } from '../pages/payoff-page';
 import { PricingPage } from '../pages/pricing-page';
-import { StartPage } from '../pages/start-page';
+//import { StartPage } from '../pages/start-page';
+import { StartPage1 } from '../pages/start-page1';
+
 import { DocsPage } from '../pages/docs-page';
 import { ReferencePage } from '../pages/reference-page';
 import { CarrersPage } from '../pages/careers/careers-page';
@@ -66,7 +68,7 @@ export const router = createBrowserRouter([
       { path: 'payoff', element: <PayoffPage /> },
       { path: 'calculator', element: <Navigate to="/payoff" replace /> },
       { path: 'pricing', element: <PricingPage /> },
-      { path: 'start', element: <StartPage /> },
+      { path: 'start', element: <StartPage1 /> },
       { path: 'docs', element: <DocsPage /> },
       { path: 'reference', element: <ReferencePage /> },
 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './home-page.css';
+import { HeadMeta } from '@/components/seo/HeadMeta';
 import {
   ScrollProgressLine,
   WelcomeSection,
@@ -9,11 +10,16 @@ import {
   AiModesSection,
   ControlBoundariesSection,
   CoffeeChallengeSection,
-  ProofFaqSection,
+  //ProofFaqSection,
+  //ProofFaqSection1,
   FinalCtaSection,
   TrailerDialog,
   MotionToggle,
 } from '@/features/home';
+import { ProofFaqSection1 } from '@/features/home/proof1';
+//import { StartPage1 } from '@/pages/start-page1';
+
+
 
 export const HomePage: React.FC = () => {
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
@@ -77,6 +83,22 @@ export const HomePage: React.FC = () => {
 
   return (
     <>
+      <HeadMeta
+        title="AI Powered Test Automation Platform | Quality Engineering"
+        description="Explore AscendQE's agentic AI test automation, AI agents for enterprise testing, GenAI testing, and intelligent quality engineering to accelerate releases."
+        canonicalPath="/"
+        ogSiteName="AscendQE"
+        ogUrl="https://ascendqe.com/"
+        ogDescription="Transform software quality with AI-powered quality engineering, intelligent test automation, GenAI testing, and enterprise QA solutions from AscendQE."
+        ogType="website"
+        ogImage="https://ascendqe.com/assets/AscendQE-logo-new-Dk-IobMt.webp"
+        twitterCard="summary_large_image"
+        twitterSite="@AscendQE"
+        twitterCreator="@AscendQE"
+        twitterTitle="Enterprise Quality Intelligence for Software & AI | AscendQE"
+        twitterDescription="Transform software quality with AI-powered quality engineering, intelligent Agentic test automation, GenAI testing, and enterprise QA solutions from AscendQE."
+        twitterImage="https://ascendqe.com/assets/AscendQE-logo-new-Dk-IobMt.webp"
+      />
       {/* Scroll Progress Line */}
       <ScrollProgressLine progress={scrollProgress} />
 
@@ -103,7 +125,7 @@ export const HomePage: React.FC = () => {
         <CoffeeChallengeSection />
 
         {/* 7. Proof Section (#proof): 100 Test Cases & FAQ */}
-        <ProofFaqSection />
+        <ProofFaqSection1 />
 
         {/* 8. Final CTA Section */}
         <FinalCtaSection />

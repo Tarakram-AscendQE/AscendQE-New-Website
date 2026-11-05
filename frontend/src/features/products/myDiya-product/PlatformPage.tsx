@@ -1,4 +1,5 @@
 import { ScrollToTop } from "@/shared/ScrollToTop";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 import { Hero, DarkSection } from "./components/Hero";
 import { WhySection } from "./components/WhySection";
 import { AgentShowcase } from "./components/AgentShowcase";
@@ -18,6 +19,12 @@ export function PlatformPage() {
     <div className="min-h-screen bg-white w-full overflow-x-hidden text-[#0f172a]">
       <CursorGlow />
       <main className="w-full overflow-x-hidden">
+        <HeadMeta
+          title="myDiya Quality Engineering Platform | AI-Powered Testing"
+          description="Discover myDiya, an AI-powered quality engineering platform for Agentic test automation, intelligent testing, analytics, governance, and enterprise QA at scale."
+          canonicalPath="/mydiya"
+        />
+        <h1 className="aqe-hero-heading text-[#0B1638]">myDiya – AI-Powered Quality Engineering Platform</h1>
         <DarkSection>
           <Hero />
         </DarkSection>

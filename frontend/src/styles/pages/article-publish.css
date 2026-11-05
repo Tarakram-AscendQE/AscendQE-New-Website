@@ -1,5 +1,3 @@
-/* LinkedIn-style Article Publishing Editor & Modal - Light Mode */
-
 .art-editor-root {
   min-height: 100vh;
   background-color: #ffffff;
@@ -9,7 +7,53 @@
   flex-direction: column;
   position: relative;
   overflow-x: hidden;
+  overflow-y: auto;    /* ← vertical scrolling enabled */
 }
+
+
+
+/* Text Formatter Toolbar */
+.art-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+/* Text Formatter Buttons */
+.art-format-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #475569;
+}
+
+.art-format-btn:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Active state */
+.art-format-btn.active {
+  background: #dbeafe;
+  color: #2563eb;
+  border-color: #bfdbfe;
+}
+
+/* Text Formatter Content Area */
+.art-editor-content {
+  /*overflow: hidden; */
+  overflow-y: auto;
+overflow-x: hidden;
+
+  padding: 16px;
+  flex: 1;
+}
+
 
 /* ---------- Top Navigation Bar ---------- */
 .art-topbar {
@@ -454,7 +498,7 @@
   font-size: 18px;
   line-height: 1.68;
   resize: none;
-  overflow-y: hidden;
+  overflow-y:auto;
   padding: 0;
   margin: 0;
 }
@@ -1291,4 +1335,3 @@
   background: var(--blue, #2d5bff);
   box-shadow: 0 4px 14px rgba(45, 91, 255, 0.25);
 }
-

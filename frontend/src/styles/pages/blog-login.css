@@ -8,7 +8,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 32px 20px;
+  padding: 118px 20px 32px;
   font-family: var(--font-sans, "Geist", "Inter", sans-serif);
   color: var(--color-navy, #101828);
   position: relative;
@@ -23,6 +23,23 @@
   padding: 36px 32px 32px;
   box-shadow: 0 20px 48px rgba(16, 24, 40, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
   animation: blScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 1023px) {
+  .bl-root {
+    padding-top: 102px;
+  }
+}
+
+#mobile-menu.aq-fixed-blog-mobile-menu {
+  position: fixed;
+  top: 86px;
+}
+
+@media (max-width: 1023px) {
+  #mobile-menu.aq-fixed-blog-mobile-menu {
+    top: 70px;
+  }
 }
 
 @keyframes blScaleIn {

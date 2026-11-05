@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Reveal } from '@/shared';
+import { HeadMeta } from '@/components/seo/HeadMeta';
 
 const money = (n: number) =>
   new Intl.NumberFormat('en-US', {
@@ -46,6 +47,11 @@ export const PayoffPage: React.FC = () => {
 
   return (
     <main>
+      <HeadMeta
+        title="Test Automation ROI Calculator | AscendQE"
+        description="Estimate test automation cost savings with AscendQE's ROI calculator. Compare test authoring effort, platform subscription and operating costs to evaluate potential business value."
+        canonicalPath="/payoff"
+      />
       <section className="page-intro">
         <div className="eyebrow">YOUR VALUE</div>
         <h1>

@@ -400,9 +400,28 @@ export function ArticlePublish({ onLogout, onBackToDashboard, initialBlog, initi
   }
 
   return (
-    <div className="art-editor-root">
-      {/* Top Header Navigation */}
-      <header className="art-topbar">
+    /*<div className="art-editor-root" style={{ paddingTop: '64px' }}>*/
+    <div className="art-editor-root" style={{ 
+  paddingTop: '64px',
+  height: 'calc(100vh - 64px)',    /* ← Add this */
+  overflow: 'auto'                /* ← Add this */
+}}>
+
+      {/* Top Header Navigation (Fixed at top of viewport) */}
+      <header
+        className="art-topbar"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          width: '100%',
+          maxWidth: 'none',
+          zIndex: 40,
+          boxSizing: 'border-box',
+          overflow: 'hidden' 
+        }}
+      >
         <div className="art-topbar-left">
           {onBackToDashboard ? (
             <button

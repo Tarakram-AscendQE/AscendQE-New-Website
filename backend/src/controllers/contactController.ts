@@ -55,6 +55,32 @@ export async function handleContactEnquiry(req: Request, res: Response): Promise
     })
     return
   }
+  if (firstName.length > 30) {
+  res.status(422).json({ success: false, message: 'First Name max 30 characters.' })
+  return
+}
+if (lastName.length > 30) {
+  res.status(422).json({ success: false, message: 'Last Name max 30 characters.' })
+  return
+}
+if (jobTitle.length > 40) {
+  res.status(422).json({ success: false, message: 'Job Title max 40 characters.' })
+  return
+}
+if (company.length > 40) {
+  res.status(422).json({ success: false, message: 'Company max 40 characters.' })
+  return
+}
+if (application.length > 40) {
+  res.status(422).json({ success: false, message: 'Application max 40 characters.' })
+  return
+}
+if (scope.length > 200) {
+  res.status(422).json({ success: false, message: 'Scope max 200 characters.' })  
+  return
+}
+
+
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
   if (!emailRegex.test(email)) {

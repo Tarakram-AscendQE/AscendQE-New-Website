@@ -37,33 +37,87 @@ export const ProofFaqSection: React.FC = () => {
           <h3>A few good questions.</h3>
           <div>
             <details>
-              <summary>Is AscendQE an automation tool or a QE platform?</summary>
+              <summary>What does AscendQE do?</summary>
               <p>
-                AscendQE brings discovery, test design, automation, execution, change analysis and
-                evidence together. Automation is one part of the wider quality engineering workflow.
+                AscendQE is an AI Product Development company focused on Quality Engineering. 
+                We build intelligent platforms and AI-powered solutions that transform software testing, test automation, and AI validation.
               </p>
             </details>
             <details>
-              <summary>Does our team stay in control?</summary>
+              <summary>What makes AscendQE different from traditional software testing companies?</summary>
               <p>
-                Yes. The operating model includes scoped work, role-based access, policies and human
-                review. Discuss the controls and deployment configuration your team needs during the
-                demo.
+                We don't just test software; we build AI products that transform how quality is engineered. 
+                Our focus is on intelligent automation, agentic AI, continuous validation, and scalable Quality Engineering solutions.
               </p>
             </details>
             <details>
-              <summary>Can you help us test AI applications?</summary>
+              <summary>What is Quality Engineering in the AI era?</summary>
               <p>
-                AscendQE’s AI testing and evaluation offering covers AI behaviour and trust
-                dimensions. Use the demo to scope your model, agent, workflow and application-level
-                evaluation needs.
+                Quality Engineering goes beyond traditional testing. 
+                It combines AI, automation, intelligent analytics, and continuous validation to deliver reliable software and trustworthy AI systems.
               </p>
             </details>
             <details>
-              <summary>What should we bring to the demo?</summary>
+              <summary>How does AI transform traditional software testing?</summary>
               <p>
-                Bring one scenario, the application context, and the bottleneck you want to remove.
-                We can agree what success looks like and show the relevant QE workflow.
+                AI accelerates test creation, improves test coverage, prioritizes risks, analyzes failures, and reduces repetitive testing efforts — 
+                helping teams deliver quality software faster and with greater confidence.
+              </p>
+            </details>
+            <details>
+              <summary>What is Agentic AI in Quality Engineering?</summary>
+              <p>
+                Agentic AI uses specialized AI agents that can understand application workflows, plan testing activities, generate and execute tests, 
+                analyze results, and adapt to changes with appropriate human oversight.
+              </p>
+            </details>
+            <details>
+              <summary>Can AscendQE help organizations test AI-powered applications?</summary>
+              <p>
+               Absolutely! Through our AI testing and validation capabilities, 
+               we help organizations evaluate AI applications for accuracy, reliability, performance, safety, and responsible AI behavior.
+              </p>
+            </details>
+            <details>
+              <summary>Can AscendQE solutions integrate with existing enterprise tools?</summary>
+              <p>
+                Yes. Our solutions are designed to work with existing enterprise ecosystems, including test management, development, automation, and CI/CD tools, 
+                helping organizations maximize their existing investments.
+              </p>
+            </details>
+            <details>
+              <summary>Does AI-powered testing replace human testers?</summary>
+              <p>
+                No. Our vision is to empower quality professionals with intelligent AI agents. 
+                AI reduces repetitive effort and accelerates testing, while human expertise remains essential for strategic decisions, validation, and quality governance.
+              </p>
+            </details>
+            <details>
+              <summary>Who can benefit from AscendQE's solutions?</summary>
+              <p>
+                Enterprises, software product companies, engineering teams, QA organizations, technology leaders, and businesses developing 
+                or adopting AI-powered applications can benefit from our solutions.
+              </p>
+            </details>
+            <details>
+              <summary>Can AscendQE support enterprise-scale Quality Engineering?</summary>
+              <p>
+                Yes. We focus on building scalable, enterprise-oriented AI products that support multiple projects, 
+                teams, workflows, integrations, and quality engineering needs.
+              </p>
+            </details>
+            <details>
+              <summary>How can organizations get started with AscendQE?</summary>
+              <p>
+                Start with a conversation. Share your Quality Engineering challenges and business goals, 
+                and our team will help identify the right AI-powered solution for your organization.
+              </p>
+            </details>
+            <details>
+              <summary>What is AscendQE's vision for the future of Quality Engineering?</summary>
+              <p>
+                To move the industry beyond traditional testing towards Autonomous Quality Engineering —
+                 where intelligent AI systems continuously discover, validate, optimize, and improve software quality.
               </p>
             </details>
           </div>
@@ -72,4 +126,3 @@ export const ProofFaqSection: React.FC = () => {
     </section>
   );
 };
-

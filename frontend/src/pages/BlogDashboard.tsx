@@ -6,6 +6,8 @@ import { blogService, BlogItem } from '@/services/blogService'
 import { Search, Eye, Pencil, Trash2, MoreVertical, FileText } from 'lucide-react'
 import ascendQeLogo from '@/assets/brand-logos/AscendQE-dark-logo.webp'
 import '@/styles/pages/blog-dashboard.css'
+import Pagination from '../shared/pagination'
+
 
 export type { BlogItem }
 
@@ -23,6 +25,10 @@ export function BlogDashboard({ onWriteNew, onEditBlog, onViewBlog, onLogout }: 
   const [activeMenuId, setActiveMenuId] = useState<number | string | null>(null)
   const [deleteBlog, setDeleteBlog] = useState<BlogItem | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
+
+    const [currentPage, setCurrentPage] = useState(1)
+  const blogsPerPage = 6
+
 
   const session = blogAuthService.getSession()
   const authorName = session?.displayName || session?.username || 'Admin'
@@ -78,10 +84,21 @@ export function BlogDashboard({ onWriteNew, onEditBlog, onViewBlog, onLogout }: 
     }
   }
 
-  const filtered = blogs.filter((b) => {
+  /*const filtered = blogs.filter((b) => {
+    const q = searchQuery.toLowerCase().trim()
+    return !q || [b.title, b.slug, b.excerpt, b.topic, b.type].some((v) => v?.toLowerCase().includes(q))
+  })*/
+   const filtered = blogs.filter((b) => {
     const q = searchQuery.toLowerCase().trim()
     return !q || [b.title, b.slug, b.excerpt, b.topic, b.type].some((v) => v?.toLowerCase().includes(q))
   })
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / blogsPerPage))
+  const visibleBlogs = filtered.slice(
+    (currentPage - 1) * blogsPerPage,
+    currentPage * blogsPerPage
+  )
+
 
   const formatDate = (iso: string) => {
     try {
@@ -169,7 +186,8 @@ export function BlogDashboard({ onWriteNew, onEditBlog, onViewBlog, onLogout }: 
           </div>
         ) : (
           <div className="bd-grid">
-            {filtered.map((blog) => {
+            {//filtered.map((blog) => {
+            visibleBlogs.map((blog) => {
               const topic = blog.topic || blog.content?.topic
               const rawType = blog.type || blog.content?.blogType || (blog.content?.type !== 'doc' ? blog.content?.type : null)
               const type = rawType && rawType.toLowerCase() !== 'doc' ? rawType : null
@@ -264,6 +282,15 @@ export function BlogDashboard({ onWriteNew, onEditBlog, onViewBlog, onLogout }: 
                 </article>
               )
             })}
+                      <div className="mt-8 flex w-full justify-end" style={{ gridColumn: '1 / -1' }}>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+              totalResults={filtered.length}
+            />
+          </div>
+
           </div>
         )}
       </main>

@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Reveal } from '@/shared';
+import { HeadMeta } from '@/components/seo/HeadMeta';
 
 export const PricingPage: React.FC = () => {
   return (
     <main>
+      <HeadMeta
+        title="AI Testing Platform Pricing | Quality Engineering | AscendQE"
+        description="Explore AscendQE pricing for AI-powered quality engineering and testing. Choose cloud, dedicated tenant, or self-deploy options for your enterprise."
+        canonicalPath="/pricing"
+      />
       <section className="page-intro">
         <Reveal delay={0.05}>
           <div className="eyebrow">YOUR OPTIONS</div>

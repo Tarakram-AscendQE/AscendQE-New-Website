@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Reveal } from '../../components/ui/shared';
 import { Quote, ArrowRight } from 'lucide-react';
+import { HeadMeta } from '@/components/seo/HeadMeta';
 import srinivasanImg from '../../assets/Testimonial-images/srinivasan-desikan.webp';
 import sudhakarImg from '../../assets/Testimonial-images/qtp-sudhakar.webp';
 
@@ -80,6 +81,11 @@ function renderParagraphWithLinks(text: string): ReactNode {
 export function TestimonialsPage() {
   return (
     <div className="min-h-screen bg-white font-sans text-[#0b1831]">
+      <HeadMeta
+        title="AscendQE Customer Success Stories & Testimonials"
+        description="Explore AscendQE customer experiences, success stories, and testimonials showcasing AI-powered quality engineering, testing, automation, and transformation."
+        canonicalPath="/testimonials"
+      />
       {/* ── 1. Hero Section (Light, matching all other AscendQE pages) ── */}
       <section className="relative overflow-hidden bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pt-14 pb-16 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-24 border-b border-[#DCE5F5]">
         <div className="relative mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">

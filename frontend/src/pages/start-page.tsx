@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle,Mail } from 'lucide-react';
 import { Reveal } from '@/shared';
 
 export const StartPage: React.FC = () => {
@@ -44,6 +44,13 @@ export const StartPage: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError('');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+  if (!emailRegex.test(workEmail)) {
+    setSubmitError('Please enter a valid email address.')
+    setIsSubmitting(false)
+    return
+  }
+
     setSubmitSuccess(false);
 
     try {
@@ -177,21 +184,23 @@ export const StartPage: React.FC = () => {
           {/* Row 1: First Name & Last Name */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 my-5">
             <label className="!my-0">
-              First Name
+              First Name <span style={{ color: 'red' }}>*</span>
               <input
                 name="firstName"
+                //pattern="[A-Za-z\s]{1,30}" title="First Name Max 30 characters"
                 required
-                placeholder="e.g. John"
+                placeholder="John"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </label>
             <label className="!my-0">
-              Last Name
+              Last Name <span style={{ color: 'red' }}>*</span>
               <input
                 name="lastName"
+                //pattern="[A-Za-z\s]{1,30}" title="Last Name Max 30 characters"
                 required
-                placeholder="e.g. Doe"
+                placeholder="Doe"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
@@ -201,22 +210,24 @@ export const StartPage: React.FC = () => {
           {/* Row 2: Work Email & Company */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 my-5">
             <label className="!my-0">
-              Work Email
+              Work Email  <span style={{ color: 'red' }}>*</span>
               <input
-                type="email"
+                //type="email"
+                type="text"
                 name="workEmail"
                 required
-                placeholder="e.g. john@company.com"
+                placeholder="john@company.com"
                 value={workEmail}
                 onChange={(e) => setWorkEmail(e.target.value)}
               />
             </label>
             <label className="!my-0">
-              Company
+              Company <span style={{ color: 'red' }}>*</span>
               <input
                 name="company"
+                //pattern="[A-Za-z0-9\s.]{1,40}" title="Company Max 40 characters"
                 required
-                placeholder="e.g. Acme Corp"
+                placeholder="Acme Corp"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
               />
@@ -225,22 +236,24 @@ export const StartPage: React.FC = () => {
 
           {/* Row 3: Job Title */}
           <label>
-            Job Title
+            Job Title   <span style={{ color: 'red' }}>*</span>
             <input
               name="jobTitle"
+              //pattern="[A-Za-z0-9\s.]{1,40}" title="Job Title Max 40 characters"
               required
-              placeholder="e.g. VP of Quality Engineering"
+              placeholder="VP of Quality Engineering"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
             />
           </label>
 
           <label>
-            Application or project
+            Application or project    <span style={{ color: 'red' }}>*</span>
             <input
               name="application"
+              //pattern="[A-Za-z0-9\s.]{1,40}" title="Application Max 40 characters"
               required
-              placeholder="e.g. Customer checkout"
+              placeholder="Customer checkout"
               value={application}
               onChange={(e) => setApplication(e.target.value)}
             />
@@ -250,6 +263,7 @@ export const StartPage: React.FC = () => {
             <select
               name="offer"
               value={offer}
+              className="!h-20 resize-y"
               onChange={(e) => setOffer(e.target.value)}
             >
               <option value="challenge">First 100 free test cases</option>
@@ -299,7 +313,7 @@ export const StartPage: React.FC = () => {
                   href={`mailto:hello@ascendqe.com?subject=${encodeURIComponent('AscendQE — Evaluation Enquiry')}&body=${encodeURIComponent(generateBrief())}`}
                   className="inline-block text-xs font-semibold text-[#1763ff] underline mt-2"
                 >
-                  Click here to email hello@ascendqe.com directly
+
                 </a>
               </div>
             </div>

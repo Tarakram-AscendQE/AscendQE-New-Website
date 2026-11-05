@@ -1,6 +1,7 @@
 import { ScrollToTop } from "@/shared/ScrollToTop";
 import { useEffect } from "react";
 import { Eyebrow, Reveal, SignalBackground, CursorGlow } from "../../../components/ui/shared";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 import { ShieldCheck, Shield, FileText, Search, FileCheck, Landmark, ClipboardList, Settings, BarChart, BarChart2, Coins, Users, ArrowRight, Play, Euro, Database, Clock, TrendingUp, Target, Gauge, Wallet, FileSearch, BarChart3, FileBadge, Rocket } from "lucide-react";
 import myTEVVLogo from "../../../assets/myTEVV-assets/myTEVV-logo.webp";
 import customShieldIcon from "../../../assets/myTEVV-assets/shield-icon.webp";
@@ -55,6 +56,11 @@ export function MyTEVVPage() {
     <div className="min-h-screen bg-white text-[#0f172a]">
       <CursorGlow />
       <main className="w-full">
+        <HeadMeta
+          title="AI Testing, Evaluation & Validation Platform | myTEVV"
+          description="Test and validate AI models and applications with myTEVV. Evaluate accuracy, security, fairness, performance, explainability, and regulatory compliance."
+          canonicalPath="/mytevv"
+        />
 
         {/* ── SECTION 1: HERO (DARK) ── */}
         <DarkSection>

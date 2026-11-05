@@ -1,6 +1,7 @@
 import { ScrollToTop } from "@/shared/ScrollToTop";
 import { useEffect } from "react";
 import { Eyebrow, Reveal, CursorGlow } from "../../../components/ui/shared";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 import { Target, BarChart, Play, Activity, Settings, Zap, Clock, Shield, ArrowRight, Database, FileText, Code, Gauge, CheckCircle2, Coins, Cloud, ShieldCheck, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import myP95Logo from "../../../assets/myP95-assets/myP95-logo.webp";
@@ -55,6 +56,11 @@ export function MyP95Page() {
     <div className="min-h-screen bg-white text-[#0f172a]">
       <CursorGlow />
       <main className="w-full">
+        <HeadMeta
+          title="myP95 | AI-Powered Performance Testing & Engineering | AscendQE"
+          description="myP95 enables intelligent performance testing and engineering to identify bottlenecks, validate scalability, and improve application reliability at scale."
+          canonicalPath="/myp95"
+        />
         
         {/* ── SECTION 1: HERO (LIGHT) ── */}
         <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 overflow-hidden border-b border-[#DCE5F5]">

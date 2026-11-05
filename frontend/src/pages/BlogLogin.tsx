@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { blogAuthService } from '@/services/blogAuthService'
+import { Header } from '@/components/layout/header'
 import ascendQeLogo from '@/assets/brand-logos/AscendQE-dark-logo.webp'
 import '@/styles/pages/blog-login.css'
 
@@ -43,7 +44,9 @@ export function BlogLogin({ onLoginSuccess }: BlogLoginProps) {
   }
 
   return (
-    <div className="bl-root">
+    <>
+      <Header />
+      <div className="bl-root">
       <div className="bl-card">
         {/* Header */}
         <div className="bl-header">
@@ -181,7 +184,8 @@ export function BlogLogin({ onLoginSuccess }: BlogLoginProps) {
         </svg>
         Back to AscendQE
       </Link>
-    </div>
+      </div>
+    </>
   )
 }
 

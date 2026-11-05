@@ -16,6 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { Reveal } from "../../components/ui/shared";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 
 const MAX_RESUME_SIZE = 1 * 1024 * 1024; // 1 MB limit
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -252,6 +253,11 @@ export function CarrersPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-[#0b1831]">
+      <HeadMeta
+        title="AI Testing & Quality Engineering Careers | AscendQE"
+        description="Join AscendQE and help build the future of AI-powered quality engineering, test automation, machine learning, and intelligent software testing."
+        canonicalPath="/careers"
+      />
       {/* ── Hero Section (Light, matching all other AscendQE pages) ── */}
       <section className="relative overflow-hidden bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pt-14 pb-16 sm:pt-16 sm:pb-20 lg:pt-20 lg:pb-24 border-b border-[#DCE5F5]">
         <div className="relative mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">

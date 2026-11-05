@@ -1,5 +1,6 @@
 import { ScrollToTop } from "@/shared/ScrollToTop";
 import { useEffect } from "react";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 import {
   ShieldCheck,
   Settings,
@@ -218,6 +219,11 @@ export function AboutUsPage() {
 
   return (
     <div className="relative min-h-screen w-full bg-white text-[#0b1831] font-sans overflow-x-hidden selection:bg-[#1763ff]/20 selection:text-[#1763ff]">
+      <HeadMeta
+        title="About AscendQE | AI-Powered Quality Engineering"
+        description="Learn about AscendQE and our mission to transform quality engineering with AI, intelligent automation, connected agents, and enterprise-grade testing."
+        canonicalPath="/about"
+      />
       {/* ══════════════════════════════════════════════════════════════════
           SECTION 1: ABOUT ASCENDQE HERO (Light Theme matching other pages)
          ══════════════════════════════════════════════════════════════════ */}

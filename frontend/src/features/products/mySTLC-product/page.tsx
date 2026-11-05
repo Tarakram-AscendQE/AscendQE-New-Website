@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useAnimationFrame, useTransform } from "motion/react";
 import { ArrowRight, Target, ShieldCheck, Zap, BarChart2, PlayCircle, Brain, FileText, Search, Database, Play, UserCheck, ClipboardList, Code2, Settings, Link, Image as ImageIcon, Coins, FileSearch } from "lucide-react";
 import { Reveal, SignalBackground, CursorGlow, Eyebrow } from "../../../components/ui/shared";
+import { HeadMeta } from "@/components/seo/HeadMeta";
 import mystlcLogo from "../../../assets/mySTLC-assets/mySTLC-logo.webp";
 import mySTLCFlow from "../../../assets/mySTLC-assets/mySTLC-flow.webp";
 import { InteractivePlatformFlow } from "@/shared/flows/InteractivePlatformFlow";
@@ -177,6 +178,11 @@ export function MySTLCPage() {
     <div className="min-h-screen bg-white w-full overflow-x-hidden text-[#0f172a]">
       <CursorGlow />
       <main className="w-full overflow-x-hidden">
+        <HeadMeta
+          title="mySTLC | AI-Powered Software Testing Lifecycle | AscendQE"
+          description="mySTLC brings AI-powered intelligence to the software testing lifecycle, helping teams plan, manage, automate, and optimize quality engineering."
+          canonicalPath="/mystlc"
+        />
 
         {/* ── SECTION 1: HERO (LIGHT) ── */}
         <DarkSection>
