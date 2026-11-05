@@ -29,6 +29,7 @@ import { MyP95Page } from '../features/products/myP95-product/page';
 import { MyUTPage } from '../features/products/myUT-product/page';
 import { MyTDMPage } from '../features/products/myTDM-product/page';
 import { FinOpsHubPage } from '../features/products/finOpsHub-product/page';
+import { PRCheckPage } from '../features/products/prCheck-product/page';
 
 const ExternalRedirect: React.FC<{ url: string }> = ({ url }) => {
   useEffect(() => {
@@ -103,6 +104,8 @@ export const router = createBrowserRouter([
       { path: 'mytdm', element: <MyTDMPage /> },
       { path: 'finopshub', element: <FinOpsHubPage /> },
       { path: 'finopshub.live', element: <FinOpsHubPage /> },
+      { path: 'prcheck', element: <PRCheckPage /> },
+      { path: 'prcheck.live', element: <PRCheckPage /> },
 
       // Sub-path aliases (/products/:slug)
       { path: 'products/mydiya', element: <MyDiyaPage /> },
@@ -113,6 +116,7 @@ export const router = createBrowserRouter([
       { path: 'products/myut', element: <MyUTPage /> },
       { path: 'products/mytdm', element: <MyTDMPage /> },
       { path: 'products/finopshub', element: <FinOpsHubPage /> },
+      { path: 'products/prcheck', element: <PRCheckPage /> },
 
       // Backwards-compatibility aliases for legacy .html paths
       { path: 'index.html', element: <Navigate to="/" replace /> },

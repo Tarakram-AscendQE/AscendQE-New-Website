@@ -78,8 +78,7 @@ const availablePlatformItems: DropdownItem[] = [
   {
     name: 'PRCheck.Live',
     icon: CheckCircle2,
-    to: 'https://prcheck.live',
-    isExternal: true,
+    to: '/prcheck',
   },
 ];
 
