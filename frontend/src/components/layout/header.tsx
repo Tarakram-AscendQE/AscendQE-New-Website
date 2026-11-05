@@ -56,17 +56,17 @@ const companyItems: DropdownItem[] = [
 
 const availablePlatformItems: DropdownItem[] = [
   {
-    name: 'AscendQE.ai',
+    name: 'AscendQE.AI',
     icon: Box,
     to: '/',
   },
   {
-    name: 'myDiya.ai',
+    name: 'myDiya.AI',
     icon: Box,
     to: '/mydiya',
   },
   {
-    name: 'mySDET.ai',
+    name: 'mySDET.AI',
     icon: Box,
     to: '/mysdet',
   },
@@ -84,27 +84,27 @@ const availablePlatformItems: DropdownItem[] = [
 
 const upcomingProductItems: DropdownItem[] = [
   {
-    name: 'mySTLC.ai',
+    name: 'mySTLC.AI',
     icon: Box,
     to: '/mystlc',
   },
   {
-    name: 'myTEVV.ai',
+    name: 'myTEVV.AI',
     icon: Box,
     to: '/mytevv',
   },
   {
-    name: 'myP95.ai',
+    name: 'myP95.AI',
     icon: Box,
     to: '/myp95',
   },
   {
-    name: 'myUT.ai',
+    name: 'myUT.AI',
     icon: Box,
     to: '/myut',
   },
   {
-    name: 'myTDM.ai',
+    name: 'myTDM.AI',
     icon: Box,
     to: '/mytdm',
   },

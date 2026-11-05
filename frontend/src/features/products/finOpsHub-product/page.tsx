@@ -438,7 +438,7 @@ export const FinOpsHubPage: React.FC = () => {
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <a
+              {/* <a
                 href="https://finopshub.live"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -446,7 +446,7 @@ export const FinOpsHubPage: React.FC = () => {
               >
                 <span>Sign in</span>
                 <ExternalLink className="h-4 w-4" />
-              </a>
+              </a> */}
 
               <button
                 type="button"
