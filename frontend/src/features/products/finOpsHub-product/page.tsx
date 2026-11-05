@@ -42,7 +42,7 @@ export const FinOpsHubPage: React.FC = () => {
       <section className="relative pt-10 sm:pt-14 lg:pt-16 pb-16 lg:pb-24 overflow-hidden border-b border-[#dde5f2] w-full block">
         <div className="absolute inset-0 bg-gradient-to-b from-[#f3f7fd] via-[#eaf0fc] to-[#e6eefb] pointer-events-none" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           {/* Breadcrumb & Status Pill */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-[#5b6780]">
@@ -80,7 +80,7 @@ export const FinOpsHubPage: React.FC = () => {
 
               {/* Lead Paragraph */}
               <div className="pl-4 border-l-4 border-[#1257f0] mb-8">
-                <p className="text-lg sm:text-xl text-[#5b6780] leading-relaxed max-w-2xl">
+                <p className="text-lg sm:text-xl text-[#5b6780] leading-relaxed max-w-3xl">
                   <strong className="text-[#0f1b33] font-bold">FinOpsHub</strong> is AscendQE’s spend-intelligence
                   platform for cloud, AI and SaaS costs. It shows what you spend, who owns it, and whether every invoice
                   adds up.
@@ -223,8 +223,8 @@ export const FinOpsHubPage: React.FC = () => {
 
       {/* ── SECTION 2: WHAT YOUR TEAM GETS (6 CAPABILITIES) ── */}
       <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-14">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="max-w-3xl mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0f1b33] tracking-tight mb-3">
               What your team gets
             </h2>
@@ -265,8 +265,8 @@ export const FinOpsHubPage: React.FC = () => {
 
       {/* ── SECTION 3: FROM SCATTERED BILLS TO ONE ANSWER (FLOW) ── */}
       <section id="how" className="py-20 bg-[#f3f7fd]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-14">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="max-w-3xl mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0f1b33] tracking-tight mb-3">
               From scattered bills to one answer
             </h2>
@@ -313,7 +313,7 @@ export const FinOpsHubPage: React.FC = () => {
 
       {/* ── SECTION 4: CONNECTORS (27 TOOLS) ── */}
       <section id="connectors" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="max-w-3xl mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0f1b33] tracking-tight mb-3">
               Connected to the tools you pay for
@@ -367,8 +367,8 @@ export const FinOpsHubPage: React.FC = () => {
 
       {/* ── SECTION 5: WHO USES IT & DATA PROTECTION ── */}
       <section id="who" className="py-20 bg-[#f3f7fd]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-14">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="max-w-3xl mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0f1b33] tracking-tight mb-3">
               Who uses it, and how it is protected
             </h2>
@@ -428,8 +428,8 @@ export const FinOpsHubPage: React.FC = () => {
 
       {/* ── SECTION 6: FINAL CTA ── */}
       <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-[#f8fafc] border border-[#dde5f2] rounded-3xl p-8 sm:p-14 text-center shadow-[0_18px_50px_rgba(18,87,240,0.08)]">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="bg-[#f8fafc] border border-[#dde5f2] rounded-3xl p-8 sm:p-14 text-center shadow-[0_18px_50px_rgba(18,87,240,0.08)] max-w-5xl mx-auto">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0f1b33] tracking-tight mb-4">
               Ready when your invite arrives.
             </h2>

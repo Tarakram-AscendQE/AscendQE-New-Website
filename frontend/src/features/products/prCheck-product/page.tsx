@@ -59,7 +59,7 @@ export const PRCheckPage: React.FC = () => {
             'radial-gradient(1200px 500px at 85% -10%, #E4EAFF 0%, transparent 60%), linear-gradient(180deg, #FFFFFF 0%, #F7F9FC 100%)',
         }}
       >
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           {/* Breadcrumb & Live Tag */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-semibold text-[#6A7E95]">
@@ -98,7 +98,7 @@ export const PRCheckPage: React.FC = () => {
                 Every pull request, checked against the rules that matter.
               </h1>
 
-              <p className="text-lg sm:text-xl text-[#41556E] leading-relaxed max-w-2xl mb-8">
+              <p className="text-lg sm:text-xl text-[#41556E] leading-relaxed max-w-3xl mb-8">
                 PRCheck.live verifies each code change against your Finance, Security and Compliance policies, on the
                 running build, before it can merge.
               </p>
@@ -189,7 +189,7 @@ export const PRCheckPage: React.FC = () => {
 
       {/* ── SECTION 1: PROBLEM (GREEN TESTS. BROKEN RULES) ── */}
       <section id="problem" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="max-w-3xl mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-4">
               Green tests. Broken rules.
@@ -229,8 +229,8 @@ export const PRCheckPage: React.FC = () => {
 
       {/* ── SECTION 2: HOW IT WORKS (4 STEPS) ── */}
       <section id="how" className="py-20 bg-[#F7F9FC] border-t border-b border-[#DFE6EF]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-14">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="max-w-3xl mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-3">
               How it works
             </h2>
@@ -265,7 +265,7 @@ export const PRCheckPage: React.FC = () => {
 
       {/* ── SECTION 3: WHY PRCHECK.LIVE (6 FEATURES) ── */}
       <section id="why" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="max-w-3xl mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-3">
               Why PRCheck.live
@@ -302,8 +302,8 @@ export const PRCheckPage: React.FC = () => {
 
       {/* ── SECTION 4: ONE VERDICT, EVERY ROLE (5 ROLES) ── */}
       <section id="roles" className="py-20 bg-[#F7F9FC] border-t border-b border-[#DFE6EF]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-14">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="max-w-3xl mb-14">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-3">
               One verdict, every role
             </h2>
@@ -340,7 +340,7 @@ export const PRCheckPage: React.FC = () => {
 
       {/* ── SECTION 5: EXAMPLE COMPARISON (PAYMENTS APPLICATION) ── */}
       <section id="example" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="max-w-3xl mb-12">
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-3">
               See the difference on one pull request
@@ -396,7 +396,7 @@ export const PRCheckPage: React.FC = () => {
 
       {/* ── SECTION 6: WORKFLOW FIT & SAFE TO ADOPT ── */}
       <section className="py-20 bg-[#F7F9FC] border-t border-b border-[#DFE6EF]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Column 1: Integrations */}
             <div>
@@ -440,53 +440,55 @@ export const PRCheckPage: React.FC = () => {
 
       {/* ── SECTION 7: FAQ ── */}
       <section id="faq" className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-3">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-lg text-[#41556E]">
-              Clear answers on how independent change assurance operates.
-            </p>
-          </div>
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-3">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-lg text-[#41556E]">
+                Clear answers on how independent change assurance operates.
+              </p>
+            </div>
 
-          <div className="space-y-4">
-            {FAQ_ITEMS.map((item, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div
-                  key={item.question}
-                  className="bg-white border border-[#DFE6EF] rounded-2xl p-5 sm:p-6 transition-all"
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggleFaq(idx)}
-                    className="w-full flex items-center justify-between gap-4 text-left font-bold text-[#0E2440] text-base sm:text-lg focus:outline-hidden"
+            <div className="space-y-4">
+              {FAQ_ITEMS.map((item, idx) => {
+                const isOpen = openFaq === idx;
+                return (
+                  <div
+                    key={item.question}
+                    className="bg-white border border-[#DFE6EF] rounded-2xl p-5 sm:p-6 transition-all"
                   >
-                    <span>{item.question}</span>
-                    <span
-                      className={`h-7 w-7 rounded-full bg-[#EEF2FE] text-[#2A4FE0] flex items-center justify-center text-lg font-bold shrink-0 transition-transform ${
-                        isOpen ? 'rotate-180' : ''
-                      }`}
+                    <button
+                      type="button"
+                      onClick={() => toggleFaq(idx)}
+                      className="w-full flex items-center justify-between gap-4 text-left font-bold text-[#0E2440] text-base sm:text-lg focus:outline-hidden"
                     >
-                      {isOpen ? '–' : '+'}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div className="mt-3 pt-3 border-t border-[#DFE6EF] text-[#41556E] text-[15px] leading-relaxed">
-                      {item.answer}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                      <span>{item.question}</span>
+                      <span
+                        className={`h-7 w-7 rounded-full bg-[#EEF2FE] text-[#2A4FE0] flex items-center justify-center text-lg font-bold shrink-0 transition-transform ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
+                      >
+                        {isOpen ? '–' : '+'}
+                      </span>
+                    </button>
+                    {isOpen && (
+                      <div className="mt-3 pt-3 border-t border-[#DFE6EF] text-[#41556E] text-[15px] leading-relaxed">
+                        {item.answer}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── SECTION 8: BOOK A DEMO CTA ── */}
       <section id="demo" className="py-12 pb-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="bg-[#0E2440] text-white rounded-3xl p-8 sm:p-14 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
             <div className="max-w-xl">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-3">
