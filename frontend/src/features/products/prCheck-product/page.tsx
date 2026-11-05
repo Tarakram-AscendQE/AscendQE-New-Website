@@ -27,6 +27,7 @@ import {
   SAFE_ADOPT_POINTS,
   FAQ_ITEMS,
 } from './prCheck-data';
+import prCheckLogo from '@/assets/prCheck-assets/prcheck-logo.webp';
 
 export const PRCheckPage: React.FC = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -80,14 +81,13 @@ export const PRCheckPage: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Column: Eyebrow, Heading & Actions */}
             <div className="lg:col-span-7 flex flex-col items-start">
-              {/* Product Badge / Mark */}
-              <div className="flex items-center gap-3 mb-5">
-                <span className="h-10 w-10 rounded-xl bg-[#2A4FE0] text-white flex items-center justify-center font-black shadow-md shadow-[#2A4FE0]/20">
-                  <Check className="h-5 w-5 stroke-[2.8]" />
-                </span>
-                <span className="text-2xl font-black tracking-tight text-[#0E2440]">
-                  PRCheck<span className="text-[#2A4FE0]">.live</span>
-                </span>
+              {/* Product Logo */}
+              <div className="mb-6 p-2.5 sm:p-3 bg-white rounded-2xl border border-[#DFE6EF] shadow-xs inline-block">
+                <img
+                  src={prCheckLogo}
+                  alt="PRCheck by AscendQE"
+                  className="h-10 sm:h-12 md:h-14 w-auto object-contain"
+                />
               </div>
 
               <span className="inline-block text-xs font-bold tracking-[0.12em] uppercase text-[#2A4FE0] mb-3">
