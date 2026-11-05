@@ -39,7 +39,7 @@ export const FinOpsHubPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f3f7fd] text-[#0f1b33] selection:bg-[#1257f0]/20 selection:text-[#1257f0]">
       {/* ── HERO SECTION ── */}
-      <section className="relative pt-10 pb-16 lg:pt-14 lg:pb-24 overflow-hidden border-b border-[#dde5f2]">
+      <section className="relative pt-10 sm:pt-14 lg:pt-16 pb-16 lg:pb-24 overflow-hidden border-b border-[#dde5f2] w-full block">
         <div className="absolute inset-0 bg-gradient-to-b from-[#f3f7fd] via-[#eaf0fc] to-[#e6eefb] pointer-events-none" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

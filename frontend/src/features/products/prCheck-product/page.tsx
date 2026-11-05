@@ -50,9 +50,9 @@ export const PRCheckPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white text-[#13233A] selection:bg-[#2A4FE0]/20 selection:text-[#2A4FE0]">
       {/* ── HERO SECTION ── */}
-      <header
+      <section
         id="top"
-        className="relative pt-10 pb-16 lg:pt-14 lg:pb-24 border-b border-[#DFE6EF] overflow-hidden"
+        className="relative pt-10 sm:pt-14 lg:pt-16 pb-16 lg:pb-24 border-b border-[#DFE6EF] overflow-hidden w-full block"
         style={{
           background:
             'radial-gradient(1200px 500px at 85% -10%, #E4EAFF 0%, transparent 60%), linear-gradient(180deg, #FFFFFF 0%, #F7F9FC 100%)',
@@ -185,7 +185,7 @@ export const PRCheckPage: React.FC = () => {
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
       {/* ── SECTION 1: PROBLEM (GREEN TESTS. BROKEN RULES) ── */}
       <section id="problem" className="py-20 bg-white">
