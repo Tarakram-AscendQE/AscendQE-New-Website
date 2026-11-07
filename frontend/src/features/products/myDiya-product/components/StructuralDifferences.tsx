@@ -87,8 +87,8 @@ export function StructuralDifferences() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl xl:text-[40px] font-bold text-[#0a1628] leading-[1.2] tracking-tight">
-              Not Another AI Agent Builder.{" "}
-              <span className="text-[#145BFF]">
+              Not Another AI Agent Builder.
+              <span className="text-[#145BFF]"  style={{ lineHeight: "1.2" }} >
                 Built Specifically for Enterprise Quality Engineering.
               </span>
             </h2>

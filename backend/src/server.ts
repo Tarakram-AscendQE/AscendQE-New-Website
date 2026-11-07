@@ -109,7 +109,22 @@ app.get('*', (req, res, next) => {
 
   const indexPath = path.join(publicDir, 'index.html')
   if (fs.existsSync(indexPath)) {
-    return res.sendFile(indexPath)
+    let html = fs.readFileSync(indexPath, 'utf8')
+    const pathname = req.path === '/' ? '/' : req.path.replace(/\/$/, '')
+    html = html.replace(/<link rel="canonical" href="[^"]*"[^>]*>/, `<link rel="canonical" href="https://ascendqe.com${pathname}" />`)
+    if (pathname !== '/') {
+      const socialSelectors = [
+        'property="og:site_name"', 'property="og:url"', 'property="og:description"',
+        'property="og:type"', 'property="og:image"', 'name="twitter:card"',
+        'name="twitter:site"', 'name="twitter:creator"', 'name="twitter:title"',
+        'name="twitter:description"', 'name="twitter:image"',
+      ]
+      socialSelectors.forEach((selector) => {
+        html = html.replace(new RegExp(`<meta\\s+[^>]*${selector}[^>]*>`, 'gi'), '')
+      })
+    }
+    res.type('html').send(html)
+    return
   }
 
   res.status(200).send('AscendQE Application Server is active and healthy.')

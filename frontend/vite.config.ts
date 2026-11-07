@@ -198,8 +198,75 @@ function devPhpMailPlugin(): Plugin {
 }
 
 // https://vitejs.dev/config/
+const seoHtmlPlugin = (): Plugin => ({
+  name: 'ascendqe-route-seo',
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      if (
+        req.method !== 'GET'
+        || !req.url
+        || req.url.includes('.')
+        || req.url.startsWith('/api/')
+        || req.url.startsWith('/uploads/')
+        || req.url.startsWith('/@vite/')
+        || req.url.startsWith('/@react-refresh')
+        || req.url.startsWith('/node_modules/')
+      ) {
+        next()
+        return
+      }
+
+      const requestUrl = (req as any).originalUrl || req.url
+      const pathname = new URL(requestUrl, 'http://localhost').pathname
+      const route = pathname === '/' || pathname === '/index.html' ? '/' : pathname.replace(/\/$/, '')
+      let html = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf8')
+      const canonicalUrl = `https://ascendqe.com${route}`
+      html = html.replace(/<link rel="canonical" href="[^"]*"[^>]*>/, `<link rel="canonical" href="${canonicalUrl}" />`)
+
+      if (route !== '/') {
+        const socialTags = [
+          'property="og:site_name"', 'property="og:url"', 'property="og:description"',
+          'property="og:type"', 'property="og:image"', 'name="twitter:card"',
+          'name="twitter:site"', 'name="twitter:creator"', 'name="twitter:title"',
+          'name="twitter:description"', 'name="twitter:image"',
+        ]
+        socialTags.forEach((selector) => {
+          html = html.replace(new RegExp(`<meta\\s+[^>]*${selector}[^>]*>`, 'gi'), '')
+        })
+      }
+
+      server.transformIndexHtml(requestUrl, html).then((transformedHtml) => {
+        res.statusCode = 200
+        res.setHeader('Content-Type', 'text/html')
+        res.end(transformedHtml)
+      }).catch(next)
+    })
+  },
+  transformIndexHtml(html, ctx) {
+    const requestUrl = ctx.originalUrl || ctx.path || '/'
+    const pathname = new URL(requestUrl, 'http://localhost').pathname
+    const route = pathname === '/' || pathname === '/index.html' ? '/' : pathname.replace(/\/$/, '')
+    const canonicalUrl = `https://ascendqe.com${route}`
+    let output = html.replace(/<link rel="canonical" href="[^"]*"[^>]*>/, `<link rel="canonical" href="${canonicalUrl}" />`)
+
+    if (route !== '/') {
+      const socialTags = [
+        'property="og:site_name"', 'property="og:url"', 'property="og:description"',
+        'property="og:type"', 'property="og:image"', 'name="twitter:card"',
+        'name="twitter:site"', 'name="twitter:creator"', 'name="twitter:title"',
+        'name="twitter:description"', 'name="twitter:image"',
+      ]
+      socialTags.forEach((selector) => {
+        output = output.replace(new RegExp(`<meta\\s+[^>]*${selector}[^>]*>`, 'gi'), '')
+      })
+    }
+
+    return output
+  },
+})
+
 export default defineConfig({
-  plugins: [react(), devPhpMailPlugin()],
+  plugins: [react(), devPhpMailPlugin(), seoHtmlPlugin()],
   resolve: {
     alias: {
       '@': '/src',

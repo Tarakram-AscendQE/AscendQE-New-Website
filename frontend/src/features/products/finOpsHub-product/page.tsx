@@ -90,7 +90,7 @@ export const FinOpsHubPage: React.FC = () => {
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-4 mb-10 w-full sm:w-auto">
                 <a
-                  href="https://finopshub.live"
+                  //href="https://finopshub.live"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white bg-[#1257f0] hover:bg-[#0b3fc0] shadow-md hover:shadow-lg transition-all duration-200"
@@ -526,7 +526,7 @@ export const FinOpsHubPage: React.FC = () => {
                 Close
               </button>
               <a
-                href="https://finopshub.live"
+                //href="https://finopshub.live"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-5 py-2 rounded-xl text-sm font-bold text-white bg-[#1257f0] hover:bg-[#0b3fc0] transition-colors"

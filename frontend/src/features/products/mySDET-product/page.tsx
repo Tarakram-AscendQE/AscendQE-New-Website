@@ -520,11 +520,11 @@ export function MySDETPage() {
                       desc: "myVega's evidence and result intelligence.",
                     },
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-4">
+                    <li key={i} className="flex items-center gap-4">
                       <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border ${item.iconBg}`}>
                         <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                       </div>
-                      <div>
+                      <div className="mt-9">
                         <h4 className="aqe-card-heading text-[#0B1638]">{item.title}</h4>
                         <p className="aqe-paragraph mt-1 text-[#263653]">{item.desc}</p>
                       </div>
@@ -560,11 +560,11 @@ export function MySDETPage() {
                     { icon: BarChart2, iconBg: "bg-[#EAF1FF] border-[#DCE5F5]", iconColor: "text-[#145BFF]", title: "AI-native QA programs report 3–10x ROI", desc: "vs. traditional automation approaches." },
                     { icon: Shield, iconBg: "bg-[#EAF1FF] border-[#DCE5F5]", iconColor: "text-[#145BFF]", title: "Defects caught in-cycle cost 5–10x less", desc: "to fix than production escapes." },
                   ].map((item, i) => (
-                    <li key={i} className="flex items-start gap-4">
+                    <li key={i} className="flex items-center gap-4">
                       <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border ${item.iconBg}`}>
                         <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                       </div>
-                      <div>
+                      <div  className="mt-5">
                         <h4 className="aqe-card-heading text-[#0B1638]">{item.title}</h4>
                         <p className="aqe-paragraph mt-0.5 text-[#263653]">{item.desc}</p>
                       </div>
