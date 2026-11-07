@@ -24,7 +24,7 @@ export function PlatformPage() {
           description="Discover myDiya, an AI-powered quality engineering platform for Agentic test automation, intelligent testing, analytics, governance, and enterprise QA at scale."
           canonicalPath="/mydiya"
         />
-        <h1 className="aqe-hero-heading text-[#0B1638]">myDiya – AI-Powered Quality Engineering Platform</h1>
+        {/*<h1 className="aqe-hero-heading text-[#0B1638]">myDiya – AI-Powered Quality Engineering Platform</h1> */}
         <DarkSection>
           <Hero />
         </DarkSection>

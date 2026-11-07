@@ -44,7 +44,7 @@ function getAuthHeader(): Record<string, string> {
   const session = blogAuthService.getSession()
   const headers: Record<string, string> = {}
   if (session?.token) {
-    headers['Authorization'] = `Bearer ${session.token}`
+    headers.Authorization = `Bearer ${session.token}`
   }
   return headers
 }
@@ -71,7 +71,7 @@ export const blogService = {
       return Array.isArray(result.data) ? result.data : []
     } catch (err) {
       console.error('[blogService.getBlogs error]:', err)
-      return []
+      throw err instanceof Error ? err : new Error('Failed to load blogs')
     }
   },
 
@@ -236,4 +236,3 @@ export const blogService = {
     }
   },
 }
-
