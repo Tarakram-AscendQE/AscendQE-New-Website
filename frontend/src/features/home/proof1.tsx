@@ -103,12 +103,13 @@ export const ProofFaqSection1: React.FC = () => {
           </div>
 
           {totalPages > 1 && (
-            <div className="mt-10 flex w-full justify-end">
+            <div className="proof-faq-pagination mt-10 flex w-full justify-end">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
                 onPageChange={setCurrentPage}
                 totalResults={faqs.length}
+                resultsPerPage={FAQsPerPage}
               />
             </div>
           )}

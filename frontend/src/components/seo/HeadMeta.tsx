@@ -20,6 +20,8 @@ interface HeadMetaProps {
   twitterImage?: string
 }
 
+const SITE_ORIGIN = 'https://ascendqe.com'
+
 export function HeadMeta({
   title,
   description,
@@ -68,7 +70,9 @@ export function HeadMeta({
         linkCanonical.rel = 'canonical'
         document.head.appendChild(linkCanonical)
       }
-      linkCanonical.href = window.location.origin + canonicalPath
+      linkCanonical.href = canonicalPath.startsWith('http')
+        ? canonicalPath
+        : `${SITE_ORIGIN}${canonicalPath === '/' ? '/' : canonicalPath.replace(/\/$/, '')}`
     }
 
     // Open Graph tags — set only when provided; remove otherwise (homepage only)
@@ -139,4 +143,3 @@ export function HeadMeta({
 
   return null
 }
-

@@ -6,8 +6,8 @@
     "backend"
   ],
   "scripts": {
-    "dev": "npm run dev:backend & npm run dev:frontend",
-    "dev:all": "npm run dev:backend & npm run dev:frontend",
+    "dev": "concurrently --kill-others-on-fail --names backend,frontend --prefix-colors cyan,magenta \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:all": "npm run dev",
     "dev:frontend": "npm run dev --prefix frontend",
     "dev:backend": "npm run dev --prefix backend",
     "prebuild": "npm install --prefix frontend && npm install --prefix backend",
@@ -18,5 +18,8 @@
   },
   "dependencies": {
     "@primer/octicons-react": "^19.42.0"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
   }
 }

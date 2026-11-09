@@ -108,7 +108,7 @@ export function ContextChanges() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-4 sm:mt-5 text-3xl sm:text-4xl lg:text-[2.5rem] xl:text-[3.1rem] font-extrabold tracking-tight leading-[1.12]"
             >
-              <span className="block text-[#0f172a]">Agents Work Better When</span>
+              {/*<span className="block text-[#0f172a]">Agents Work Better When</span>
               <span
                 className="block"
                 style={{
@@ -130,7 +130,39 @@ export function ContextChanges() {
                 }}
               >
                 Enterprise Reality.
-              </span>
+              </span>*/}
+              <span
+  className="block text-[#0f172a] mb-1"
+  style={{ lineHeight: "1.2", paddingBottom: "3px" }}
+>
+  Agents Work Better When
+</span>
+
+<span
+  className="block mb-1"
+  style={{
+    background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    lineHeight: "1.2",
+    paddingBottom: "3px",
+  }}
+>
+  They Understand the Same
+</span>
+
+<span
+  className="block mb-1"
+  style={{
+    background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    lineHeight: "1.2",
+    paddingBottom: "3px",
+  }}
+>
+  Enterprise Reality.
+</span>
             </motion.h2>
 
             {/* Paragraphs */}

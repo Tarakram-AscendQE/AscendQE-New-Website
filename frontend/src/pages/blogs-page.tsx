@@ -48,6 +48,7 @@ export function BlogsPage() {
   const [selectedTopic, setSelectedTopic] = useState<string>('All')
   const [failedCovers, setFailedCovers] = useState<Record<number, boolean>>({})
   const [currentPage, setCurrentPage] = useState(1)
+  const [loadError, setLoadError] = useState<string>('')
   const blogsPerPage = 6
 
   // Load published blogs from GoDaddy MySQL via backend API
@@ -55,6 +56,7 @@ export function BlogsPage() {
     let isMounted = true
     const fetchBlogs = async () => {
       setLoading(true)
+      setLoadError('')
       try {
         const data = await blogService.getBlogs()
         if (isMounted) {
@@ -62,6 +64,7 @@ export function BlogsPage() {
         }
       } catch (err) {
         console.error('Failed to load blogs:', err)
+        setLoadError(err instanceof Error ? err.message : 'Failed to load articles')
       } finally {
         if (isMounted) {
           setLoading(false)
@@ -250,7 +253,24 @@ export function BlogsPage() {
             )}
 
             {/* Empty State */}
-            {!loading && filteredBlogs.length === 0 && (
+            {!loading && loadError && (
+              <div className="text-center py-20 px-4 max-w-md mx-auto">
+                <h3 className="text-xl font-bold text-[#0b1831] mb-2">Unable to load articles</h3>
+                <p className="text-slate-500 text-sm mb-6">
+                  Start both services with the same command, then refresh this page.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => window.location.reload()}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1763ff] text-white text-xs font-semibold hover:bg-[#1250d4] transition-colors"
+                >
+                  <RefreshCw size={13} />
+                  Retry
+                </button>
+              </div>
+            )}
+
+            {!loading && !loadError && filteredBlogs.length === 0 && (
               <div className="text-center py-20 px-4 max-w-md mx-auto">
                 <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-[#eff4ff] text-[#1763ff] flex items-center justify-center border border-[#dbe6ff]">
                   <BookOpen size={26} />
@@ -335,17 +355,6 @@ export function BlogsPage() {
                               </span>
                             )}
 
-                            {!loading && filteredBlogs.length > 0 && (
-                              <div className="mt-10 flex w-full justify-end">
-                                <Pagination
-                                  currentPage={currentPage}
-                                  totalPages={totalPages}
-                                  onPageChange={setCurrentPage}
-                                  totalResults={filteredBlogs.length}
-                                  resultsPerPage={blogsPerPage}
-                                />
-                              </div>
-                            )}
                           </div>
 
                           {/* Title */}
@@ -391,6 +400,18 @@ export function BlogsPage() {
                     </article>
                   )
                 })}
+              </div>
+            )}
+
+            {!loading && filteredBlogs.length > 0 && (
+              <div className="mt-10 flex w-full justify-end">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                  totalResults={filteredBlogs.length}
+                  resultsPerPage={blogsPerPage}
+                />
               </div>
             )}
           </div>
