@@ -69,14 +69,14 @@ const Pagination: React.FC<PaginationProps> = ({
   className="ml-auto flex w-fit max-w-full items-center  ml-auto justify-end px-4 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm"
   aria-label="Pagination"
 >*/
-/*<nav
-  className="ml-auto flex flex-col w-fit max-w-full items-center px-4 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm"
-  aria-label="Pagination"
->*/
-    <nav
+    /*<nav
       className="flex flex-col w-fit max-w-full items-center mx-auto mt-4 px-4 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm"
       aria-label="Pagination"
-    >
+    >*/
+   <nav
+  className="ml-auto flex flex-col w-fit max-w-full items-center px-4 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm"
+  aria-label="Pagination"
+>
 
 
       <div className="flex items-center gap-2">

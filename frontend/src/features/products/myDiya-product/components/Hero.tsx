@@ -23,6 +23,8 @@ import {
   Settings,
 } from "lucide-react";
 import myDiyaLogo from "../../../../assets/logo-images/myDiya-logo.webp";
+import myDiyaDarkLogo from "../../../../assets/logo-images/myDiya-dark.webp";
+
 
 // Orbit geometry constants: 37% percentage radius guarantees all nodes and labels stay inside stage
 const R_PCT = 37;
@@ -194,25 +196,60 @@ export function Hero() {
       {/* ── Main Container: Edge-Aligned Two-Column Hero ── */}
       <div className="relative z-10 w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-6 xl:gap-8">
         {/* ════════ LEFT COLUMN: Copy, CTAs & Value Metrics (Starts from Left Border) ════════ */}
+        
         <div className="w-full lg:w-[50%] xl:w-[50%] flex flex-col items-start text-left shrink-0">
           {/* Breadcrumb */}
           <p className="mb-4 sm:mb-6 text-xs text-[#64748B]">
             <a href="/" className="hover:text-[#145BFF] transition-colors">Home</a>
             <span className="mx-1.5">›</span>
             <a href="/products" className="hover:text-[#145BFF] transition-colors">Products</a>
+            {/* myDiya Dark Logo below breadcrumb */}
             <span className="mx-1.5">›</span>
             <span className="text-[#145BFF] font-medium">myDiya</span>
           </p>
+          {/*<img
+  src={myDiyaDarkLogo}
+  alt="myDiya Dark Logo"
+  //className="mt-4 sm:mt-6 h-10 sm:h-12 lg:h-14 object-contain"
+  className="mt-4 sm:mt-6 mb-4 sm:mb-6 ml-2 sm:ml-8 lg:ml-6 h-20 sm:h-20 lg:h-20 object-contain"
+
+/>*/}
+<div className="flex items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
+  <img
+    src={myDiyaDarkLogo}
+    alt="myDiya Dark Logo"
+    className="h-20 sm:h-20 lg:h-20 object-contain"
+    //className="h-10 sm:h-10 lg:h-10 w-auto object-contain"
+
+  />
+  {/*<span className="text-xl sm:text-2xl lg:text-[28px] font-extrabold tracking-tight text-[#0B1638]">*/}
+  {/*<span className="mt-10 sm:mt-10 text-xl sm:text-2xl lg:text-[28px] font-extrabold tracking-tight text-[#0B1638]">
+
+    my<span className="text-[#145BFF]">Diya</span>
+  </span>*/}
+  {/*<span className="mt-10 sm:mt-10 text-2xl sm:text-3xl lg:text-[49px] font-extrabold tracking-tight text-[#0B1638]">
+  my<span className="text-[#0B1638]">Diya</span>
+</span>*/}
+<span className="mt-10 sm:mt-10 text-2xl sm:text-3xl lg:text-[36px] font-extrabold tracking-tight text-[#0B1638]">
+  my<span className="text-[#0B1638]">Diya</span>
+</span>
+
+
+</div>
+
 
           {/* Eyebrow Pill */}
           <motion.div
             initial={reduce ? false : { opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#DCE5F5] bg-[#EAF1FF] px-4 py-1.5"
+           // className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#DCE5F5] bg-[#EAF1FF] px-4 py-1.5"
+           //className="mt-4 sm:mt-6 mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-[#DCE5F5] bg-[#EAF1FF] px-4 py-1.5"
+          //className="-mt-2 mb-6 inline-flex w-fit items-center gap-6 rounded-full border border-[#DCE5F5] bg-[#EAF1FF] px-4 py-1.5"
+          className="mt-2 sm:mt-4 mb-6 inline-flex w-fit items-center gap-6 rounded-full border border-[#DCE5F5] bg-[#EAF1FF] px-4 py-1.5"
           >
             <span className="aqe-label-text text-[#145BFF]">
-              MYDIYA.AI
+              Autonomous AI agent platform
             </span>
           </motion.div>
 

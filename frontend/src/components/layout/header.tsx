@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logoImg from '@/assets/brand-logos/AscendQE-dark-logo.webp';
 import {
@@ -14,6 +14,7 @@ import {
   ChevronDown,
   ChevronRight,
   ArrowRight,
+  BookOpen,
 } from 'lucide-react';
 
 interface DropdownItem {
@@ -46,6 +47,12 @@ const companyItems: DropdownItem[] = [
     name: 'Customer Stories',
     icon: MessageSquareQuote,
     to: '/testimonials',
+  },
+  {
+    name: 'Case Studies',
+    icon: BookOpen,
+    to: '/study.pdf',
+    isExternal: true,
   },
   {
     name: 'Connect With Us',
@@ -114,35 +121,63 @@ export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isWhoWeAreOpen, setIsWhoWeAreOpen] = useState(false);
   const [isMobileWhoWeAreOpen, setIsMobileWhoWeAreOpen] = useState(false);
+  /*const [isOtherPlatformOpen, setIsOtherPlatformOpen] = useState(false);
+  const [isUpcomingProductsOpen, setIsUpcomingProductsOpen] = useState(false);
+  const [isMobileOtherPlatformOpen, setIsMobileOtherPlatformOpen] = useState(false);
+  const [isMobileUpcomingProductsOpen, setIsMobileUpcomingProductsOpen] = useState(false);
+  const [upcomingSubmenuPosition, setUpcomingSubmenuPosition] = useState<{ top: number; left: number } | null>(null);*/
+  const [isOtherPlatformOpen, setIsOtherPlatformOpen] = useState(false);
+  const [isUpcomingProductsOpen, setIsUpcomingProductsOpen] = useState(false);
+  const [isMobileOtherPlatformOpen, setIsMobileOtherPlatformOpen] = useState(false);
+  const [isMobileUpcomingProductsOpen, setIsMobileUpcomingProductsOpen] = useState(false);
+  const [upcomingSubmenuPosition, setUpcomingSubmenuPosition] = useState<{ top: number; left: number } | null>(null);
   const location = useLocation();
   const currentPath = location.pathname;
   const isBlogReadingRoute = currentPath === '/blogs/login'
     || /^\/(blog|blogs|article)\/.+/.test(currentPath);
 
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const desktopNavRef = useRef<HTMLElement>(null);
+  const upcomingTriggerRef = useRef<HTMLButtonElement>(null);
+  const upcomingPanelRef = useRef<HTMLDivElement>(null);
+  const upcomingCloseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Close dropdown on outside click or escape key
+  const cancelUpcomingClose = () => {
+    if (upcomingCloseTimeoutRef.current) {
+      clearTimeout(upcomingCloseTimeoutRef.current);
+      upcomingCloseTimeoutRef.current = null;
+    }
+  };
+
+  const scheduleUpcomingClose = () => {
+    cancelUpcomingClose();
+    upcomingCloseTimeoutRef.current = setTimeout(() => {
+      setIsUpcomingProductsOpen(false);
+      setUpcomingSubmenuPosition(null);
+    }, 140);
+  };
+
+  const closeDropdowns = () => {
+    setIsWhoWeAreOpen(false);
+    setIsOtherPlatformOpen(false);
+    setIsUpcomingProductsOpen(false);
+  };
+
+  // Close navigation dropdowns on outside click or escape key
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Node;
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(target) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(target)
-      ) {
-        setIsWhoWeAreOpen(false);
+      if (desktopNavRef.current && !desktopNavRef.current.contains(target)) {
+        closeDropdowns();
       }
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsWhoWeAreOpen(false);
+        closeDropdowns();
       }
     };
 
-    if (isWhoWeAreOpen) {
+    if (isWhoWeAreOpen || isOtherPlatformOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleKeyDown);
     }
@@ -150,14 +185,56 @@ export const Header: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isWhoWeAreOpen]);
+  }, [isWhoWeAreOpen, isOtherPlatformOpen]);
 
   // Close dropdowns on route change
   useEffect(() => {
     setIsWhoWeAreOpen(false);
+    setIsOtherPlatformOpen(false);
+    setIsUpcomingProductsOpen(false);
     setIsOpen(false);
     setIsMobileWhoWeAreOpen(false);
+    setIsMobileOtherPlatformOpen(false);
+    setIsMobileUpcomingProductsOpen(false);
   }, [location.pathname]);
+
+  useLayoutEffect(() => {
+    if (!isUpcomingProductsOpen) {
+      setUpcomingSubmenuPosition(null);
+      return;
+    }
+
+    const positionSubmenu = () => {
+      const trigger = upcomingTriggerRef.current;
+      const panel = upcomingPanelRef.current;
+      if (!trigger || !panel) return;
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+      const viewportPadding = 8;
+      const gap = 0;
+      const fitsRight = triggerRect.right + gap + panelRect.width <= window.innerWidth - viewportPadding;
+      const left = fitsRight
+        ? triggerRect.right + gap
+        : Math.max(viewportPadding, triggerRect.left - panelRect.width - gap);
+      const top = Math.min(
+        Math.max(viewportPadding, triggerRect.top),
+        Math.max(viewportPadding, window.innerHeight - panelRect.height - viewportPadding)
+      );
+
+      setUpcomingSubmenuPosition({ top, left });
+    };
+
+    positionSubmenu();
+    window.addEventListener('resize', positionSubmenu);
+    window.addEventListener('scroll', positionSubmenu, true);
+    return () => {
+      window.removeEventListener('resize', positionSubmenu);
+      window.removeEventListener('scroll', positionSubmenu, true);
+    };
+  }, [isUpcomingProductsOpen]);
+
+  useEffect(() => () => cancelUpcomingClose(), []);
 
   const renderCompanyItem = (item: DropdownItem) => {
     const IconComponent = item.icon;
@@ -192,7 +269,7 @@ export const Header: React.FC = () => {
         href={item.to}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={() => setIsWhoWeAreOpen(false)}
+        onClick={closeDropdowns}
         className={linkClasses}
       >
         {content}
@@ -201,7 +278,7 @@ export const Header: React.FC = () => {
       <Link
         key={item.name}
         to={item.to}
-        onClick={() => setIsWhoWeAreOpen(false)}
+        onClick={closeDropdowns}
         className={linkClasses}
       >
         {content}
@@ -239,7 +316,7 @@ export const Header: React.FC = () => {
     );
 
     const linkClasses =
-      'group flex items-center justify-between px-3 py-2 rounded-xl bg-[#f4fcf6] hover:bg-[#eaf8ee] border border-[#e5f7ea] transition-all duration-150';
+      'group flex items-center justify-between px-3 py-2 rounded-xl hover:bg-[#eaf8ee] border border-[#e5f7ea] transition-all duration-150';
 
     return isExt ? (
       <a
@@ -247,7 +324,7 @@ export const Header: React.FC = () => {
         href={item.to}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={() => setIsWhoWeAreOpen(false)}
+        onClick={closeDropdowns}
         className={linkClasses}
       >
         {content}
@@ -256,7 +333,7 @@ export const Header: React.FC = () => {
       <Link
         key={item.name}
         to={item.to}
-        onClick={() => setIsWhoWeAreOpen(false)}
+        onClick={closeDropdowns}
         className={linkClasses}
       >
         {content}
@@ -302,7 +379,7 @@ export const Header: React.FC = () => {
         href={item.to}
         target="_blank"
         rel="noopener noreferrer"
-        onClick={() => setIsWhoWeAreOpen(false)}
+        onClick={closeDropdowns}
         className={linkClasses}
       >
         {content}
@@ -311,7 +388,7 @@ export const Header: React.FC = () => {
       <Link
         key={item.name}
         to={item.to}
-        onClick={() => setIsWhoWeAreOpen(false)}
+        onClick={closeDropdowns}
         className={linkClasses}
       >
         {content}
@@ -334,12 +411,12 @@ export const Header: React.FC = () => {
             className="h-8 sm:h-9 w-auto object-contain"
           />
         </Link>
-        <nav aria-label="Main navigation" className="relative hidden lg:flex items-center gap-7">
+        <nav ref={desktopNavRef} aria-label="Main navigation" className="relative hidden lg:flex items-center gap-7">
           <Link
             to="/"
             {...(currentPath === '/' || currentPath === '/index.html' ? { 'aria-current': 'page' } : {})}
           >
-            The platform
+            The  core platform
           </Link>
           <Link
             to="/proof"
@@ -363,9 +440,12 @@ export const Header: React.FC = () => {
           {/* Who We Are Trigger with Arrow */}
           <div className="relative inline-flex items-center">
             <button
-              ref={triggerRef}
               type="button"
-              onClick={() => setIsWhoWeAreOpen((prev) => !prev)}
+              onClick={() => {
+                setIsWhoWeAreOpen((prev) => !prev);
+                setIsOtherPlatformOpen(false);
+                setIsUpcomingProductsOpen(false);
+              }}
               className={`inline-flex items-center gap-1.5 py-1.5 px-0.5 text-[14px] font-[550] transition-colors cursor-pointer border-0 bg-transparent ${
                 isWhoWeAreOpen ? 'text-[#1763ff]' : 'text-[#0b1831] hover:text-[#1763ff]'
               }`}
@@ -387,56 +467,121 @@ export const Header: React.FC = () => {
                 aria-hidden="true"
               />
             )}
-          </div>
-
-          {/* Who We Are Dropdown Panel */}
-          {isWhoWeAreOpen && (
-            <div
-              ref={dropdownRef}
-              className="absolute top-[calc(100%+33px)] left-0 w-[840px] max-w-[95vw] bg-white rounded-2xl border border-slate-200/90 shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
-              style={{
-                fontFamily: 'Inter, Arial, sans-serif',
-              }}
-            >
-              <div className="grid grid-cols-[1fr_auto_1.45fr] gap-6 items-stretch">
-                {/* Column 1: COMPANY */}
+            {/* Who We Are Dropdown Panel */}
+            {isWhoWeAreOpen && (
+              <div
+                className="absolute top-[calc(100%+33px)] right-0 w-[360px] max-w-[95vw] bg-white rounded-2xl border border-slate-200/90 shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+                style={{
+                  fontFamily: 'Inter, Arial, sans-serif',
+                }}
+              >
                 <div className="flex flex-col gap-1.5">
                   <div className="text-[11px] font-bold tracking-[1.5px] text-[#69758a] uppercase px-3 py-1 mb-1">
                     COMPANY
                   </div>
                   {companyItems.map(renderCompanyItem)}
                 </div>
+              </div>
+            )}
+          </div>
 
-                {/* Vertical Divider Line */}
-                <div className="w-[1px] bg-[#eceef5] my-1" aria-hidden="true" />
-
-                {/* Column 2: PLATFORMS */}
+          {/* Other Platform Trigger */}
+          <div className="relative inline-flex items-center">
+            <button
+              type="button"
+              onClick={() => {
+                setIsOtherPlatformOpen((prev) => !prev);
+                setIsWhoWeAreOpen(false);
+                setIsUpcomingProductsOpen(false);
+              }}
+              className={`inline-flex items-center gap-1.5 py-1.5 px-0.5 text-[14px] font-[550] transition-colors cursor-pointer border-0 bg-transparent ${
+                isOtherPlatformOpen ? 'text-[#1763ff]' : 'text-[#0b1831] hover:text-[#1763ff]'
+              }`}
+              aria-expanded={isOtherPlatformOpen}
+              aria-haspopup="true"
+            >
+              <span>Other Platforms</span>
+              <ChevronDown
+                className={`h-4 w-4 transition-transform duration-200 ${
+                  isOtherPlatformOpen ? 'rotate-180 text-[#1763ff]' : 'rotate-0 text-slate-500'
+                }`}
+              />
+            </button>
+            {isOtherPlatformOpen && (
+              <span
+                className="absolute -bottom-8 left-0 right-0 h-[3px] bg-[#1763ff] rounded-full pointer-events-none"
+                aria-hidden="true"
+              />
+            )}
+            {/* Other Platform Dropdown Panel */}
+            {isOtherPlatformOpen && (
+              <div
+                className="absolute top-[calc(100%+33px)] right-0 w-[430px] max-w-[95vw] bg-white rounded-2xl border border-slate-200/90 shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+                style={{ fontFamily: 'Inter, Arial, sans-serif' }}
+              >
                 <div className="flex flex-col gap-2">
                   <div className="text-[11px] font-bold tracking-[1.5px] text-[#69758a] uppercase px-3 py-1 mb-0.5">
                     PLATFORMS
                   </div>
-
-                  {/* Available Platforms */}
                   <div className="flex flex-col gap-1.5">
                     {availablePlatformItems.map(renderAvailableItem)}
                   </div>
 
-                  {/* Upcoming Products Card */}
-                  <div className="mt-2 rounded-2xl border border-[#dbe6fe] bg-[#f4f7fe] overflow-hidden">
-                    <div className="flex items-center gap-2.5 px-3.5 py-2.5 bg-[#e4eeff] border-b border-[#dbe6fe]/80">
-                      <Rocket className="h-4 w-4 text-[#1763ff]" />
-                      <span className="text-[13px] font-bold text-[#1763ff]">
-                        Upcoming Products
-                      </span>
+                  <div
+                    className="relative mt-2"
+                    onMouseEnter={cancelUpcomingClose}
+                    onMouseLeave={scheduleUpcomingClose}
+                  >
+                    <div className="rounded-2xl border border-[#dbe6fe] bg-[#f4f7fe]">
+                      <button
+                        ref={upcomingTriggerRef}
+                        type="button"
+                        onMouseEnter={() => {
+                          cancelUpcomingClose();
+                          setIsUpcomingProductsOpen(true);
+                        }}
+                        onFocus={() => setIsUpcomingProductsOpen(true)}
+                        onClick={() => {
+                          cancelUpcomingClose();
+                          setIsUpcomingProductsOpen((prev) => !prev);
+                        }}
+                        aria-expanded={isUpcomingProductsOpen}
+                        aria-controls="desktop-upcoming-products"
+                        className="flex w-full items-center justify-between gap-2.5 px-3.5 py-2.5 bg-[#e4eeff] text-left rounded-2xl hover:bg-[#dce9ff] transition-colors duration-150"
+                      >
+                        <span className="flex items-center gap-2.5">
+                          <Rocket className="h-4 w-4 text-[#1763ff]" />
+                          <span className="text-[13px] font-bold text-[#1763ff]">
+                            UPCOMING PRODUCTS
+                          </span>
+                        </span>
+                        <ChevronRight className="h-4 w-4 text-[#1763ff] transition-transform duration-200" />
+                      </button>
                     </div>
-                    <div className="p-1.5 flex flex-col gap-0.5">
-                      {upcomingProductItems.map(renderUpcomingItem)}
-                    </div>
+                    {isUpcomingProductsOpen && (
+                      <div
+                        ref={upcomingPanelRef}
+                        id="desktop-upcoming-products"
+                        onMouseEnter={cancelUpcomingClose}
+                        onMouseLeave={scheduleUpcomingClose}
+                        className="fixed z-[60] max-h-[calc(100vh-16px)] w-[280px] max-w-[calc(100vw-16px)] overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-2 shadow-[0_20px_50px_rgba(11,24,49,0.16)]"
+                        style={{
+                          top: upcomingSubmenuPosition?.top ?? 0,
+                          left: upcomingSubmenuPosition?.left ?? 0,
+                          visibility: upcomingSubmenuPosition ? 'visible' : 'hidden',
+                          fontFamily: 'Inter, Arial, sans-serif',
+                        }}
+                      >
+                        <div className="flex flex-col gap-0.5">
+                          {upcomingProductItems.map(renderUpcomingItem)}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </nav>
 
         <Link className="button small hidden sm:inline-flex items-center gap-1.5" to="/start">
@@ -479,8 +624,13 @@ export const Header: React.FC = () => {
         <div className="border-t border-slate-100 py-2">
           <button
             type="button"
-            onClick={() => setIsMobileWhoWeAreOpen((prev) => !prev)}
+            onClick={() => {
+              setIsMobileWhoWeAreOpen((prev) => !prev);
+              setIsMobileOtherPlatformOpen(false);
+              setIsMobileUpcomingProductsOpen(false);
+            }}
             className="flex items-center justify-between w-full py-2 px-3 text-[14px] font-semibold text-[#0b1831]"
+            aria-expanded={isMobileWhoWeAreOpen}
           >
             <span>Who We Are</span>
             <ChevronDown
@@ -495,112 +645,113 @@ export const Header: React.FC = () => {
               <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-2">
                 COMPANY
               </div>
-              {companyItems.map((item) =>
-                item.isExternal ? (
-                  <a
-                    key={item.name}
-                    href={item.to}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-1.5 px-2 text-[13px] text-[#0b1831] hover:text-[#1763ff]"
-                  >
-                    <item.icon className="h-4 w-4 text-[#1763ff]" />
-                    <span>{item.name}</span>
-                  </a>
-                ) : (
+              {companyItems.map((item) => {
+                const IconComponent = item.icon;
+                return (
                   <Link
                     key={item.name}
                     to={item.to}
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-2 py-1.5 px-2 text-[13px] text-[#0b1831] hover:text-[#1763ff]"
                   >
-                    <item.icon className="h-4 w-4 text-[#1763ff]" />
+                    <IconComponent className="h-4 w-4 text-[#1763ff]" />
                     <span>{item.name}</span>
                   </Link>
-                )
-              )}
+                );
+              })}
+            </div>
+          )}
+        </div>
 
-              <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-3">
+        {/* Mobile Other Platform Accordion */}
+        <div className="border-t border-slate-100 py-2">
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileOtherPlatformOpen((prev) => !prev);
+              setIsMobileWhoWeAreOpen(false);
+              setIsMobileUpcomingProductsOpen(false);
+            }}
+            className="flex items-center justify-between w-full py-2 px-3 text-[14px] font-semibold text-[#0b1831]"
+            aria-expanded={isMobileOtherPlatformOpen}
+          >
+            <span>Other Platform</span>
+            <ChevronDown
+              className={`h-4 w-4 transition-transform duration-200 ${
+                isMobileOtherPlatformOpen ? 'rotate-180 text-[#1763ff]' : 'text-slate-500'
+              }`}
+            />
+          </button>
+
+          {isMobileOtherPlatformOpen && (
+            <div className="pl-3 pr-2 py-2 flex flex-col gap-1 bg-[#f9fbff] rounded-xl mt-1">
+              <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-2">
                 PLATFORMS
               </div>
               <div className="flex flex-col gap-1.5 mt-1">
                 {availablePlatformItems.map((item) => {
                   const IconComponent = item.icon;
-                  const isExt = Boolean(
-                    item.isExternal ||
-                    item.to.startsWith('http://') ||
-                    item.to.startsWith('https://') ||
-                    item.to.startsWith('//')
-                  );
-                  const inner = (
-                    <div className="flex items-center justify-between w-full py-2 px-2.5 rounded-lg bg-[#f4fcf6] border border-[#e5f7ea] text-[13px] text-[#0b1831]">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <IconComponent className="h-4 w-4 text-[#1763ff] shrink-0" />
-                        <span className="font-semibold text-[#0b1831] truncate">{item.name}</span>
-                      </div>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-[#15803d] bg-[#dcfce7] border border-[#bbf7d0] shrink-0">
-                        <CheckCircle2 className="h-3 w-3 fill-[#16a34a] text-white" />
-                        <span>Available</span>
-                      </span>
-                    </div>
-                  );
-                  return isExt ? (
-                    <a
-                      key={item.name}
-                      href={item.to}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {inner}
-                    </a>
-                  ) : (
+                  return (
                     <Link
                       key={item.name}
                       to={item.to}
                       onClick={() => setIsOpen(false)}
+                      className="flex items-center justify-between w-full py-2 px-2.5 rounded-lg border border-[#e5f7ea] text-[13px] text-[#0b1831]"
                     >
-                      {inner}
+                      <span className="flex items-center gap-2 min-w-0">
+                        <IconComponent className="h-4 w-4 text-[#1763ff] shrink-0" />
+                        <span className="font-semibold truncate">{item.name}</span>
+                      </span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-[#15803d] bg-[#dcfce7] border border-[#bbf7d0] shrink-0">
+                        <CheckCircle2 className="h-3 w-3 fill-[#16a34a] text-white" />
+                        <span>Available</span>
+                      </span>
                     </Link>
                   );
                 })}
               </div>
 
-              {/* Mobile Upcoming Products */}
               <div className="mt-2.5 rounded-xl border border-[#dbe6fe] bg-[#f4f7fe] overflow-hidden">
-                <div className="flex items-center gap-2 px-3 py-2 bg-[#e4eeff] border-b border-[#dbe6fe]/80">
-                  <Rocket className="h-3.5 w-3.5 text-[#1763ff]" />
-                  <span className="text-[12px] font-bold text-[#1763ff]">Upcoming Products</span>
-                </div>
-                <div className="p-1 flex flex-col gap-0.5">
-                  {upcomingProductItems.map((item) => {
-                    const IconComponent = item.icon;
-                    const inner = (
-                      <div className="flex items-center justify-between w-full py-1.5 px-2 text-[12px] text-[#0b1831]">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <IconComponent className="h-3.5 w-3.5 text-[#1763ff] shrink-0" />
-                          <span className="font-medium truncate">{item.name}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <span className="text-slate-400 font-normal select-none">-</span>
-                          <span className="text-[10px] font-medium text-[#2563eb] bg-[#eef4ff] border border-[#dbe6fe] px-1.5 py-0.5 rounded-full">
+                <button
+                  type="button"
+                  onClick={() => setIsMobileUpcomingProductsOpen((prev) => !prev)}
+                  aria-expanded={isMobileUpcomingProductsOpen}
+                  aria-controls="mobile-upcoming-products"
+                  className="flex w-full items-center justify-between gap-2 px-3 py-2 bg-[#e4eeff] border-b border-[#dbe6fe]/80 text-left"
+                >
+                  <span className="flex items-center gap-2">
+                    <Rocket className="h-3.5 w-3.5 text-[#1763ff]" />
+                    <span className="text-[12px] font-bold text-[#1763ff]">UPCOMING PRODUCTS</span>
+                  </span>
+                  <ChevronDown
+                    className={`h-4 w-4 text-[#1763ff] transition-transform duration-200 ${
+                      isMobileUpcomingProductsOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </button>
+                {isMobileUpcomingProductsOpen && (
+                  <div id="mobile-upcoming-products" className="p-1 flex flex-col gap-0.5 animate-in fade-in slide-in-from-top-1 duration-150">
+                    {upcomingProductItems.map((item) => {
+                      const IconComponent = item.icon;
+                      return (
+                        <Link
+                          key={item.name}
+                          to={item.to}
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center justify-between w-full py-1.5 px-2 text-[12px] text-[#0b1831]"
+                        >
+                          <span className="flex items-center gap-2 min-w-0">
+                            <IconComponent className="h-3.5 w-3.5 text-[#1763ff] shrink-0" />
+                            <span className="font-medium truncate">{item.name}</span>
+                          </span>
+                          <span className="text-[10px] font-medium text-[#2563eb] bg-[#eef4ff] border border-[#dbe6fe] px-1.5 py-0.5 rounded-full shrink-0">
                             Coming Soon
                           </span>
-                        </div>
-                      </div>
-                    );
-                    return (
-                      <Link
-                        key={item.name}
-                        to={item.to}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {inner}
-                      </Link>
-                    );
-                  })}
-                </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           )}
