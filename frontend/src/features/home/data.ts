@@ -153,5 +153,7 @@ export const CREW_BOTS: CrewBot[] = [
   { bot: 'Patch', role: 'Repair', className: 'patch', idx: 7 },
   { bot: 'Sentry', role: 'Review', className: 'sentry', idx: 8 },
   { bot: 'Yeti', role: 'Improve', className: 'yeti', idx: 9 },
+  { bot: 'Atlas', role: 'Manage', className: 'atlas1', idx: 10 },
+  { bot: 'Echo', role: 'Collaborate', className: 'echo1', idx: 11 },
 ];
 

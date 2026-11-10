@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { CheckCircle2, AlertCircle,Mail } from 'lucide-react';
+import { CheckCircle2, AlertCircle,Mail,MapPin } from 'lucide-react';
 import { Reveal } from '@/shared';
 import { HeadMeta } from '@/components/seo/HeadMeta';
 
@@ -199,7 +199,7 @@ export const StartPage1: React.FC = () => {
       <HeadMeta
         title="Contact AscendQE | AI Quality Engineering & Testing"
         description="Connect with AscendQE to explore AI-powered quality engineering, test automation, GenAI testing, and intelligent software testing solutions."
-        canonicalPath="/contact"
+        canonicalPath="/start"
       />
       <div className="max-w-[1400px] mx-auto px-6 sm:px-[5.5%] py-10 sm:py-14">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 xl:gap-16 items-start">
@@ -217,8 +217,12 @@ export const StartPage1: React.FC = () => {
                 Let’s start with your application.
               </h2>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-[750] leading-[1.1] tracking-[-1.5px] text-[#0b1831] mt-3 mb-4"><span className="text-[#1763ff]">Location</span></h1>
-        
+            {/*<h1 className="text-3xl sm:text-4xl lg:text-[42px] font-[750] leading-[1.1] tracking-[-1.5px] text-[#0b1831] mt-3 mb-4"><span className="text-[#1763ff]">Location</span></h1>*/}
+        <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-[750] leading-[1.1] tracking[-1.5px] text-[#0b1831] mt-3 mb-4 flex items-center gap-2">
+  <MapPin className="text-[#1763ff]" />
+  <span className="text-[#1763ff]">Location</span>
+</h1>
+
             <a style={{ fontSize: '18px' }}>
             Manjeera Trinity Corporate <br />
             Ground floor unit no 03, <br />

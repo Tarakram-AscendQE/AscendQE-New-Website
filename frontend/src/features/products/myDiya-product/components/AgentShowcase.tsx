@@ -244,7 +244,7 @@ export function AgentShowcase() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-4 sm:mt-5 text-3xl sm:text-4xl lg:text-[2.6rem] xl:text-[3.1rem] font-extrabold tracking-tight leading-[1.15] text-[#0f172a]"
             >
-              <span>Build Your Digital QE Workforce — </span>
+              {/*<span>Build Your Digital QE Workforce — </span>
               <span
                 className="inline-block"
                 style={{
@@ -255,7 +255,26 @@ export function AgentShowcase() {
                 }}
               >
                 One Agent at a Time.
-              </span>
+              </span>*/}
+              <h1>
+  <span className="block" style={{ lineHeight: "1.2" }}>
+    Build Your Digital QE
+  </span>
+
+  <span className="block whitespace-nowrap mt-2" style={{ lineHeight: "1.2" }}>
+    <span>Workforce — </span>
+    <span
+      className="inline-block"
+      style={{
+        background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
+        WebkitBackgroundClip: "text",
+        WebkitTextFillColor: "transparent",
+      }}
+    >
+      One Agent at a Time.
+    </span>
+  </span>
+</h1>
             </motion.h2>
 
             {/* Sub-headline */}

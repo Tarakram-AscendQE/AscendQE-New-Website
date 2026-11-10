@@ -334,12 +334,19 @@ export function Workflow() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-4 sm:mt-5 text-3xl sm:text-4xl lg:text-[2.45rem] xl:text-[2.9rem] font-extrabold tracking-tight leading-[1.12]"
             >
-              <span className="block text-[#0a1628]">
+              {/*<span className="block text-[#0a1628]">
                 Quality Engineering Needs More Than AI Assistance.
               </span>
               <span className="block text-[#145BFF] mt-1">
                 It Needs Coordinated Intelligence.
-              </span>
+              </span>*/}
+              <span className="block text-[#0a1628]" style={{ lineHeight: "1.3" }}>
+  Quality Engineering Needs More Than AI Assistance.
+</span>
+
+<span className="block text-[#145BFF]" style={{ lineHeight: "1.3" }}>
+  It Needs Coordinated Intelligence.
+</span>
             </motion.h2>
 
             {/* Narrative Paragraph */}

@@ -13,7 +13,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onOpenTrailer })
     <section className="welcome" aria-labelledby="welcome-title">
       <div className="welcome-glow" aria-hidden="true" />
       <div className="welcome-topline">
-        <span /> TEN AGENTS. ONE CONNECTED QE TEAM.
+        <span /> TWELVE AGENTS. ONE CONNECTED QE TEAM.
       </div>
       <h1 id="welcome-title">
         Your next release.<br />
@@ -61,7 +61,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onOpenTrailer })
               <strong>Let’s get your QE moving.</strong>
             </p>
             <span className="crew-count">
-              10 agents<br />
+              {CREW_BOTS.length} agents<br />
               <b>One mission</b>
             </span>
           </div>

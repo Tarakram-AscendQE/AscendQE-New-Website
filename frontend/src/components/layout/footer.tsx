@@ -16,7 +16,7 @@ const SOCIAL_LINKS = [
 
 const FOOTER_COLS = [
   {
-    title: "Products",
+    title: "Other Products",
     links: [
       { label: "myDiya", href: "/mydiya" },
       { label: "mySTLC", href: "/mystlc" },
@@ -42,7 +42,7 @@ const FOOTER_COLS = [
   {
     title: "Platform Overview",
     links: [
-      { label: "The Platform", href: "/" },
+      { label: "The  Platform", href: "/" },
       { label: "How it works", href: "/proof" },
       { label: "Your options", href: "/pricing" },
       { label: "Your value", href: "/payoff" },

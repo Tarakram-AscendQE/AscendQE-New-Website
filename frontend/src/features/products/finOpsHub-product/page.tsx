@@ -17,7 +17,9 @@ import {
   BookOpen,
   X,
 } from 'lucide-react';
-import finOpsHubLogo from '@/assets/finOpsHub-assets/finopshub-logo.webp';
+// import finOpsHubLogo from '@/assets/finOpsHub-assets/fin.webp';
+import finOpsHubLogo from "@/assets/finOpsHub-assets/finopshub-logo.webp";
+
 import {
   CAPABILITIES,
   WORKFLOW_STEPS,
@@ -65,7 +67,7 @@ export const FinOpsHubPage: React.FC = () => {
             {/* Left Column: Headline, Description & Facts */}
             <div className="lg:col-span-7 flex flex-col items-start">
               {/* Product Logo */}
-              <div className="mb-6 p-3 sm:p-4 bg-white rounded-2xl border border-[#dde5f2] shadow-sm inline-block">
+              <div className="mb-6 p-3 sm:p-4 rounded-2xl border border-[#dde5f2] inline-block">
                 <img
                   src={finOpsHubLogo}
                   alt="FinOpsHub by AscendQE"
@@ -90,7 +92,7 @@ export const FinOpsHubPage: React.FC = () => {
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-4 mb-10 w-full sm:w-auto">
                 <a
-                  href="https://finopshub.live"
+                  //href="https://finopshub.live"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-white bg-[#1257f0] hover:bg-[#0b3fc0] shadow-md hover:shadow-lg transition-all duration-200"
@@ -526,7 +528,7 @@ export const FinOpsHubPage: React.FC = () => {
                 Close
               </button>
               <a
-                href="https://finopshub.live"
+                //href="https://finopshub.live"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-5 py-2 rounded-xl text-sm font-bold text-white bg-[#1257f0] hover:bg-[#0b3fc0] transition-colors"
