@@ -89,6 +89,9 @@ export const router = createBrowserRouter([
       { path: 'career', element: <Navigate to="/careers" replace /> },
       { path: 'testimonials', element: <TestimonialsPage /> },
       { path: 'testimonial', element: <Navigate to="/testimonials" replace /> },
+     // { path: 'case-studies', element: <Navigate to="/study.pdf" replace /> },
+     //{ path: 'case-studies', element: <ExternalRedirect url="/study.pdf" /> }
+     { path: 'case-studies', element: <ExternalRedirect url="/study.pdf" /> },
       { path: 'privacy', element: <PrivacyPolicyPage /> },
       { path: 'privacy-policy', element: <Navigate to="/privacy" replace /> },
       { path: 'terms', element: <TermsOfServicePage /> },

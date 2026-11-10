@@ -32,7 +32,7 @@ export const PricingPage: React.FC = () => {
             </h3>
             <p className="price-unit">From</p>
             <div className="price min-h-[72px] flex items-baseline">
-              {' '}$25K<span> / month</span>
+              {' '}$1<span> / testcase</span>
             </div>
             <p className="price-unit">Monthly billing · annual commitment</p>
             <ul className="flex-1">
