@@ -17,7 +17,9 @@ import {
   BookOpen,
   X,
 } from 'lucide-react';
-import finOpsHubLogo from '@/assets/finOpsHub-assets/finopshub-logo.webp';
+// import finOpsHubLogo from '@/assets/finOpsHub-assets/fin.webp';
+import finOpsHubLogo from "@/assets/finOpsHub-assets/finopshub-logo.webp";
+
 import {
   CAPABILITIES,
   WORKFLOW_STEPS,
@@ -65,7 +67,7 @@ export const FinOpsHubPage: React.FC = () => {
             {/* Left Column: Headline, Description & Facts */}
             <div className="lg:col-span-7 flex flex-col items-start">
               {/* Product Logo */}
-              <div className="mb-6 p-3 sm:p-4 bg-white rounded-2xl border border-[#dde5f2] shadow-sm inline-block">
+              <div className="mb-6 p-3 sm:p-4 rounded-2xl border border-[#dde5f2] inline-block">
                 <img
                   src={finOpsHubLogo}
                   alt="FinOpsHub by AscendQE"

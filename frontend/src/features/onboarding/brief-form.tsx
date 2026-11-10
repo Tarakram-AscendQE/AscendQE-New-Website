@@ -78,7 +78,7 @@ export const BriefForm: React.FC = () => {
             onChange={(e) => setFormData({ ...formData, offer: e.target.value as BriefData['offer'] })}
           >
             <option value="challenge">First 100 free test cases (Evaluation Hook)</option>
-            <option value="platform">Private enterprise platform ($25K/month)</option>
+            <option value="platform">Private enterprise platform ($1/testcase)</option>
             <option value="managed">Managed services (Scoped delivery)</option>
           </select>
         </div>

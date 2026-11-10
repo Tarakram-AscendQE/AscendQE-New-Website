@@ -159,7 +159,8 @@ export const ProofPage: React.FC = () => {
             <span className="text-[#64748b] font-[650]">More than one screen.</span>
           </h2>
         </Reveal>
-        <div className="coverage-grid !grid !grid-cols-1 sm:!grid-cols-2 md:!grid-cols-3 lg:!grid-cols-5 !gap-4 sm:!gap-[18px] !my-8">
+        {/* Coverage Grid */}
+        {/*<div className="coverage-grid !grid !grid-cols-1 sm:!grid-cols-2 md:!grid-cols-3 lg:!grid-cols-5 !gap-4 sm:!gap-[18px] !my-8">
           {[
             { title: "Web", sub: "UI workflows", icon: Monitor },
             { title: "API", sub: "Connected services", icon: Workflow },
@@ -186,7 +187,36 @@ export const ProofPage: React.FC = () => {
               </Reveal>
             );
           })}
+        </div>*/}
+        <div className="coverage-grid !grid !grid-cols-1 sm:!grid-cols-2 md:!grid-cols-3 lg:!grid-cols-5 !gap-4 sm:!gap-[10px] !my-6">
+          {[
+            { title: "Web", sub: "UI workflows", icon: Monitor },
+            { title: "API", sub: "Connected services", icon: Workflow },
+            { title: "Mobile", sub: "Application journeys", icon: Smartphone },
+            { title: "Data", sub: "Database validation", icon: Database },
+            { title: "End to end", sub: "Business outcomes", icon: Route },
+          ].map((item, idx) => {
+            const Icon = item.icon;
+            return (
+              <Reveal key={item.title} delay={0.1 + idx * 0.08} className="h-full">
+                <div className="!border !border-[#dce4f1] !rounded-2xl !p-2 sm:!p-3 bg-white transition-all duration-200 hover:-translate-y-1 hover:!border-[#1763ff] hover:shadow-[0_10px_28px_rgba(23,99,255,0.08)] h-full flex items-center gap-3.5 sm:gap-4 group">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#eff5ff] border border-[#dce8ff] flex items-center justify-center text-[#1763ff] shrink-0 transition-transform group-hover:scale-105">
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 stroke-[2]" />
+                  </div>
+                  <div className="min-w-0">
+                    <b className="!block !text-[16px] sm:!text-[18px] !font-bold !tracking-tight !text-[#071327] group-hover:!text-[#1763ff] transition-colors leading-tight">
+                      {item.title}
+                    </b>
+                    <span className="!block !mt-1 !text-[11px] sm:!text-[12px] !leading-snug !text-[#64748b]">
+                      {item.sub}
+                    </span>
+                  </div>
+                </div>
+              </Reveal>
+            )
+          })}
         </div>
+
         <p className="fine !block !mt-6 text-[#64748b]">
           Supported applications, frameworks, devices and environments are confirmed during scoping.
         </p>

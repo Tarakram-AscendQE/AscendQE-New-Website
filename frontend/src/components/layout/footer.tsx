@@ -16,7 +16,7 @@ const SOCIAL_LINKS = [
 
 const FOOTER_COLS = [
   {
-    title: "Products",
+    title: "Other Products",
     links: [
       { label: "myDiya", href: "/mydiya" },
       { label: "mySTLC", href: "/mystlc" },

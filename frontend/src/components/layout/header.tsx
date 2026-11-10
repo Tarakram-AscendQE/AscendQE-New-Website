@@ -411,7 +411,7 @@ export const Header: React.FC = () => {
             className="h-8 sm:h-9 w-auto object-contain"
           />
         </Link>
-        <nav ref={desktopNavRef} aria-label="Main navigation" className="relative hidden lg:flex items-center gap-7">
+        <nav ref={desktopNavRef} aria-label="Main navigation" className="relative hidden lg:flex items-center gap-4">
           <Link
             to="/"
             {...(currentPath === '/' || currentPath === '/index.html' ? { 'aria-current': 'page' } : {})}
@@ -446,7 +446,10 @@ export const Header: React.FC = () => {
                 setIsOtherPlatformOpen(false);
                 setIsUpcomingProductsOpen(false);
               }}
-              className={`inline-flex items-center gap-1.5 py-1.5 px-0.5 text-[14px] font-[550] transition-colors cursor-pointer border-0 bg-transparent ${
+              /*className={`inline-flex items-center gap-1.5 py-1.5 px-0.5 text-[14px] font-[550] transition-colors cursor-pointer border-none bg-transparent ${
+                isWhoWeAreOpen ? 'text-[#1763ff]' : 'text-[#0b1831] hover:text-[#1763ff]'
+              }`}*/
+              className={`inline-flex items-center gap-1.5 py-1.5 px-0.5 text-[14px] font-[550] transition-colors cursor-pointer border-0 focus-visible:outline-0 bg-transparent ${
                 isWhoWeAreOpen ? 'text-[#1763ff]' : 'text-[#0b1831] hover:text-[#1763ff]'
               }`}
               aria-expanded={isWhoWeAreOpen}
@@ -470,7 +473,9 @@ export const Header: React.FC = () => {
             {/* Who We Are Dropdown Panel */}
             {isWhoWeAreOpen && (
               <div
-                className="absolute top-[calc(100%+33px)] right-0 w-[360px] max-w-[95vw] bg-white rounded-2xl border border-slate-200/90 shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+                className="absolute top-[calc(100%+33px)] right-0 w-[360px] max-w-[95vw] bg-white rounded-2xl shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+                //className="absolute top-[calc(100%+33px)] right-0 w-[430px] max-w-[95vw] bg-white rounded-2xl shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+
                 style={{
                   fontFamily: 'Inter, Arial, sans-serif',
                 }}
@@ -494,7 +499,7 @@ export const Header: React.FC = () => {
                 setIsWhoWeAreOpen(false);
                 setIsUpcomingProductsOpen(false);
               }}
-              className={`inline-flex items-center gap-1.5 py-1.5 px-0.5 text-[14px] font-[550] transition-colors cursor-pointer border-0 bg-transparent ${
+              className={`inline-flex items-center gap-1.5 py-1.5 px-0.5 text-[14px] font-[550] transition-colors cursor-pointer border-none bg-transparent ${
                 isOtherPlatformOpen ? 'text-[#1763ff]' : 'text-[#0b1831] hover:text-[#1763ff]'
               }`}
               aria-expanded={isOtherPlatformOpen}
@@ -516,7 +521,7 @@ export const Header: React.FC = () => {
             {/* Other Platform Dropdown Panel */}
             {isOtherPlatformOpen && (
               <div
-                className="absolute top-[calc(100%+33px)] right-0 w-[430px] max-w-[95vw] bg-white rounded-2xl border border-slate-200/90 shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
+                className="absolute top-[calc(100%+33px)] right-0 w-[430px] max-w-[95vw] bg-white rounded-2xl shadow-[0_20px_50px_rgba(11,24,49,0.12)] p-6 z-50 animate-in fade-in zoom-in-95 duration-150"
                 style={{ fontFamily: 'Inter, Arial, sans-serif' }}
               >
                 <div className="flex flex-col gap-2">
@@ -564,7 +569,7 @@ export const Header: React.FC = () => {
                         id="desktop-upcoming-products"
                         onMouseEnter={cancelUpcomingClose}
                         onMouseLeave={scheduleUpcomingClose}
-                        className="fixed z-[60] max-h-[calc(100vh-16px)] w-[280px] max-w-[calc(100vw-16px)] overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-2 shadow-[0_20px_50px_rgba(11,24,49,0.16)]"
+                        className="fixed z-[60] max-h-[calc(100vh-16px)] w-[280px] max-w-[calc(100vw-16px)] overflow-y-auto rounded-2xl bg-white p-2 shadow-[0_20px_50px_rgba(11,24,49,0.16)]"
                         style={{
                           top: upcomingSubmenuPosition?.top ?? 0,
                           left: upcomingSubmenuPosition?.left ?? 0,
@@ -621,7 +626,7 @@ export const Header: React.FC = () => {
         </Link>
 
         {/* Mobile Who We Are Accordion */}
-        <div className="border-t border-slate-100 py-2">
+        <div className="py-2">
           <button
             type="button"
             onClick={() => {
@@ -629,7 +634,7 @@ export const Header: React.FC = () => {
               setIsMobileOtherPlatformOpen(false);
               setIsMobileUpcomingProductsOpen(false);
             }}
-            className="flex items-center justify-between w-full py-2 px-3 text-[14px] font-semibold text-[#0b1831]"
+            className="flex items-center justify-between w-full py-2 px-3 text-[14px] font-semibold text-[#0b1831] bg-transparent border-none cursor-pointer outline-none"
             aria-expanded={isMobileWhoWeAreOpen}
           >
             <span>Who We Are</span>
@@ -641,7 +646,7 @@ export const Header: React.FC = () => {
           </button>
 
           {isMobileWhoWeAreOpen && (
-            <div className="pl-3 pr-2 py-2 flex flex-col gap-1 bg-[#f9fbff] rounded-xl mt-1">
+            <div className="pl-3 pr-2 py-2 flex flex-col gap-1">
               <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-2">
                 COMPANY
               </div>
@@ -664,7 +669,7 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Mobile Other Platform Accordion */}
-        <div className="border-t border-slate-100 py-2">
+        <div className="py-2">
           <button
             type="button"
             onClick={() => {
@@ -672,7 +677,7 @@ export const Header: React.FC = () => {
               setIsMobileWhoWeAreOpen(false);
               setIsMobileUpcomingProductsOpen(false);
             }}
-            className="flex items-center justify-between w-full py-2 px-3 text-[14px] font-semibold text-[#0b1831]"
+            className="flex items-center justify-between w-full py-2 px-3 text-[14px] font-semibold text-[#0b1831] bg-transparent border-none cursor-pointer outline-none"
             aria-expanded={isMobileOtherPlatformOpen}
           >
             <span>Other Platform</span>
@@ -684,7 +689,7 @@ export const Header: React.FC = () => {
           </button>
 
           {isMobileOtherPlatformOpen && (
-            <div className="pl-3 pr-2 py-2 flex flex-col gap-1 bg-[#f9fbff] rounded-xl mt-1">
+            <div className="pl-3 pr-2 py-2 flex flex-col gap-1">
               <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-2">
                 PLATFORMS
               </div>

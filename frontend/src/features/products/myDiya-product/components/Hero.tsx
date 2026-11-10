@@ -219,22 +219,10 @@ export function Hero() {
     src={myDiyaDarkLogo}
     alt="myDiya Dark Logo"
     className="h-20 sm:h-20 lg:h-20 object-contain"
-    //className="h-10 sm:h-10 lg:h-10 w-auto object-contain"
-
   />
-  {/*<span className="text-xl sm:text-2xl lg:text-[28px] font-extrabold tracking-tight text-[#0B1638]">*/}
-  {/*<span className="mt-10 sm:mt-10 text-xl sm:text-2xl lg:text-[28px] font-extrabold tracking-tight text-[#0B1638]">
-
-    my<span className="text-[#145BFF]">Diya</span>
-  </span>*/}
-  {/*<span className="mt-10 sm:mt-10 text-2xl sm:text-3xl lg:text-[49px] font-extrabold tracking-tight text-[#0B1638]">
-  my<span className="text-[#0B1638]">Diya</span>
-</span>*/}
-<span className="mt-10 sm:mt-10 text-2xl sm:text-3xl lg:text-[36px] font-extrabold tracking-tight text-[#0B1638]">
-  my<span className="text-[#0B1638]">Diya</span>
-</span>
-
-
+  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1638] leading-none">
+    myDiya
+  </h2>
 </div>
 
 
