@@ -189,27 +189,3 @@ export const SAFE_ADOPT_POINTS = [
   'Complements your testing. It does not replace it.',
 ];
 
-export interface FaqItem {
-  question: string;
-  answer: string;
-}
-
-export const FAQ_ITEMS: FaqItem[] = [
-  {
-    question: 'Does it replace our testing?',
-    answer: 'No. Your tests check that features work. PRCheck.live checks that every change still obeys your enterprise rules, independently.',
-  },
-  {
-    question: 'Where do the rules come from?',
-    answer: 'From the controls you already have: internal policies, regulatory directions, audit findings. We turn the ones that apply into checkable rules your owners approve.',
-  },
-  {
-    question: 'Who writes the checks?',
-    answer: 'An independent assurance team, from the policies. Never the team whose change is being checked.',
-  },
-  {
-    question: 'How do we start?',
-    answer: 'With one critical application and five or six high-risk rules. Most of the value shows on the first pull request.',
-  },
-];
-

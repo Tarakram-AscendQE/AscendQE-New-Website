@@ -195,7 +195,7 @@ export function PrivacyPolicyPage() {
                     <div>
                       <span className="block font-semibold text-[#0B1638] text-sm">Phone</span>
                       <a href="tel:+919392576186" className="text-[#1763ff] hover:underline font-medium">
-                        +91 93925 76186
+                        +91  70959 70067
                       </a>
                     </div>
                   </div>

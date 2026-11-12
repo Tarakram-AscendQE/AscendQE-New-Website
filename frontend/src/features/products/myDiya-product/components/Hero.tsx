@@ -116,7 +116,7 @@ export function DarkSection({
       id="top"
       className={`relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5] text-[#0B1638] overflow-hidden w-full ${className}`}
     >
-      <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
+      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
         {children}
       </div>
     </section>
@@ -160,6 +160,8 @@ export function Hero() {
         <svg
           className="absolute inset-0 w-full h-full opacity-35"
           xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1400 500"
+          preserveAspectRatio="xMidYMid slice"
         >
           {/* Subtle connecting lines */}
           <path
@@ -391,19 +393,36 @@ export function Hero() {
                       style={{ rotate: negAngle }}
                     >
                       <div
-                        className={`group relative flex flex-col items-center justify-center text-center rounded-full border-2 ${node.ringColor} ${node.shadowClass} ${node.badgeBg} p-1 sm:p-1.5 transition-all duration-300 hover:scale-115 hover:shadow-[0_8px_24px_rgba(20,91,255,0.22)] cursor-default w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 xl:w-22 xl:h-22 2xl:w-24 2xl:h-24`}
+                        className={`group relative flex flex-col items-center justify-center text-center rounded-full border-2 ${node.ringColor} ${node.shadowClass} ${node.badgeBg} p-1 sm:p-1.5 transition-all duration-300 hover:scale-115 hover:shadow-[0_8px_24px_rgba(20,91,255,0.22)] cursor-default w-[62px] h-[62px] sm:w-[72px] sm:h-[72px] md:w-20 md:h-20 lg:w-22 lg:h-22 xl:w-22 xl:h-22 2xl:w-24 2xl:h-24`}
                       >
                         {/* Inner subtle border */}
                         <div className="absolute inset-1 rounded-full border border-[#DCE5F5] pointer-events-none" />
 
                         {/* Icon */}
                         <div className={`mb-0.5 sm:mb-1 ${node.iconColor} transition-transform duration-200 group-hover:scale-110`}>
-                          <Icon className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5 xl:h-6 xl:w-6 stroke-[2.2]" />
+                          <Icon className="h-3.5 w-3.5 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 lg:h-5.5 lg:w-5.5 xl:h-6 xl:w-6 stroke-[2.2]" />
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-[8px] sm:text-[9.5px] md:text-[10.5px] lg:text-[11px] xl:text-[12px] 2xl:text-[13px] font-bold text-[#0B1638] leading-tight px-1">
-                          {node.title}
+                        <h3 className="text-[7.5px] sm:text-[9px] md:text-[10px] lg:text-[11px] xl:text-[12px] 2xl:text-[13px] font-bold text-[#0B1638] leading-[1.1] px-0.5 text-center">
+                          {node.id === "generates" ? (
+                            <>
+                              <span className="block">Generates &amp;</span>
+                              <span className="block">Executes</span>
+                            </>
+                          ) : node.id === "heals" ? (
+                            <>
+                              <span className="block">Heals &amp;</span>
+                              <span className="block">Learns</span>
+                            </>
+                          ) : node.id === "governs" ? (
+                            <>
+                              <span className="block">Governs</span>
+                              <span className="block">Quality</span>
+                            </>
+                          ) : (
+                            <span className="block">{node.title}</span>
+                          )}
                         </h3>
                       </div>
                     </motion.div>
@@ -419,30 +438,30 @@ export function Hero() {
                 transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
                 className="pointer-events-auto flex items-center justify-center"
               >
-                <div className="relative w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 xl:w-52 xl:h-52 rounded-full flex flex-col items-center justify-center p-2.5 sm:p-3 text-center border-2 border-[#DCE5F5] shadow-[0_10px_35px_rgba(20,91,255,0.14),inset_0_0_20px_rgba(20,91,255,0.05)] bg-white/95 backdrop-blur-md overflow-hidden">
+                <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-48 lg:h-48 xl:w-52 xl:h-52 rounded-full flex flex-col items-center justify-center p-2 sm:p-3 text-center border-2 border-[#DCE5F5] shadow-[0_10px_35px_rgba(20,91,255,0.14),inset_0_0_20px_rgba(20,91,255,0.05)] bg-white/95 backdrop-blur-md overflow-hidden">
                   {/* Concentric Inner Ring */}
-                  <div className="absolute inset-1.5 sm:inset-2.5 rounded-full border border-[#DCE5F5] border-dashed pointer-events-none" />
+                  <div className="absolute inset-1 sm:inset-2.5 rounded-full border border-[#DCE5F5] border-dashed pointer-events-none" />
 
                   {/* MyDiya Flame Logo */}
                   <div className="relative z-10 flex flex-col items-center justify-center">
                     <img
                       src={myDiyaLogo}
                       alt="MyDiya Logo"
-                      className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 object-contain select-none pointer-events-none transition-transform duration-300 hover:scale-105"
+                      className="w-7 h-7 sm:w-10 sm:h-10 lg:w-14 lg:h-14 xl:w-16 xl:h-16 object-contain select-none pointer-events-none transition-transform duration-300 hover:scale-105"
                     />
 
                     {/* Brand Name Typography */}
                     <div className="mt-0.5 sm:mt-1 flex items-center justify-center">
-                      <span className="text-base sm:text-lg lg:text-xl xl:text-2xl font-black tracking-tight text-[#0B1638]">
+                      <span className="text-sm sm:text-base lg:text-xl xl:text-2xl font-black tracking-tight text-[#0B1638]">
                         myDiya
                       </span>
                     </div>
 
                     {/* Subtitle */}
-                    <p className="mt-0.5 text-[8px] sm:text-[9px] lg:text-[9.5px] xl:text-[10.5px] font-semibold text-[#263653] tracking-wide uppercase">
+                    <p className="mt-0.5 text-[6.5px] sm:text-[8px] lg:text-[9.5px] xl:text-[10.5px] font-semibold text-[#263653] tracking-wide uppercase">
                       Autonomous QE Agents
                     </p>
-                    <p className="text-[7px] sm:text-[8px] lg:text-[8.5px] xl:text-[9.5px] font-bold text-[#145BFF] tracking-wider uppercase">
+                    <p className="text-[6px] sm:text-[7px] lg:text-[8.5px] xl:text-[9.5px] font-bold text-[#145BFF] tracking-wider uppercase">
                       Platform
                     </p>
                   </div>
@@ -454,8 +473,8 @@ export function Hero() {
           {/* ── Futuristic Pedestal Platform Base (Horizontally Centered Directly Below Orbit) ── */}
           <div className="relative -mt-4 sm:-mt-6 lg:-mt-8 w-full flex flex-col items-center pointer-events-none z-10">
             {/* Pedestal Bottom Base Step Ring */}
-            <div className="w-[82%] max-w-[420px] h-7 sm:h-8 lg:h-9 rounded-[100%] bg-gradient-to-b from-white via-[#F5F8FF] to-[#EAF1FF] border border-[#DCE5F5] shadow-[0_8px_24px_rgba(20,91,255,0.1)] flex items-center justify-center px-4">
-              <span className="text-[6px] sm:text-[7.5px] md:text-[8.5px] lg:text-[9px] font-bold tracking-[0.14em] sm:tracking-[0.18em] text-[#145BFF] uppercase whitespace-nowrap select-none">
+            <div className="w-[94%] sm:w-[82%] max-w-[420px] h-7 sm:h-8 lg:h-9 rounded-[100%] bg-gradient-to-b from-white via-[#F5F8FF] to-[#EAF1FF] border border-[#DCE5F5] shadow-[0_8px_24px_rgba(20,91,255,0.1)] flex items-center justify-center px-2 sm:px-4">
+              <span className="text-[6.5px] sm:text-[7.5px] md:text-[8.5px] lg:text-[9px] font-bold tracking-[0.06em] sm:tracking-[0.18em] text-[#145BFF] uppercase select-none">
                 ONE PLATFORM &nbsp;•&nbsp; MULTIPLE AGENTS &nbsp;•&nbsp; CONTINUOUS QUALITY
               </span>
             </div>
@@ -477,7 +496,7 @@ export function Hero() {
           const Icon = metric.icon;
           return (
             <React.Fragment key={metric.label}>
-              <div className="flex items-center gap-3 whitespace-nowrap">
+              <div className="flex items-center gap-3">
                 <Icon className="h-5 w-5 text-[#145BFF] shrink-0" />
                 <span className="text-sm font-semibold text-[#0B1638]">{metric.label}</span>
               </div>

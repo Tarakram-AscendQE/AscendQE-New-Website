@@ -16,7 +16,7 @@ export const CoffeeChallengeSection: React.FC = () => {
             Bring a real QE scenario. Let’s walk it from intent to evidence, and measure the
             time, cost and work it takes.
           </p>
-          <Link className="text-link" to="/start?offer=challenge">
+          <Link className="text-link" to="/contact?offer=challenge">
             Put your scenario to the test <span aria-hidden="true">↗</span>
           </Link>
           <p className="coffee-small aqe-caption">

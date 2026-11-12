@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, AlertCircle,Mail,MapPin } from 'lucide-react';
 import { Reveal } from '@/shared';
 import { HeadMeta } from '@/components/seo/HeadMeta';
@@ -199,9 +199,14 @@ export const StartPage1: React.FC = () => {
       <HeadMeta
         title="Contact AscendQE | AI Quality Engineering & Testing"
         description="Connect with AscendQE to explore AI-powered quality engineering, test automation, GenAI testing, and intelligent software testing solutions."
-        canonicalPath="/start"
+        canonicalPath="/contact"
       />
       <div className="max-w-[1400px] mx-auto px-6 sm:px-[5.5%] py-10 sm:py-14">
+        <nav aria-label="Breadcrumb" className="mb-8 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#6A7E95]" style={{ fontSize: '12px' }}>
+          <Link to="/" className="transition-colors hover:text-[#1763ff]">Home</Link>
+          <span aria-hidden="true">›</span>
+          <span className="text-[#1763ff]" aria-current="page">Contact</span>
+        </nav>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 xl:gap-16 items-start">
           <div className="flex flex-col pt-1">
             <div className="eyebrow">START WITH PROOF</div>

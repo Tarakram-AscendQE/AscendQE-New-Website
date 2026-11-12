@@ -25,21 +25,18 @@ import {
   EXAMPLE_ROWS,
   INTEGRATION_CHIPS,
   SAFE_ADOPT_POINTS,
-  FAQ_ITEMS,
 } from './prCheck-data';
 import prCheckLogo from '@/assets/prCheck-assets/prcheck-logo.webp';
+import { FAQAccordion } from "@/shared/faq's accordians/page";
+import { StillHaveQuestionsBanner } from '@/shared/StillHaveQuestionsBanner';
+import { PRCHECK_FAQS } from './prCheck-faqs';
 
 export const PRCheckPage: React.FC = () => {
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [showDemoModal, setShowDemoModal] = useState<boolean>(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  const toggleFaq = (index: number) => {
-    setOpenFaq((prev) => (prev === index ? null : index));
-  };
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -122,7 +119,7 @@ export const PRCheckPage: React.FC = () => {
                 </button>
 
                 <Link
-                  to="/start"
+                  to="/contact"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-[#2A4FE0] hover:bg-[#EEF2FE] transition-colors"
                 >
                   <span>Start with 100 free tests</span>
@@ -439,52 +436,12 @@ export const PRCheckPage: React.FC = () => {
       </section>
 
       {/* ── SECTION 7: FAQ ── */}
-      <section id="faq" className="py-20 bg-white">
-        <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0E2440] tracking-tight mb-3">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-lg text-[#41556E]">
-                Clear answers on how independent change assurance operates.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              {FAQ_ITEMS.map((item, idx) => {
-                const isOpen = openFaq === idx;
-                return (
-                  <div
-                    key={item.question}
-                    className="bg-white border border-[#DFE6EF] rounded-2xl p-5 sm:p-6 transition-all"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => toggleFaq(idx)}
-                      className="w-full flex items-center justify-between gap-4 text-left font-bold text-[#0E2440] text-base sm:text-lg focus:outline-hidden"
-                    >
-                      <span>{item.question}</span>
-                      <span
-                        className={`h-7 w-7 rounded-full bg-[#EEF2FE] text-[#2A4FE0] flex items-center justify-center text-lg font-bold shrink-0 transition-transform ${
-                          isOpen ? 'rotate-180' : ''
-                        }`}
-                      >
-                        {isOpen ? '–' : '+'}
-                      </span>
-                    </button>
-                    {isOpen && (
-                      <div className="mt-3 pt-3 border-t border-[#DFE6EF] text-[#41556E] text-[15px] leading-relaxed">
-                        {item.answer}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
+      <FAQAccordion
+        items={PRCHECK_FAQS}
+        title="Frequently Asked Questions"
+        subtitle="Clear answers on how independent change assurance operates."
+      />
+      <StillHaveQuestionsBanner />
 
       {/* ── SECTION 8: BOOK A DEMO CTA ── */}
       <section id="demo" className="py-12 pb-20 bg-white">
@@ -509,7 +466,7 @@ export const PRCheckPage: React.FC = () => {
               </button>
 
               <Link
-                to="/start"
+                to="/contact"
                 className="px-6 py-3.5 rounded-xl font-bold text-white bg-[#2A4FE0] hover:bg-[#2142C4] transition-all"
               >
                 Start free trial
@@ -548,7 +505,7 @@ export const PRCheckPage: React.FC = () => {
 
             <div className="space-y-3">
               <Link
-                to="/start"
+                to="/contact"
                 onClick={() => setShowDemoModal(false)}
                 className="w-full flex items-center justify-between p-3.5 rounded-xl border border-[#DFE6EF] hover:border-[#2A4FE0] hover:bg-[#EEF2FE]/40 transition-colors group"
               >

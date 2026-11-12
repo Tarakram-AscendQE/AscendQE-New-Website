@@ -79,7 +79,7 @@ export function ContextChanges() {
       </div>
 
       {/* ── Main Container: Edge-Aligned Width ── */}
-      <div className="relative z-10 w-full px-6 sm:px-12 md:px-[88px] lg:px-16 xl:px-24">
+      <div className="relative z-10 w-full px-4 sm:px-8 md:px-[88px] lg:px-16 xl:px-24">
         
         {/* ════════ TOP SECTION: Headline (Left) & Hub Diagram (Right) ════════ */}
         <div className="grid items-center gap-10 lg:gap-12 xl:gap-14 lg:grid-cols-12">
@@ -131,38 +131,19 @@ export function ContextChanges() {
               >
                 Enterprise Reality.
               </span>*/}
+              <span className="block text-[#0f172a] mb-1">
+                Agents Work Better When
+              </span>
               <span
-  className="block text-[#0f172a] mb-1"
-  style={{ lineHeight: "1.2", paddingBottom: "3px" }}
->
-  Agents Work Better When
-</span>
-
-<span
-  className="block mb-1"
-  style={{
-    background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    lineHeight: "1.2",
-    paddingBottom: "3px",
-  }}
->
-  They Understand the Same
-</span>
-
-<span
-  className="block mb-1"
-  style={{
-    background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    lineHeight: "1.2",
-    paddingBottom: "3px",
-  }}
->
-  Enterprise Reality.
-</span>
+                className="inline-block"
+                style={{
+                  background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                They Understand the Same Enterprise Reality.
+              </span>
             </motion.h2>
 
             {/* Paragraphs */}
@@ -206,8 +187,8 @@ export function ContextChanges() {
           </div>
 
           {/* Right Hub Diagram Column */}
-          <div className="lg:col-span-7 xl:col-span-7 relative flex items-center justify-center">
-            <div className="relative w-full max-w-[620px] xl:max-w-[680px] grid grid-cols-12 gap-2 sm:gap-3 items-center select-none">
+          <div className="lg:col-span-7 xl:col-span-7 relative flex items-center justify-center w-full pb-4 pt-1 px-1">
+            <div className="relative w-full min-w-0 max-w-[620px] xl:max-w-[680px] grid grid-cols-12 gap-2 sm:gap-3 items-center select-none">
               
               {/* Left 5 Inputs */}
               <div className="col-span-4 flex flex-col gap-2.5 sm:gap-3 z-10">
@@ -237,19 +218,24 @@ export function ContextChanges() {
               {/* Center Holographic Shared Context Hub */}
               <div className="col-span-4 flex items-center justify-center relative z-20">
                 {/* SVG Circuit Connectors */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none -z-10" viewBox="0 0 200 320" fill="none">
+                <svg
+                  className="absolute inset-0 w-full h-full pointer-events-none -z-10"
+                  viewBox="0 0 200 320"
+                  preserveAspectRatio="none"
+                  fill="none"
+                >
                   {/* Left lines */}
-                  <path d="M 0 35 C 50 35, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
-                  <path d="M 0 95 C 40 95, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
-                  <path d="M 0 160 L 100 160" stroke="#0284c7" strokeWidth="1.8" opacity="0.75" />
-                  <path d="M 0 225 C 40 225, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
-                  <path d="M 0 285 C 50 285, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
+                  <path d="M 0 35 C 50 35, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
+                  <path d="M 0 95 C 40 95, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
+                  <path d="M 0 160 L 100 160" stroke="#0284c7" strokeWidth="1.8" opacity="0.75" vectorEffect="non-scaling-stroke" />
+                  <path d="M 0 225 C 40 225, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
+                  <path d="M 0 285 C 50 285, 60 160, 100 160" stroke="#0284c7" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
                   {/* Right lines */}
-                  <path d="M 100 160 C 140 160, 150 35, 200 35" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
-                  <path d="M 100 160 C 140 160, 160 95, 200 95" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
-                  <path d="M 100 160 L 200 160" stroke="#9333ea" strokeWidth="1.8" opacity="0.75" />
-                  <path d="M 100 160 C 140 160, 160 225, 200 225" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
-                  <path d="M 100 160 C 140 160, 150 285, 200 285" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" />
+                  <path d="M 100 160 C 140 160, 150 35, 200 35" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
+                  <path d="M 100 160 C 140 160, 160 95, 200 95" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
+                  <path d="M 100 160 L 200 160" stroke="#9333ea" strokeWidth="1.8" opacity="0.75" vectorEffect="non-scaling-stroke" />
+                  <path d="M 100 160 C 140 160, 160 225, 200 225" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
+                  <path d="M 100 160 C 140 160, 150 285, 200 285" stroke="#9333ea" strokeWidth="1.5" opacity="0.6" strokeDasharray="3 4" vectorEffect="non-scaling-stroke" />
                 </svg>
 
                 {/* 3D Stepped Disc Core */}
@@ -318,7 +304,7 @@ export function ContextChanges() {
                     className={`flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-xl border ${step.bg} shadow-sm backdrop-blur-md transition-transform duration-200 hover:scale-105 shrink-0`}
                   >
                     <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    <span className="text-[10.5px] sm:text-xs font-bold whitespace-nowrap">
+                    <span className="text-[10.5px] sm:text-xs font-bold">
                       {step.label}
                     </span>
                   </div>

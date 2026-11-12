@@ -148,7 +148,7 @@ export function Workflow() {
       </div>
 
       {/* ── Main Container: Edge-Aligned Two-Column Layout ── */}
-      <div className="relative z-10 w-full px-6 sm:px-12 md:px-[88px] lg:px-16 xl:px-24">
+      <div className="relative z-10 w-full px-4 sm:px-8 md:px-[88px] lg:px-16 xl:px-24">
         <div className="grid items-center gap-12 lg:gap-14 xl:gap-16 lg:grid-cols-12">
           
           {/* ════════ LEFT COLUMN: 3D Agentic QE Cycle Diagram ════════ */}
@@ -219,68 +219,101 @@ export function Workflow() {
                 >
                   {/* Top Glowing Gradient Sphere matching Image 2 */}
                   <div
-                    className="relative w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full border-[3px] border-white shadow-[0_12px_36px_rgba(99,102,241,0.45),inset_0_3px_14px_rgba(255,255,255,0.85),inset_0_-8px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center text-center p-3 overflow-hidden"
+                    className="relative w-22 h-22 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full border-[3px] border-white shadow-[0_12px_36px_rgba(99,102,241,0.45),inset_0_3px_14px_rgba(255,255,255,0.85),inset_0_-8px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center text-center p-2 sm:p-3 overflow-hidden"
                     style={{
                       background: "linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #a855f7 100%)",
                     }}
                   >
                     {/* Top-Center Specular Glare */}
-                    <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-16 sm:w-20 md:w-24 h-6 sm:h-8 rounded-full bg-gradient-to-b from-white/75 to-transparent pointer-events-none" />
+                    <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-12 sm:w-16 md:w-24 h-4 sm:h-6 md:h-8 rounded-full bg-gradient-to-b from-white/75 to-transparent pointer-events-none" />
 
                     {/* Inner subtle glow ring */}
                     <div className="absolute inset-1.5 rounded-full border border-white/20 pointer-events-none" />
 
                     {/* Typography: Agentic QE */}
                     <div className="relative z-10 flex flex-col items-center justify-center select-none">
-                      <span className="text-base sm:text-lg md:text-xl font-black text-[#0a1628] tracking-tight leading-tight drop-shadow-sm">
+                      <span className="text-xs sm:text-base md:text-xl font-black text-[#0a1628] tracking-tight leading-tight drop-shadow-sm">
                         Agentic
                       </span>
-                      <span className="text-base sm:text-lg md:text-xl font-black text-[#0a1628] tracking-tight leading-tight drop-shadow-sm mt-0.5">
+                      <span className="text-xs sm:text-base md:text-xl font-black text-[#0a1628] tracking-tight leading-tight drop-shadow-sm mt-0.5">
                         QE
                       </span>
                     </div>
                   </div>
 
                   {/* 3D Pedestal Shadow & Depth Layers */}
-                  <div className="w-28 sm:w-32 md:w-36 h-5 sm:h-6 rounded-[100%] bg-gradient-to-b from-[#475569] via-[#334155] to-[#1e293b] shadow-md -mt-3 sm:-mt-3.5 -z-10" />
-                  <div className="w-36 sm:w-42 md:w-48 h-6 sm:h-8 rounded-[100%] bg-gradient-to-b from-[#94a3b8]/40 via-[#cbd5e1]/25 to-transparent blur-[3px] -mt-4.5 sm:-mt-5 -z-20" />
+                  <div className="w-20 sm:w-26 md:w-32 lg:w-36 h-4 sm:h-5 md:h-6 rounded-[100%] bg-gradient-to-b from-[#475569] via-[#334155] to-[#1e293b] shadow-md -mt-2.5 sm:-mt-3 md:-mt-3.5 -z-10" />
+                  <div className="w-26 sm:w-34 md:w-42 lg:w-48 h-5 sm:h-6 md:h-8 rounded-[100%] bg-gradient-to-b from-[#94a3b8]/40 via-[#cbd5e1]/25 to-transparent blur-[3px] -mt-3.5 sm:-mt-4 md:-mt-5 -z-20" />
                 </motion.div>
               </div>
 
-              {/* ── 6 Cycle Step Cards (Arranged in Perfect Symmetric Hexagon with Guaranteed -50% -50% Center Alignment) ── */}
-              {CYCLE_STEPS.map((step, idx) => {
-                const Icon = step.icon;
-                return (
-                  <div
-                    key={step.id}
-                    style={{
-                      left: step.pos.left,
-                      top: step.pos.top,
-                      transform: "translate(-50%, -50%)",
-                    }}
-                    className="absolute z-30 pointer-events-auto"
-                  >
-                    <motion.div
-                      initial={reduce ? false : { opacity: 0, scale: 0.85 }}
-                      whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: 0.1 + idx * 0.05 }}
-                    >
+              {/* ── 6 Cycle Step Cards (Hexagon on desktop, stacked list on mobile) ── */}
+              <div className="relative w-full aspect-square max-w-[420px] sm:max-w-[480px] md:max-w-[520px] lg:max-w-[540px] xl:max-w-[580px] mx-auto">
+                {/* Desktop: Hexagon layout with absolute positioning */}
+                <div className="hidden lg:block">
+                  {CYCLE_STEPS.map((step, idx) => {
+                    const Icon = step.icon;
+                    return (
                       <div
-                        className={`group flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border p-2 sm:p-2.5 xl:p-3 text-center transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-default w-26 sm:w-28 md:w-30 lg:w-32 xl:w-34 min-h-[86px] sm:min-h-[92px] md:min-h-[98px] lg:min-h-[104px] ${step.bgClass}`}
+                        key={step.id}
+                        style={{
+                          left: step.pos.left,
+                          top: step.pos.top,
+                          transform: "translate(-50%, -50%)",
+                        }}
+                        className="absolute z-30 pointer-events-auto"
                       >
-                        <Icon className={`h-5 w-5 sm:h-5.5 sm:w-5.5 lg:h-6 lg:w-6 ${step.iconColor} mb-1 transition-transform duration-200 group-hover:scale-110`} />
-                        <h4 className="text-xs sm:text-[13px] lg:text-[13.5px] font-bold text-[#0f172a] leading-tight">
-                          {step.title}
-                        </h4>
-                        <p className="mt-0.5 aqe-caption text-slate-500 leading-tight text-center font-normal max-w-[115px] sm:max-w-[125px]">
-                          {step.subtext}
-                        </p>
+                        <motion.div
+                          initial={reduce ? false : { opacity: 0, scale: 0.85 }}
+                          whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: 0.1 + idx * 0.05 }}
+                        >
+                          <div
+                            className={`group flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border p-1.5 sm:p-2 xl:p-3 text-center transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-default w-20 sm:w-24 md:w-28 lg:w-32 xl:w-34 min-h-[64px] sm:min-h-[78px] md:min-h-[92px] lg:min-h-[104px] ${step.bgClass}`}
+                          >
+                            <Icon className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 ${step.iconColor} mb-0.5 sm:mb-1 transition-transform duration-200 group-hover:scale-110`} />
+                            <h4 className="text-[10px] sm:text-xs md:text-[13px] lg:text-[13.5px] font-bold text-[#0f172a] leading-tight">
+                              {step.title}
+                            </h4>
+                            <p className="mt-0.5 text-[7px] sm:text-[8px] md:text-[10px] lg:text-[11px] text-slate-500 leading-tight text-center font-normal max-w-[85px] sm:max-w-[105px] md:max-w-[125px]">
+                              {step.subtext}
+                            </p>
+                          </div>
+                        </motion.div>
                       </div>
-                    </motion.div>
-                  </div>
-                );
-              })}
+                    );
+                  })}
+                </div>
+
+                {/* Mobile: Stacked vertical list of cycle steps */}
+                <div className="lg:hidden flex flex-col items-center gap-4 sm:gap-6 w-full px-4 sm:px-6 mt-8">
+                  {CYCLE_STEPS.map((step, idx) => {
+                    const Icon = step.icon;
+                    return (
+                      <motion.div
+                        key={step.id}
+                        initial={reduce ? false : { opacity: 0, y: 10 }}
+                        whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: 0.1 + idx * 0.05 }}
+                      >
+                        <div
+                          className={`group flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border p-1.5 sm:p-2 xl:p-3 text-center transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-default w-full sm:w-[280px] md:w-[320px] lg:w-[340px] min-h-[64px] sm:min-h-[78px] md:min-h-[92px] lg:min-h-[104px] ${step.bgClass}`}
+                        >
+                          <Icon className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 ${step.iconColor} mb-0.5 sm:mb-1 transition-transform duration-200 group-hover:scale-110`} />
+                          <h4 className="text-[10px] sm:text-xs md:text-[13px] lg:text-[13.5px] font-bold text-[#0f172a] leading-tight">
+                            {step.title}
+                          </h4>
+                          <p className="mt-0.5 text-[7px] sm:text-[8px] md:text-[10px] lg:text-[11px] text-slate-500 leading-tight text-center font-normal max-w-[85px] sm:max-w-[105px] md:max-w-[125px]">
+                            {step.subtext}
+                          </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
 
               {/* ── 4 Corner Boundary Badges ── */}
               {CORNER_BADGES.map((badge, idx) => (
@@ -291,7 +324,7 @@ export function Workflow() {
                     top: badge.pos.top,
                     transform: "translate(-50%, -50%)",
                   }}
-                  className="absolute z-10 flex flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-sm px-3 sm:px-3.5 py-1.5 sm:py-2 shadow-[0_4px_16px_rgba(0,0,0,0.05)] min-w-[72px] sm:min-w-[82px] text-center select-none"
+                  className="absolute z-10 hidden md:flex flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-sm px-3 sm:px-3.5 py-1.5 sm:py-2 shadow-[0_4px_16px_rgba(0,0,0,0.05)] min-w-[72px] sm:min-w-[82px] text-center select-none"
                 >
                   <span className="text-[9px] sm:text-[10px] font-bold text-slate-700 tracking-wider">
                     {badge.label1}
@@ -363,7 +396,7 @@ export function Workflow() {
             </motion.p>
 
             {/* 5 Transformation Comparison Columns (Before -> After) */}
-            <div className="mt-7 sm:mt-8 pt-6 border-t border-slate-100 grid grid-cols-5 gap-2 sm:gap-3 xl:gap-4 w-full">
+            <div className="mt-7 sm:mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-3.5 xl:gap-4 w-full">
               {COMPARISON_COLUMNS.map((col, index) => {
                 const Icon = col.icon;
                 return (

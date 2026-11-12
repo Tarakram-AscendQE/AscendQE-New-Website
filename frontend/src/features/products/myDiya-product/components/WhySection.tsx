@@ -104,7 +104,7 @@ export function WhySection() {
       </div>
 
       {/* ── Main Container: Edge-Aligned Two-Column Layout ── */}
-      <div className="relative z-10 w-full px-6 sm:px-12 md:px-[88px] lg:px-16 xl:px-24">
+      <div className="relative z-10 w-full px-4 sm:px-8 md:px-[88px] lg:px-16 xl:px-24">
         <div className="grid items-center gap-8 lg:gap-10 xl:gap-12 lg:grid-cols-12">
           
           {/* ════════ LEFT COLUMN: Copy & Narrative (Starts at Left Border) ════════ */}
@@ -131,97 +131,18 @@ export function WhySection() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-4 sm:mt-5 text-3xl sm:text-4xl lg:text-[2.5rem] xl:text-[3rem] font-extrabold tracking-tight text-[#0a1628] leading-[1.12]"
             >
-              {/*<span>my</span><span
+              <span>my</span>
+              <span
                 className="inline-block"
                 style={{
                   background: "linear-gradient(90deg, #ea580c 0%, #e11d48 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
-                  color: "#ea580c",
                 }}
               >
                 Diya
               </span>
-              <span> — Enterprise Quality Engineering, Reimagined with Agentic AI</span>*/}
-              {/*<span>my</span>
-<span
-  className="inline-block"
-  style={{
-    background: "linear-gradient(90deg, #ea580c 0%, #e11d48 100%)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    color: "#ea580c",
-  }}
->
-  Diya
-</span>
-
-<span className="block mt-6">
-  — Enterprise Quality Engineering, Reimagined with Agentic AI
-</span>*/}
-{/*<h1>
-  <span className="block" style={{ lineHeight: "1.2", paddingBottom: "4px" }}>
-    <span>my</span>
-    <span
-      className="inline-block"
-      style={{
-        background: "linear-gradient(90deg, #ea580c 0%, #e11d48 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-      }}
-    >
-      Diya
-    </span>
-    <span>-Enterprise Quality</span>
-  </span>
-
-  <span className="block" style={{ marginTop: "8px", lineHeight: "1.1" }}>
-    Engineering, Reimagined with Agentic AI
-  </span>
-</h1>*/}
-{/*<h1>
-  <span
-    className="block whitespace-nowrap"
-    style={{ lineHeight: "1.2", paddingBottom: "4px" }}
-  >
-    <span>my</span>
-    <span
-      className="inline-block"
-      style={{
-        background: "linear-gradient(90deg, #ea580c 0%, #e11d48 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-      }}
-    >
-      Diya
-    </span>
-    <span>-Enterprise Quality</span>
-  </span>
-
-  <span className="block mt-2" style={{ lineHeight: "1.1" }}>
-    Engineering, Reimagined with Agentic AI
-  </span>
-</h1>*/}
-<h1>
-  <span className="block whitespace-nowrap" style={{ lineHeight: "1.2", paddingBottom: "4px" }}>
-    <span>my</span>
-    <span
-      className="inline-block"
-      style={{
-        background: "linear-gradient(90deg, #ea580c 0%, #e11d48 100%)",
-        WebkitBackgroundClip: "text",
-        WebkitTextFillColor: "transparent",
-      }}
-    >
-      Diya
-    </span>
-    <span>-Enterprise Quality</span>
-  </span>
-
-  <span className="block">Engineering,</span>
-  <span className="block">Reimagined with</span>
-  <span className="block">Agentic AI</span>
-</h1>
+              <span> — Enterprise Quality Engineering, Reimagined with Agentic AI</span>
             </motion.h2>
 
             {/* Paragraph 1 */}

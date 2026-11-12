@@ -30,7 +30,7 @@ function MetricCard({ value, title, source }: { value: string; title: string; so
 function DarkSection({ children }: { children: React.ReactNode }) {
   return (
     <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5]">
-      <div className="relative z-10 mx-auto w-full px-12 md:px-[88px] lg:px-24">
+      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
         {children}
       </div>
     </section>
@@ -39,8 +39,8 @@ function DarkSection({ children }: { children: React.ReactNode }) {
 
 function LightSection({ children }: { children: React.ReactNode }) {
   return (
-    <section className="relative bg-[#f9fafb] py-24 lg:py-32">
-      <div className="mx-auto w-full px-12 md:px-[88px] lg:px-24">
+    <section className="relative bg-[#f9fafb] py-16 sm:py-24 lg:py-32">
+      <div className="mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
         {children}
       </div>
     </section>

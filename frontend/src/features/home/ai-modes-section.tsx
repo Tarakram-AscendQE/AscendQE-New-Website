@@ -72,7 +72,7 @@ export const AiModesSection: React.FC = () => {
                 <li key={i}>{chk}</li>
               ))}
             </ul>
-            <Link className="text-link" to="/start">
+            <Link className="text-link" to="/contact">
               See it on your application <span aria-hidden="true">↗</span>
             </Link>
           </div>

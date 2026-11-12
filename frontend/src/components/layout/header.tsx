@@ -51,8 +51,8 @@ const companyItems: DropdownItem[] = [
   {
     name: 'Case Studies',
     icon: BookOpen,
-    to: '/study.pdf',
-    isExternal: true,
+    to: '/case-studies',
+    //isExternal: true,
   },
   {
     name: 'Connect With Us',
@@ -408,7 +408,7 @@ export const Header: React.FC = () => {
           <img
             src={logoImg}
             alt="AscendQE"
-            className="h-8 sm:h-9 w-auto object-contain"
+            className="h-8 sm:h-9 w-auto object-contain align-middle mr-2"
           />
         </Link>
         <nav ref={desktopNavRef} aria-label="Main navigation" className="relative hidden lg:flex items-center gap-4">
