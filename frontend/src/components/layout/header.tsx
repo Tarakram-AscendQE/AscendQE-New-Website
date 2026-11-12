@@ -52,7 +52,7 @@ const companyItems: DropdownItem[] = [
     name: 'Case Studies',
     icon: BookOpen,
     to: '/case-studies',
-    isExternal: true,
+    //isExternal: true,
   },
   {
     name: 'Connect With Us',
