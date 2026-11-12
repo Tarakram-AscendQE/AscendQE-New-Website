@@ -37,6 +37,7 @@ const FOOTER_COLS = [
       { label: "Connect With Us", href: "/contact" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
+      {label:"Case Studies", href:"/case-studies"}
     ],
   },
   {

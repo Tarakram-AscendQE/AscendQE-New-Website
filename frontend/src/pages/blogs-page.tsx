@@ -435,7 +435,7 @@ export function BlogsPage() {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <Link
-                to="/start"
+                to="/contact"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1763ff] text-white text-sm font-semibold shadow-md shadow-[#1763ff]/20 hover:bg-[#1250d4] transition-colors"
               >
                 <span>Start with 100 free tests</span>

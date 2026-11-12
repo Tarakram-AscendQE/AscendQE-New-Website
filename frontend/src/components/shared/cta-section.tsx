@@ -24,7 +24,7 @@ export const CtaSection: React.FC = () => {
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
-              <Link to="/start">
+              <Link to="/contact">
                 <Button size="lg" variant="primary" className="w-full sm:w-auto">
                   Automate my first 100 test cases
                   <ArrowRight className="h-4 w-4 ml-1" />

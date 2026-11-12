@@ -291,7 +291,7 @@ export function MySTLCPage() {
         {/* ── SECTION 3: VALUE MODEL (LIGHT) ── */}
         <section className="relative bg-gradient-to-b from-[#f8faff] via-[#ffffff] to-[#f4f7fe] py-14 lg:py-20 overflow-hidden border-t border-slate-200/80 text-[#0f172a]">
           {/* <SignalBackground style={{ opacity: 0.5 }} /> */}
-          <div className="relative z-10 mx-auto w-full px-12 md:px-[88px] lg:px-24">
+          <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
 
             {/* Top row: eyebrow + chart label */}
             <div className="flex items-start justify-between">
@@ -535,7 +535,7 @@ export function MySTLCPage() {
           {/* Subtle background glow */}
           <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-teal-500/5 rounded-full blur-[140px] pointer-events-none" />
 
-          <div className="relative z-10 mx-auto w-full px-12 md:px-[88px] lg:px-24">
+          <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
 
               {/* Left Column: Data */}
@@ -619,7 +619,7 @@ export function MySTLCPage() {
 
         {/* ── SECTION 6: PROVEN BY INDUSTRY DATA (LIGHT) ── */}
         <section className="relative bg-[#f8fafc] py-14 lg:py-20 overflow-hidden border-t border-[#e2e8f0]">
-          <div className="mx-auto w-full px-12 md:px-[88px] lg:px-24">
+          <div className="mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
 
               {/* Left Column: Copy & Card */}

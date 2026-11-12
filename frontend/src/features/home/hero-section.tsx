@@ -12,10 +12,12 @@ export const HeroSection: React.FC = () => {
               <span className="dot" /> THE QE OPERATING SYSTEM
             </div>
             <h2
+              className="hero-heading"
               style={{
-                fontSize: 'clamp(52px, 6vw, 88px)',
+                fontSize: 'clamp(34px, 6vw, 88px)',
                 lineHeight: 0.98,
                 letterSpacing: '-4px',
+                overflowWrap: 'break-word',
               }}
             >
               Better. Faster.<br />
@@ -34,7 +36,7 @@ export const HeroSection: React.FC = () => {
               </p>
             </div>
             <div className="actions">
-              <Link className="btn" to="/start">
+              <Link className="btn" to="/contact">
                 See my first 100 tests automated <span className="arrow" aria-hidden="true">↗</span>
               </Link>
               <a className="text-link" href="#journey">

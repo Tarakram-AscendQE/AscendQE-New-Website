@@ -66,7 +66,7 @@ export function FinalCTA() {
         />
       </div>
 
-      <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-16 xl:px-24">
+      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-16 xl:px-24">
         {/* Eyebrow Header */}
         <div className="inline-block">
           <p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.22em] text-[#64748B]">

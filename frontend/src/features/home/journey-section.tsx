@@ -339,7 +339,7 @@ export const JourneySection: React.FC<JourneySectionProps> = ({ isMotionPaused }
             <br />
             See how your first 100 test cases can be automated.
           </p>
-          <Link className="btn" to="/start">
+          <Link className="btn" to="/contact">
             Book my 100-test demo <span className="arrow" aria-hidden="true">↗</span>
           </Link>
         </div>

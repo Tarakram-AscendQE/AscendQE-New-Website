@@ -80,7 +80,7 @@ export const ProofFaqSection1: React.FC = () => {
               qualifying test cases, automated free. See the scripts. Run the tests. Measure the
               difference.
             </p>
-            <Link className="btn" to="/start">
+            <Link className="btn" to="/contact">
               Book my 100-test demo <span className="arrow" aria-hidden="true">↗</span>
             </Link>
             <p className="terms">
