@@ -14,12 +14,22 @@
     "build": "npm run build --prefix frontend && npm run build --prefix backend",
     "build:frontend": "npm run build --prefix frontend",
     "build:backend": "npm run build --prefix backend",
-    "start": "npm run start --prefix backend"
+    "start": "npm run start --prefix backend",
+    "lint": "eslint frontend/src backend/src",
+    "lint:fix": "eslint frontend/src backend/src --fix",
+    "format:check": "prettier --check frontend/src backend/src"
   },
   "dependencies": {
     "@primer/octicons-react": "^19.42.0"
   },
   "devDependencies": {
-    "concurrently": "^10.0.6"
+    "@eslint/js": "9.39.5",
+    "concurrently": "^10.0.6",
+    "eslint": "9.39.5",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.8",
+    "globals": "17.14.0",
+    "prettier": "3.10.1",
+    "typescript-eslint": "8.72.2"
   }
 }
