@@ -6,7 +6,7 @@ export class TrackingController {
     // Listen for consent changes
   }
   
-  static loadScript(src: string, category: string): Promise<void> {
+  static async loadScript(src: string, category: string): Promise<void> {
     // Only load if category is allowed
   }
   
