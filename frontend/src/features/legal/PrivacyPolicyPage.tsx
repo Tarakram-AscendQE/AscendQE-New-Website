@@ -16,8 +16,8 @@ export function PrivacyPolicyPage() {
           {/* Breadcrumb */}
           <p className="mb-6 aqe-caption text-[#69758a]">
             <a href="/" className="hover:text-[#1763ff] transition-colors">Home</a>
-            <span className="mx-1.5 text-[#cbd5e1]">›</span>
-            <span className="text-[#69758a]">Legal</span>
+            {/*<span className="mx-1.5 text-[#cbd5e1]">›</span>*/}
+            {/*<span className="text-[#69758a]">Legal</span>*/}
             <span className="mx-1.5 text-[#cbd5e1]">›</span>
             <span className="text-[#1763ff] font-semibold">Privacy Policy</span>
           </p>
@@ -51,10 +51,10 @@ export function PrivacyPolicyPage() {
       <section className="relative bg-white py-16 sm:py-24">
         <div className="mx-auto max-w-4xl px-6 sm:px-10 lg:px-12">
           <Reveal delay={0.1}>
-            <div className="space-y-10 text-[#475569] leading-relaxed text-[15px] sm:text-[16px]">
+            <div className="space-y-0 text-[#475569] leading-relaxed text-[15px] sm:text-[16px]">
               
               {/* Introduction */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">1. Introduction</h2>
                 <p className="text-[#475569] leading-relaxed">
                   AscendQE ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website and use our enterprise quality engineering platform and services.
@@ -62,7 +62,7 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* Information We Collect */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">2. Information We Collect</h2>
                 
                 <h3 className="text-base sm:text-lg font-semibold text-[#1763ff] mb-3 mt-4">Personal Information</h3>
@@ -87,7 +87,7 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* How We Use Your Information */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">3. How We Use Your Information</h2>
                 <p className="mb-4">
                   We process collected information to:
@@ -104,7 +104,7 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* Sharing Your Information */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">4. Sharing Your Information</h2>
                 <p className="mb-4">
                   We do not sell your personal data. We may share information under strictly governed conditions:
@@ -126,7 +126,7 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* Data Security */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">5. Data Security</h2>
                 <p>
                   We implement robust technical and organizational security controls, including encryption in transit and at rest, role-based access management, and continuous infrastructure auditing to safeguard your data. While no digital platform can guarantee absolute security, we continuously review and reinforce our safeguards.
@@ -134,7 +134,7 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* Your Rights */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">6. Your Rights</h2>
                 <p className="mb-4">
                   Depending on your geographic location and local data protection regulations, you may possess the following rights:
@@ -150,15 +150,18 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* Cookies and Tracking */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section id="cookies" className="scroll-mt-24 rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">7. Cookies and Tracking Technologies</h2>
+                <p className="mb-4">
+                  Strictly necessary storage supports core site operation and security. Optional functional, analytics, and marketing technologies are disabled unless you choose to allow them in Cookie Settings. Your choice is stored on this device so it can be applied on later visits.
+                </p>
                 <p>
-                  We utilize standard session and analytical cookies to remember user preferences and measure overall site engagement. You can configure your browser preferences to reject or prompt for cookies, though some platform features may operate with reduced functionality as a result.
+                  This website uses Google Tag Manager (GTM-PS92RJ6D). The container is not loaded until you allow Analytics or Marketing. Tags in that container must also be configured to respect the consent signals for their category. You can review or withdraw your choice at any time using Cookie Settings in the website footer.
                 </p>
               </section>
 
               {/* Children's Privacy */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">8. Children's Privacy</h2>
                 <p>
                   AscendQE services are designed exclusively for business enterprises and software development professionals. We do not knowingly collect personal details from anyone under 13 years of age. If you believe a minor has submitted personal data to us, please notify us immediately.
@@ -166,7 +169,7 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* Changes to Privacy Policy */}
-              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-6 sm:p-8 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
+              <section className="rounded-2xl border border-[#e2e8f0] bg-white p-3 sm:p-5 shadow-[0_2px_12px_rgba(20,91,255,0.03)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">9. Changes to This Privacy Policy</h2>
                 <p>
                   We may periodically revise this Privacy Policy to reflect updates to our operational practices or statutory requirements. When revisions occur, the updated policy will be posted on this page with a revised effective date.
@@ -174,7 +177,7 @@ export function PrivacyPolicyPage() {
               </section>
 
               {/* Contact Us */}
-              <section className="rounded-2xl border border-[#DCE5F5] bg-[#f7f9fd] p-6 sm:p-8 shadow-[0_4px_24px_rgba(20,91,255,0.04)]">
+              <section className="rounded-2xl border border-[#DCE5F5] bg-[#f7f9fd] p-3 sm:p-5 shadow-[0_4px_24px_rgba(20,91,255,0.04)]">
                 <h2 className="text-xl sm:text-2xl font-bold text-[#0B1638] mb-4">10. Contact Us</h2>
                 <p className="mb-6 text-[#475569]">
                   If you have any questions, inquiries, or privacy-related requests regarding this Privacy Policy, please reach out to us:

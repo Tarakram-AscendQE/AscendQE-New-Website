@@ -1,5 +1,7 @@
+﻿
 import React, { useState } from 'react';
 import { CREW_BOTS } from './data';
+import { CharacterRow } from './character-row';
 import aqShortLogo from '@/assets/brand-logos/AQ-short-logo.webp';
 
 interface WelcomeSectionProps {
@@ -8,6 +10,10 @@ interface WelcomeSectionProps {
 
 export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onOpenTrailer }) => {
   const [crewMessage, setCrewMessage] = useState('Meet your crew. Then see them work.');
+
+  const handleSelectBot = (bot: string, role: string) => {
+    setCrewMessage(`${bot} · ${role} — part of your connected QE crew.`);
+  };
 
   return (
     <section className="welcome" aria-labelledby="welcome-title">
@@ -24,31 +30,8 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onOpenTrailer })
       </p>
 
       <div className="welcome-console">
-        {/* 10 Crew Agent Avatars */}
-        <div className="welcome-crew">
-          {CREW_BOTS.map((item) => (
-            <button
-              key={item.bot}
-              type="button"
-              className="welcome-bot"
-              style={{ ['--i' as any]: item.idx }}
-              data-bot={item.bot}
-              data-role={item.role}
-              aria-label={`Meet ${item.bot}: ${item.role}`}
-              onClick={() =>
-                setCrewMessage(`${item.bot} · ${item.role} — part of your connected QE crew.`)
-              }
-            >
-              <span className="welcome-portrait">
-                <span className={`mascot ${item.className}`} />
-              </span>
-              <span className="bot-caption">
-                {item.bot}
-                <small>{item.role}</small>
-              </span>
-            </button>
-          ))}
-        </div>
+        {/* 12 individual .webp agents */}
+        <CharacterRow onSelectBot={handleSelectBot} />
 
         {/* Welcome Card */}
         <div className="welcome-card">
@@ -58,7 +41,7 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onOpenTrailer })
             </span>
             <p>
               Big ambitions?<br />
-              <strong>Let’s get your QE moving.</strong>
+              <strong>Let's get your QE moving.</strong>
             </p>
             <span className="crew-count">
               {CREW_BOTS.length} agents<br />
@@ -112,4 +95,3 @@ export const WelcomeSection: React.FC<WelcomeSectionProps> = ({ onOpenTrailer })
     </section>
   );
 };
-

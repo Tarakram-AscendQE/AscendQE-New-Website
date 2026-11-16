@@ -37,6 +37,8 @@ import { MyTDMPage } from '../features/products/myTDM-product/page';
 import { FinOpsHubPage } from '../features/products/finOpsHub-product/page';
 import { PRCheckPage } from '../features/products/prCheck-product/page';
 
+import { CookiePolicyPage } from '@/pages/cookiepolicy';
+
 const ExternalRedirect: React.FC<{ url: string }> = ({ url }) => {
   useEffect(() => {
     window.location.href = url;
@@ -135,7 +137,8 @@ export const router = createBrowserRouter([
       { path: 'start.html', element: <Navigate to="/contact" replace /> },
       { path: 'docs.html', element: <Navigate to="/docs" replace /> },
       { path: 'reference.html', element: <Navigate to="/reference" replace /> },
-
+      
+      { path: '/cookie-policy', element: <CookiePolicyPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
