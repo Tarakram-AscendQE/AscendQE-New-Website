@@ -14,38 +14,7 @@ import { StillHaveQuestionsBanner } from "@/shared/StillHaveQuestionsBanner";
 import { MYUT_FAQS } from "./myUT-faqs";
 import { InteractivePlatformFlow } from "@/shared/flows/InteractivePlatformFlow";
 import { MYUT_FLOW_CONFIG } from "@/shared/flows/flowConfigs";
-function MetricCard({ value, title, source }: { value: string; title: string; source: string }) {
-  return (
-    <Reveal className="h-full">
-      <div className="flex h-full flex-col justify-center rounded-2xl border border-[#DCE5F5] bg-white p-8 text-center shadow-sm transition-all hover:border-[#145BFF] hover:shadow-[0_12px_32px_-12px_rgba(20,91,255,0.15)]">
-        <div className="aqe-metric-number text-[#145BFF]">{value}</div>
-        <div className="aqe-card-heading mt-4 italic text-[#0B1638]">{title}</div>
-        <div className="aqe-text-small mt-auto pt-6 italic text-[#64748B]">{source}</div>
-      </div>
-    </Reveal>
-  );
-}
-
-function DarkSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5] overflow-hidden w-full">
-      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function LightSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f9fafb] py-16 lg:py-24 overflow-hidden w-full">
-      <div className="mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
+import { ProductHeroSection } from "@/shared/ProductSections";
 export function MyUTPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -62,7 +31,7 @@ export function MyUTPage() {
         />
         
         {/* ── SECTION 1: HERO (LIGHT) ── */}
-        <DarkSection>
+        <ProductHeroSection>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.92fr_1.08fr] xl:grid-cols-[0.88fr_1.12fr] lg:items-center relative z-10">
             
             {/* Left Column: Copy */}
@@ -180,7 +149,7 @@ export function MyUTPage() {
               </div>
             </div>
           </Reveal>
-        </DarkSection>
+        </ProductHeroSection>
 
         {/* ── SECTION 1.5: PLATFORM FLOW (LIGHT) ── */}
         <section className="relative bg-[#f9fafb] py-16 lg:py-24 overflow-hidden border-t border-gray-100">

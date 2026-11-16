@@ -738,14 +738,14 @@ export function CarrersPage() {
                   )}
                 </div>
 
-                <div className="mt-8 flex items-center justify-between pt-2">
+                <div className="mt-8 flex flex-wrap items-center justify-between gap-3 pt-2">
                   <span className="aqe-caption font-medium text-[#69758a]">
                     <span className="text-red-500">*</span> Required fields
                   </span>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group flex min-w-[170px] items-center justify-center gap-2 rounded-xl bg-[#1763ff] hover:bg-[#0e53e6] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_4px_14px_rgba(23,99,255,0.25)] transition-all hover:shadow-[0_6px_20px_rgba(23,99,255,0.35)] hover:-translate-y-0.5 active:scale-95 disabled:opacity-50"
+                    className="group flex w-full sm:w-auto min-w-[170px] items-center justify-center gap-2 rounded-xl bg-[#1763ff] hover:bg-[#0e53e6] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_4px_14px_rgba(23,99,255,0.25)] transition-all hover:shadow-[0_6px_20px_rgba(23,99,255,0.35)] hover:-translate-y-0.5 active:scale-95 disabled:opacity-50"
                   >
                     {isSubmitting ? "Submitting..." : "Submit Application"}
                     {!isSubmitting && <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />}

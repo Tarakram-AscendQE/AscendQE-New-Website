@@ -5,7 +5,6 @@ import { HomePage } from '../pages/home-page';
 import { ProofPage } from '../pages/proof-page';
 import { PayoffPage } from '../pages/payoff-page';
 import { PricingPage } from '../pages/pricing-page';
-//import { StartPage } from '../pages/start-page';
 import { StartPage1 } from '../pages/start-page1';
 
 import { DocsPage } from '../pages/docs-page';
@@ -22,6 +21,11 @@ import { BlogAuthGate } from '../pages/BlogAuthGate';
 import { BlogArticle } from '../pages/BlogArticle';
 import { BlogsPage } from '../pages/blogs-page';
 
+// Case Studies Pages
+import { CaseStudiesPage } from '../features/case-studies/CaseStudiesPage';
+import { CaseStudiesCategoryPage } from '../features/case-studies/CaseStudiesCategoryPage';
+import { CaseStudyDetailPage } from '../features/case-studies/CaseStudyDetailPage';
+
 // Product Pages
 import { PlatformPage as MyDiyaPage } from '../features/products/myDiya-product/PlatformPage';
 import { MySTLCPage } from '../features/products/mySTLC-product/page';
@@ -32,6 +36,8 @@ import { MyUTPage } from '../features/products/myUT-product/page';
 import { MyTDMPage } from '../features/products/myTDM-product/page';
 import { FinOpsHubPage } from '../features/products/finOpsHub-product/page';
 import { PRCheckPage } from '../features/products/prCheck-product/page';
+
+import { CookiePolicyPage } from '@/pages/cookiepolicy';
 
 const ExternalRedirect: React.FC<{ url: string }> = ({ url }) => {
   useEffect(() => {
@@ -70,7 +76,8 @@ export const router = createBrowserRouter([
       { path: 'payoff', element: <PayoffPage /> },
       { path: 'calculator', element: <Navigate to="/payoff" replace /> },
       { path: 'pricing', element: <PricingPage /> },
-      { path: 'start', element: <StartPage1 /> },
+      { path: 'contact', element: <StartPage1 /> },
+      { path: 'start', element: <Navigate to="/contact" replace /> },
       { path: 'docs', element: <DocsPage /> },
       { path: 'reference', element: <ReferencePage /> },
 
@@ -82,16 +89,15 @@ export const router = createBrowserRouter([
       { path: 'article/:slug', element: <BlogArticle /> },
 
       // Navigation and footer aliases
-      { path: 'contact', element: <Navigate to="/start" replace /> },
       { path: 'about', element: <AboutUsPage /> },
       { path: 'about-us', element: <Navigate to="/about" replace /> },
       { path: 'careers', element: <CarrersPage /> },
       { path: 'career', element: <Navigate to="/careers" replace /> },
       { path: 'testimonials', element: <TestimonialsPage /> },
       { path: 'testimonial', element: <Navigate to="/testimonials" replace /> },
-     // { path: 'case-studies', element: <Navigate to="/study.pdf" replace /> },
-     //{ path: 'case-studies', element: <ExternalRedirect url="/study.pdf" /> }
-     { path: 'case-studies', element: <ExternalRedirect url="/study.pdf" /> },
+      { path: 'case-studies', element: <CaseStudiesPage /> },
+      { path: 'case-studies/:category', element: <CaseStudiesCategoryPage /> },
+      { path: 'case-studies/:category/:slug', element: <CaseStudyDetailPage /> },
       { path: 'privacy', element: <PrivacyPolicyPage /> },
       { path: 'privacy-policy', element: <Navigate to="/privacy" replace /> },
       { path: 'terms', element: <TermsOfServicePage /> },
@@ -128,10 +134,11 @@ export const router = createBrowserRouter([
       { path: 'proof.html', element: <Navigate to="/proof" replace /> },
       { path: 'payoff.html', element: <Navigate to="/payoff" replace /> },
       { path: 'pricing.html', element: <Navigate to="/pricing" replace /> },
-      { path: 'start.html', element: <Navigate to="/start" replace /> },
+      { path: 'start.html', element: <Navigate to="/contact" replace /> },
       { path: 'docs.html', element: <Navigate to="/docs" replace /> },
       { path: 'reference.html', element: <Navigate to="/reference" replace /> },
-
+      
+      { path: '/cookie-policy', element: <CookiePolicyPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

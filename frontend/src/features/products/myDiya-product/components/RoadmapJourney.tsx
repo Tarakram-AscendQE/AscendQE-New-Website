@@ -231,7 +231,7 @@ export function RoadmapJourney() {
       </div>
 
       {/* Stage content + connector chevrons */}
-      <div className="relative mx-auto mt-6 grid w-full px-12 md:px-[88px] lg:px-24 gap-5 md:grid-cols-3">
+      <div className="relative mx-auto mt-6 grid w-full px-4 sm:px-8 md:px-[88px] lg:px-24 gap-5 md:grid-cols-3">
         {STAGES.map((s, i) => {
           const active = isActive(i);
           return (
@@ -282,7 +282,7 @@ export function RoadmapJourney() {
       </div>
 
       {/* New Comparison Cards */}
-      <div className="mx-auto mt-12 grid w-full px-12 md:px-[88px] lg:px-24 gap-6 md:grid-cols-2">
+      <div className="mx-auto mt-12 grid w-full px-4 sm:px-8 md:px-[88px] lg:px-24 gap-6 md:grid-cols-2">
         {/* Traditional QA Firms */}
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -334,7 +334,7 @@ export function RoadmapJourney() {
 
       {/* Payoff row — appears after destination reached */}
       <motion.div
-        className="mx-auto mt-6 grid w-full px-12 md:px-[88px] lg:px-24 gap-5 sm:grid-cols-3"
+        className="mx-auto mt-6 grid w-full px-4 sm:px-8 md:px-[88px] lg:px-24 gap-5 sm:grid-cols-3"
         animate={{ opacity: longReached ? 1 : 0, y: longReached ? 0 : 16 }}
         transition={{ duration: 0.5 }}
         style={{ pointerEvents: longReached ? "auto" : "none" }}

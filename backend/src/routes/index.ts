@@ -20,30 +20,14 @@ apiRouter.get('/health', (_req, res) => {
   })
 })
 
-// Diagnostic endpoint to inspect environment variables securely (sensitive values are masked)
+// Diagnostic endpoint: reports only whether each integration is configured (no values or key names)
 apiRouter.get('/debug-env', (_req, res) => {
-  const envSummary: Record<string, any> = {}
-  for (const [k, v] of Object.entries(process.env)) {
-    const isSensitive = k.toUpperCase().includes('SECRET') || k.toUpperCase().includes('KEY') || k.toUpperCase().includes('PASS')
-    envSummary[k] = {
-      length: (v || '').length,
-      hasValue: (v || '').length > 0,
-      preview: isSensitive ? (v ? `${v.slice(0, 3)}...${v.slice(-2)}` : '') : v,
-    }
-  }
-
   res.status(200).json({
     status: 'ok',
-    cwd: process.cwd(),
-    nodeEnv: process.env.NODE_ENV,
+    nodeEnv: config.nodeEnv,
     awsConfigured: !!(config.awsAccessKeyId && config.awsSecretAccessKey),
-    detectedAwsKeyLength: config.awsAccessKeyId.length,
-    detectedAwsSecretLength: config.awsSecretAccessKey.length,
-    awsRegion: config.awsRegion,
-    senderMail: config.senderMail,
-    recipientMail: config.recipientMail,
-    environmentKeys: Object.keys(process.env).sort(),
-    environmentSummary: envSummary,
+    databaseConfigured: !!(config.dbHost && config.dbUser),
+    jwtSecretConfigured: !!process.env.JWT_SECRET,
   })
 })
 

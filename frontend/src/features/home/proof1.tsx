@@ -80,7 +80,7 @@ export const ProofFaqSection1: React.FC = () => {
               qualifying test cases, automated free. See the scripts. Run the tests. Measure the
               difference.
             </p>
-            <Link className="btn" to="/start">
+            <Link className="btn" to="/contact">
               Book my 100-test demo <span className="arrow" aria-hidden="true">↗</span>
             </Link>
             <p className="terms">
@@ -103,7 +103,7 @@ export const ProofFaqSection1: React.FC = () => {
           </div>
 
           {totalPages > 1 && (
-            <div className="proof-faq-pagination mt-10 flex w-full justify-end">
+            <div className="proof-faq-pagination mt-10 flex w-full justify-center sm:justify-end">
               <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}

@@ -218,7 +218,7 @@ export function AgentShowcase() {
         />
       </div>
 
-      <div className="relative z-10 w-full px-6 sm:px-12 md:px-[88px] lg:px-16 xl:px-24">
+      <div className="relative z-10 w-full px-4 sm:px-8 md:px-[88px] lg:px-16 xl:px-24">
         {/* ════════ HEADER: Title & Specialized Agents Badge ════════ */}
         <div className="w-full flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="flex flex-col items-start text-left max-w-4xl">
@@ -261,7 +261,7 @@ export function AgentShowcase() {
     Build Your Digital QE
   </span>
 
-  <span className="block whitespace-nowrap mt-2" style={{ lineHeight: "1.2" }}>
+  <span className="block mt-2" style={{ lineHeight: "1.2" }}>
     <span>Workforce — </span>
     <span
       className="inline-block"
@@ -362,7 +362,7 @@ export function AgentShowcase() {
           whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45, delay: 0.3 }}
-          className="mt-10 sm:mt-12 rounded-full border border-slate-200/90 bg-white/95 backdrop-blur-md px-5 sm:px-8 py-3.5 shadow-[0_4px_20px_rgba(15,23,42,0.06)] flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left w-full"
+          className="mt-10 sm:mt-12 rounded-2xl sm:rounded-full border border-slate-200/90 bg-white/95 backdrop-blur-md px-5 sm:px-8 py-3.5 shadow-[0_4px_20px_rgba(15,23,42,0.06)] flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-left w-full"
         >
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2.5 sm:gap-3 text-xs sm:text-sm">
             <div className="flex items-center gap-2">

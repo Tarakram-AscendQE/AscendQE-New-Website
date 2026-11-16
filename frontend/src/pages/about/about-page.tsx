@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { Reveal } from "@/components/ui/shared";
-import aqShortLogo from "@/assets/about-page-images/AQ-short-logo.webp";
+import aqShortLogo from "@/assets/brand-logos/AQ-short-logo.webp";
 import aboutBelieveImage from "@/assets/about-page-images/AscendQE-about-page.webp";
 import nagFounderImage from "@/assets/about-page-images/Nag-image-2.webp";
 import nagAvatarImage from "@/assets/about-page-images/Nag.webp";
@@ -1144,13 +1144,13 @@ export function AboutUsPage() {
             </Reveal>
 
             <Reveal delay={0.2} className="w-full mb-10 sm:mb-12">
-              <div className="flex flex-wrap md:flex-nowrap items-center justify-start gap-2.5 sm:gap-3 lg:gap-4 w-full">
+              <div className="flex flex-col items-center sm:flex-row sm:flex-wrap xl:flex-nowrap justify-start gap-2.5 sm:gap-3 lg:gap-4 w-full">
                 {DIRECTION_PILLARS.map((item, idx) => {
                   const Icon = item.icon;
                   const isLast = idx === DIRECTION_PILLARS.length - 1;
 
                   return (
-                    <div key={item.label} className="flex items-center gap-2.5 sm:gap-3 lg:gap-4">
+                    <div key={item.label} className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 lg:gap-4">
                       <motion.div
                         initial={{ opacity: 0, y: 18 }}
                         whileInView={{ opacity: 1, y: 0 }}

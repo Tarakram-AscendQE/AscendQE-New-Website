@@ -12,6 +12,11 @@ export const PricingPage: React.FC = () => {
         canonicalPath="/pricing"
       />
       <section className="page-intro">
+      <nav aria-label="Breadcrumb" className="mb-8 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#6A7E95]" style={{ fontSize: '12px' }}>
+          <Link to="/" className="transition-colors hover:text-[#145BFF]" font-medium>Home</Link>
+          <span aria-hidden="true">›</span>
+          <span className="text-[#145BFF]" aria-current="page" font-medium>Your options</span>
+        </nav>
         <Reveal delay={0.05}>
           <div className="eyebrow">YOUR OPTIONS</div>
           <h1>
@@ -42,7 +47,7 @@ export const PricingPage: React.FC = () => {
               <li>Support and updates within contracted scope</li>
             </ul>
             <div className="mt-auto">
-              <Link className="button" to="/start?offer=platform">
+              <Link className="button" to="/contact?offer=platform">
                 Prove it on my application
               </Link>
               <p className="fine min-h-[40px] mt-4 mb-0 leading-[1.6]">
@@ -69,7 +74,7 @@ export const PricingPage: React.FC = () => {
               <li>Choose the responsibilities you want us to own</li>
             </ul>
             <div className="mt-auto">
-              <Link className="button dark" to="/start?offer=managed">
+              <Link className="button dark" to="/contact?offer=managed">
                 Discuss my managed service
               </Link>
               <p className="fine min-h-[40px] mt-4 mb-0 leading-[1.6]">
@@ -126,7 +131,7 @@ export const PricingPage: React.FC = () => {
           <span>Automated free.</span>
         </h2>
         <p>See the scripts. Run the tests. Measure the difference.</p>
-        <Link className="button" to="/start">
+        <Link className="button" to="/contact">
           Automate my first 100 test cases
         </Link>
         <p className="fine">

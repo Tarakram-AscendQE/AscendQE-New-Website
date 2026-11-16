@@ -53,6 +53,11 @@ export const PayoffPage: React.FC = () => {
         canonicalPath="/payoff"
       />
       <section className="page-intro">
+        <nav aria-label="Breadcrumb" className="mb-8 flex flex-wrap items-center gap-2 text-xs font-semibold text-[#6A7E95]" style={{ fontSize: '12px' }}>
+          <Link to="/" className="transition-colors hover:text-[#1763ff]">Home</Link>
+          <span aria-hidden="true">›</span>
+          <span className="text-[#1763ff]" aria-current="page">Your value</span>
+        </nav>
         <div className="eyebrow">YOUR VALUE</div>
         <h1>
           Your workload.<br />
@@ -193,7 +198,7 @@ export const PayoffPage: React.FC = () => {
           <span>Automated free.</span>
         </h2>
         <p>See the scripts. Run the tests. Measure the difference.</p>
-        <Link className="button" to="/start">
+        <Link className="button" to="/contact">
           Automate my first 100 test cases
         </Link>
         <p className="fine">

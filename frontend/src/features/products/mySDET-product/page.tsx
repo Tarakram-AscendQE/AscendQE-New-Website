@@ -13,26 +13,7 @@ import { StillHaveQuestionsBanner } from "@/shared/StillHaveQuestionsBanner";
 import { MYSDET_FAQS } from "./mySDET-faqs";
 import { InteractivePlatformFlow } from "@/shared/flows/InteractivePlatformFlow";
 import { MYSDET_FLOW_CONFIG } from "@/shared/flows/flowConfigs";
-
-function DarkSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5]">
-      <div className="relative z-10 mx-auto w-full px-12 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function LightSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f9fafb] py-16 lg:py-20 overflow-hidden w-full">
-      <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
+import { ProductHeroSection, ProductContentSection } from "@/shared/ProductSections";
 
 const CARDS = [
   { label: "TEST\nINTENT", icon: FileText },
@@ -248,12 +229,12 @@ export function MySDETPage() {
         />
 
         {/* ── SECTION 1: HERO (DARK) ── */}
-        <DarkSection>
+        <ProductHeroSection className="" innerClassName="px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
             {/* Left Column: Copy */}
             <Reveal delay={0.1}>
               {/* Breadcrumb */}
-              <p className="mb-4 sm:mb-6 text-xs text-[#64748B] text-center lg:text-left">
+              <p className="mb-4 sm:mb-6 text-xs text-[#64748B]">
                 <a href="/" className="hover:text-[#145BFF] transition-colors">Home</a>
                 <span className="mx-1.5">›</span>
                 <a href="/products" className="hover:text-[#145BFF] transition-colors">Products</a>
@@ -261,7 +242,7 @@ export function MySDETPage() {
                 <span className="text-[#145BFF] font-medium">mySDET</span>
               </p>
 
-              <div className="flex flex-col items-center gap-4 text-center lg:flex-row lg:text-left">
+              <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center">
                 <div className="mb-4 flex items-center gap-4">
                   <img src={mySDETLogo} alt="mySDET Logo" className="h-14 sm:h-16 md:h-20 lg:h-[84px] w-auto object-contain shrink-0" />
                   <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0B1638] leading-none">mySDET</h2>
@@ -274,19 +255,19 @@ export function MySDETPage() {
                 mySDET – <span className="text-[#145BFF]">AI-Powered</span> Test Automation for Quality Engineers
               </h1>
 
-              <h2 className="aqe-sub-heading mt-8 text-center text-[#0B1638] lg:text-left">
+              <h2 className="aqe-sub-heading mt-8 text-[#0B1638]">
                 Purpose-built for automation engineering.
               </h2>
 
-              <p className="aqe-intro mt-4 text-center text-[#263653] lg:text-left">
+              <p className="aqe-intro mt-4 text-[#263653]">
                 UI, dashboards, configuration and workflow are designed specifically around test automation — from platform facilities down to the fixed agent flow.
               </p>
 
-              <p className="aqe-paragraph mt-6 text-center italic tracking-wide text-[#64748B] lg:text-left">
+              <p className="aqe-paragraph mt-6 italic tracking-wide text-[#64748B]">
                 Fixed internal agents own each lifecycle stage — sequence and contracts designed by AscendQE.
               </p>
 
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+              <div className="mt-10 flex flex-wrap items-center gap-4">
                 <a href="/contact" className="aqe-btn-text flex items-center gap-2 rounded-xl bg-[#145BFF] hover:bg-[#0B49D6] px-6 py-3.5 text-white transition-transform hover:scale-105 active:scale-95 shadow-[0_12px_24px_-10px_rgba(20,91,255,0.4)]">
                   Request a Demo <ArrowRight className="h-4 w-4" />
                 </a>
@@ -334,16 +315,16 @@ export function MySDETPage() {
               </div>
             </div>
           </Reveal>
-        </DarkSection>
+        </ProductHeroSection>
 
         {/* ── SECTION 2: PLATFORM FLOW (LIGHT) ── */}
-        <LightSection>
+        <ProductContentSection>
           <InteractivePlatformFlow config={MYSDET_FLOW_CONFIG} />
-        </LightSection>
+        </ProductContentSection>
 
         {/* ── SECTION 3: VALUE MODEL (LIGHT) ── */}
         <section className="relative bg-[#F5F8FF] py-24 lg:py-32 overflow-hidden border-t border-[#DCE5F5] text-[#0B1638]">
-          <div className="relative z-10 mx-auto w-full px-12 md:px-[88px] lg:px-24">
+          <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
 
             {/* Header row */}
             <Reveal>
@@ -520,13 +501,13 @@ export function MySDETPage() {
                       desc: "myVega's evidence and result intelligence.",
                     },
                   ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-4">
+                    <li key={i} className="grid grid-cols-[2.75rem_minmax(0,1fr)] items-center gap-4">
                       <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border ${item.iconBg}`}>
                         <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                       </div>
-                      <div className="mt-9">
-                        <h4 className="aqe-card-heading text-[#0B1638]">{item.title}</h4>
-                        <p className="aqe-paragraph mt-1 text-[#263653]">{item.desc}</p>
+                      <div>
+                        <h4 className="aqe-card-heading m-0 text-[#0B1638]">{item.title}</h4>
+                        <p className="aqe-paragraph m-0 mt-1 text-[#263653]">{item.desc}</p>
                       </div>
                     </li>
                   ))}
@@ -539,7 +520,7 @@ export function MySDETPage() {
 
         {/* ── SECTION 5: FINANCIAL IMPACT (LIGHT) ── */}
         <section className="relative bg-[#F5F8FF] py-24 lg:py-32 overflow-hidden border-t border-[#DCE5F5] text-[#0B1638]">
-          <div className="relative z-10 mx-auto w-full px-12 md:px-[88px] lg:px-24">
+          <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
             <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center">
 
               {/* Left: Copy */}
@@ -560,13 +541,13 @@ export function MySDETPage() {
                     { icon: BarChart2, iconBg: "bg-[#EAF1FF] border-[#DCE5F5]", iconColor: "text-[#145BFF]", title: "AI-native QA programs report 3–10x ROI", desc: "vs. traditional automation approaches." },
                     { icon: Shield, iconBg: "bg-[#EAF1FF] border-[#DCE5F5]", iconColor: "text-[#145BFF]", title: "Defects caught in-cycle cost 5–10x less", desc: "to fix than production escapes." },
                   ].map((item, i) => (
-                    <li key={i} className="flex items-center gap-4">
+                    <li key={i} className="grid grid-cols-[2.75rem_minmax(0,1fr)] items-center gap-4">
                       <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border ${item.iconBg}`}>
                         <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                       </div>
-                      <div  className="mt-5">
-                        <h4 className="aqe-card-heading text-[#0B1638]">{item.title}</h4>
-                        <p className="aqe-paragraph mt-0.5 text-[#263653]">{item.desc}</p>
+                      <div>
+                        <h4 className="aqe-card-heading m-0 text-[#0B1638]">{item.title}</h4>
+                        <p className="aqe-paragraph m-0 mt-0.5 text-[#263653]">{item.desc}</p>
                       </div>
                     </li>
                   ))}

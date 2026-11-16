@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { createOpenCookieSettingsEvent } from "@/services/cookieConsent";
 import logoImg from "@/assets/brand-logos/AscendQE-white-logo.webp";
 import linkedinIcon from "@/assets/socialmedia-logos/linkedin-icon.webp";
 import xIcon from "@/assets/socialmedia-logos/x-icon.webp";
@@ -36,7 +37,9 @@ const FOOTER_COLS = [
       { label: "Customer Stories", href: "/testimonials" },
       { label: "Connect With Us", href: "/contact" },
       { label: "Privacy Policy", href: "/privacy" },
+      { label: "Cookie Policy", href: "/cookie-policy" },
       { label: "Terms of Service", href: "/terms" },
+      {label:"Case Studies", href:"/case-studies"}
     ],
   },
   {
@@ -125,8 +128,18 @@ export function Footer() {
       <div className="w-full border-t border-white/10" />
 
       {/* Bottom Copyright Notice */}
-      <div className="w-full px-6 sm:px-[5.5%] pt-6 pb-10 text-[#5d6b7d] aqe-caption">
-        © 2026 AscendQE. All rights reserved.
+      <div className="flex w-full flex-col gap-4 px-6 pt-6 pb-10 text-[#5d6b7d] aqe-caption sm:flex-row sm:items-center sm:justify-between sm:px-[5.5%]">
+        <span>© 2026 AscendQE. All rights reserved.</span>
+        <a
+          href="#cookie-settings"
+          onClick={(event) => {
+            event.preventDefault();
+            window.dispatchEvent(createOpenCookieSettingsEvent());
+          }}
+          className="w-fit text-[#7c8aa0] transition-colors hover:text-[#00e5c0]"
+        >
+          Cookie Settings
+        </a>
       </div>
     </footer>
   );

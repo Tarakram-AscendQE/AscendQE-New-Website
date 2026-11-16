@@ -74,7 +74,7 @@ const DIFFERENCE_CARDS: DifferenceCard[] = [
 export function StructuralDifferences() {
   return (
     <section className="relative w-full bg-white py-16 sm:py-20 lg:py-24 text-slate-900 border-t border-slate-100">
-      <div className="w-full px-6 sm:px-12 md:px-[88px] lg:px-16 xl:px-24">
+      <div className="w-full px-4 sm:px-8 md:px-[88px] lg:px-16 xl:px-24">
         {/* Top 2-Column Split: Narrative on Left, Cards on Right */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
           {/* Left Column: Heading & Positioning Statement */}

@@ -517,7 +517,7 @@ export function InteractivePlatformFlow({
           "#145BFF",
           "rgba(20, 91, 255, 0.4)"
         )}
-        className="w-full rounded-2xl bg-white px-4 py-3 sm:py-3.5 text-center flex items-center justify-between min-h-[76px] h-[76px] z-10"
+        className="w-full rounded-2xl bg-white px-4 py-3 sm:py-3.5 text-center flex items-center justify-between min-h-[76px] h-auto lg:h-[76px] z-10"
       >
         <div className="flex items-center gap-3.5 text-left">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl text-white shadow-xs bg-[#145BFF] shrink-0">
@@ -570,7 +570,7 @@ export function InteractivePlatformFlow({
           "#0ea5e9",
           "rgba(14, 165, 233, 0.4)"
         )}
-        className="w-full rounded-2xl bg-white p-3.5 text-left flex items-center gap-3.5 min-h-[68px] h-[68px] z-10"
+        className="w-full rounded-2xl bg-white p-3.5 text-left flex items-center gap-3.5 min-h-[68px] h-auto lg:h-[68px] z-10"
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-xl shrink-0 bg-sky-50 text-[#0ea5e9] border border-sky-200 shadow-xs">
           <FacilitiesIcon className="h-5 w-5" />
@@ -604,7 +604,7 @@ export function InteractivePlatformFlow({
           "#f59e0b",
           "rgba(245, 158, 11, 0.4)"
         )}
-        className="w-full rounded-2xl bg-white p-3.5 text-left flex items-center justify-between min-h-[68px] h-[68px] z-10"
+        className="w-full rounded-2xl bg-white p-3.5 text-left flex items-center justify-between min-h-[68px] h-auto lg:h-[68px] z-10"
       >
         <div className="flex items-center gap-3.5">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl shrink-0 bg-amber-50 text-amber-600 border border-amber-200 shadow-xs">
@@ -643,7 +643,7 @@ export function InteractivePlatformFlow({
           "#8b5cf6",
           "rgba(139, 92, 246, 0.4)"
         )}
-        className="w-full rounded-2xl bg-white p-3.5 text-left flex items-center gap-3.5 min-h-[68px] h-[68px] z-10"
+        className="w-full rounded-2xl bg-white p-3.5 text-left flex items-center gap-3.5 min-h-[68px] h-auto lg:h-[68px] z-10"
       >
         <div className="flex h-10 w-10 items-center justify-center rounded-xl shrink-0 bg-purple-50 text-purple-600 border border-purple-200 shadow-xs">
           <OrchestratorIcon className="h-5 w-5" />
@@ -694,11 +694,11 @@ export function InteractivePlatformFlow({
             </span>
           </div>
 
-          <div className="flex items-center gap-3 ml-auto">
+          <div className="flex items-center gap-2 sm:gap-3 ml-auto">
             {/* Live Status Pill */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-emerald-50 px-3.5 py-1 text-xs font-semibold text-emerald-800 transition-all shadow-2xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#00c853] animate-ping" />
-              <span>{getStatusText()}</span>
+            <div className="hidden sm:inline-flex items-center gap-2 rounded-full border border-emerald-400/50 bg-emerald-50 px-3.5 py-1 text-xs font-semibold text-emerald-800 transition-all shadow-2xs">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#00c853] animate-ping" />
+              <span className="truncate max-w-[200px] md:max-w-none">{getStatusText()}</span>
             </div>
 
             {/* Pause Button */}

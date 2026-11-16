@@ -14,38 +14,7 @@ import { StillHaveQuestionsBanner } from "@/shared/StillHaveQuestionsBanner";
 import { MYTEVV_FAQS } from "./myTEVV-faqs";
 import { InteractivePlatformFlow } from "@/shared/flows/InteractivePlatformFlow";
 import { MYTEVV_FLOW_CONFIG } from "@/shared/flows/flowConfigs";
-
-function MetricCard({ value, title, source }: { value: string; title: string; source: string }) {
-  return (
-    <Reveal className="h-full">
-      <div className="flex h-full flex-col justify-center rounded-2xl border border-[#e5e7eb] bg-white p-8 text-center shadow-sm transition-all hover:border-[rgba(0,229,192,0.4)] hover:shadow-[0_12px_32px_-12px_rgba(0,229,192,0.15)]">
-        <div className="aqe-cyan-text font-black" style={{ fontSize: "2.8rem", lineHeight: 1 }}>{value}</div>
-        <div className="mt-4 font-bold italic text-[#111827]" style={{ fontSize: "1.05rem", lineHeight: 1.4 }}>{title}</div>
-        <div className="mt-auto pt-6 text-xs font-medium italic text-[#64748b]">{source}</div>
-      </div>
-    </Reveal>
-  );
-}
-
-function DarkSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5] overflow-hidden w-full">
-      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function LightSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f9fafb] py-16 sm:py-20 lg:py-32 overflow-hidden w-full">
-      <div className="mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
+import { ProductHeroSection } from "@/shared/ProductSections";
 
 export function MyTEVVPage() {
   useEffect(() => {
@@ -63,7 +32,7 @@ export function MyTEVVPage() {
         />
 
         {/* ── SECTION 1: HERO (DARK) ── */}
-        <DarkSection>
+        <ProductHeroSection>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center relative z-10">
 
             {/* Left Column: Copy */}
@@ -116,34 +85,25 @@ export function MyTEVVPage() {
 
             {/* Right Column: Interactive Shield Visual */}
             <Reveal delay={0.3} className="w-full min-w-0 flex items-center justify-center">
-              <div className="relative mx-auto flex w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[620px] h-[460px] xs:h-[480px] sm:h-[520px] md:h-[560px] lg:h-[600px] items-center justify-center mt-12 lg:mt-0">
+              <div className="relative mx-auto flex flex-col sm:flex-row w-full max-w-[360px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[620px] min-h-[460px] sm:h-[520px] md:h-[560px] lg:h-[600px] items-center justify-center gap-3 sm:gap-0 mt-10 sm:mt-12 lg:mt-0">
 
                 {/* Glowing Background Elements */}
                 <div className="absolute inset-0 bg-[#145BFF]/6 blur-[80px] sm:blur-[120px] rounded-full pointer-events-none" />
 
-                {/* Glowing Base Platform Pedestal */}
-                <div className="absolute bottom-[2%] sm:bottom-[4%] md:bottom-[5%] inset-x-0 flex flex-col items-center pointer-events-none z-10">
-                  <div className="w-[110%] sm:w-[120%] max-w-[540px] h-20 sm:h-24 md:h-28 rounded-[100%] border-t-[2px] border-[#145BFF]/30 shadow-[0_-10px_35px_rgba(20,91,255,0.15)] bg-gradient-to-b from-[#145BFF]/15 via-[#145BFF]/5 to-transparent relative -mb-6 sm:-mb-7 pointer-events-none" />
-
-                  {/* Small Base Cards */}
-                  <div className="relative z-20 flex gap-2 sm:gap-3 md:gap-3.5 whitespace-nowrap pointer-events-auto">
-                    <div className="flex items-center gap-1.5 sm:gap-2 bg-white border border-[#DCE5F5] rounded-md sm:rounded px-3 py-1.5 sm:px-4 sm:py-2 shadow-sm">
-                      <FileCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#145BFF] shrink-0" />
-                      <span className="text-[#0B1638] font-bold aqe-caption uppercase tracking-wider sm:tracking-widest">Evidence</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 sm:gap-2 bg-white border border-[#DCE5F5] rounded-md sm:rounded px-3 py-1.5 sm:px-4 sm:py-2 shadow-sm">
-                      <Landmark className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#145BFF] shrink-0" />
-                      <span className="text-[#0B1638] font-bold aqe-caption uppercase tracking-wider sm:tracking-widest">Governance</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 sm:gap-2 bg-white border border-[#DCE5F5] rounded-md sm:rounded px-3 py-1.5 sm:px-4 sm:py-2 shadow-sm">
-                      <ClipboardList className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#145BFF] shrink-0" />
-                      <span className="text-[#0B1638] font-bold aqe-caption uppercase tracking-wider sm:tracking-widest">Decisions</span>
-                    </div>
-                  </div>
+                {/* 1. Evaluation (Top) */}
+                <div className="relative sm:absolute sm:top-[1%] sm:inset-x-0 z-20 flex justify-center pointer-events-none">
+                  <motion.div
+                    className="pointer-events-auto flex flex-col items-center justify-center bg-white border border-[#DCE5F5] rounded-xl px-4 py-2.5 sm:p-3 md:p-3.5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] min-w-[132px] sm:min-w-[144px] md:min-w-[168px] text-center"
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <FileText className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#145BFF] mb-1.5 sm:mb-2 shrink-0" />
+                    <h3 className="text-[#0B1638] font-bold aqe-caption tracking-wider uppercase whitespace-nowrap">Evaluation</h3>
+                  </motion.div>
                 </div>
 
                 {/* Center Shield Element */}
-                <div className="relative z-10 flex flex-col items-center justify-center w-36 h-44 sm:w-46 sm:h-54 md:w-54 md:h-64 lg:w-60 lg:h-72 -mt-4 sm:-mt-6">
+                <div className="relative z-10 flex flex-col items-center justify-center w-36 h-44 sm:w-46 sm:h-54 md:w-54 md:h-64 lg:w-60 lg:h-72 my-6 sm:my-0 sm:-mt-6">
                   {/* Outer Glowing Shield Layer */}
                   <div
                     className="absolute inset-0 w-full h-full pointer-events-none"
@@ -189,41 +149,52 @@ export function MyTEVVPage() {
                   </div>
                 </div>
 
-                {/* Floating Orbit Cards */}
-                {/* 1. Evaluation (Top) */}
-                <div className="absolute top-[2%] sm:top-[1%] inset-x-0 z-20 flex justify-center pointer-events-none">
-                  <motion.div
-                    className="pointer-events-auto flex flex-col items-center justify-center bg-white border border-[#DCE5F5] rounded-xl p-2.5 sm:p-3 md:p-3.5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] min-w-[125px] sm:min-w-[150px] md:min-w-[168px] text-center"
-                    animate={{ y: [0, -6, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <FileText className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#145BFF] mb-1.5 sm:mb-2 shrink-0" />
-                    <h3 className="text-[#0B1638] font-bold aqe-caption tracking-wider uppercase whitespace-nowrap">Evaluation</h3>
-                  </motion.div>
+                {/* 2 & 3. Verification & Validation (Side-by-side below shield on mobile, orbital left/right on sm+) */}
+                <div className="grid grid-cols-2 gap-2.5 w-full max-w-[340px] sm:max-w-none sm:contents z-20">
+                  {/* Verification */}
+                  <div className="relative sm:absolute sm:top-[35%] md:top-[36%] sm:left-[-5%] md:left-[-3%] lg:left-[-4%] z-20 pointer-events-none">
+                    <motion.div
+                      className="pointer-events-auto flex flex-col items-center justify-center bg-white border border-[#DCE5F5] rounded-xl px-2 py-2.5 sm:p-3 md:p-3.5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] w-full sm:w-auto sm:min-w-[138px] md:min-w-[156px] lg:min-w-[168px] text-center"
+                      animate={{ y: [-4, 4, -4] }}
+                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <Search className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#145BFF] mb-1.5 sm:mb-2 shrink-0" />
+                      <h3 className="text-[#0B1638] font-bold aqe-caption tracking-wider uppercase whitespace-nowrap">Verification</h3>
+                    </motion.div>
+                  </div>
+
+                  {/* Validation */}
+                  <div className="relative sm:absolute sm:top-[35%] md:top-[36%] sm:right-[-5%] md:right-[-3%] lg:right-[-4%] z-20 pointer-events-none">
+                    <motion.div
+                      className="pointer-events-auto flex flex-col items-center justify-center bg-white border border-[#DCE5F5] rounded-xl px-2 py-2.5 sm:p-3 md:p-3.5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] w-full sm:w-auto sm:min-w-[138px] md:min-w-[156px] lg:min-w-[168px] text-center"
+                      animate={{ y: [4, -4, 4] }}
+                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#145BFF] mb-1.5 sm:mb-2 shrink-0" />
+                      <h3 className="text-[#0B1638] font-bold aqe-caption tracking-wider uppercase whitespace-nowrap">Validation</h3>
+                    </motion.div>
+                  </div>
                 </div>
 
-                {/* 2. Verification (Middle Left) */}
-                <div className="absolute top-[34%] sm:top-[35%] md:top-[36%] left-[-5%] sm:left-[-4%] md:left-[-3%] lg:left-[-4%] z-20 pointer-events-none">
-                  <motion.div
-                    className="pointer-events-auto flex flex-col items-center justify-center bg-white border border-[#DCE5F5] rounded-xl p-2.5 sm:p-3 md:p-3.5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] min-w-[125px] sm:min-w-[150px] md:min-w-[168px] text-center"
-                    animate={{ y: [-4, 4, -4] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <Search className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#145BFF] mb-1.5 sm:mb-2 shrink-0" />
-                    <h3 className="text-[#0B1638] font-bold aqe-caption tracking-wider uppercase whitespace-nowrap">Verification</h3>
-                  </motion.div>
-                </div>
+                {/* Glowing Base Platform Pedestal */}
+                <div className="relative sm:absolute sm:bottom-[4%] md:bottom-[5%] sm:inset-x-0 flex flex-col items-center pointer-events-none z-10 w-full mt-2 sm:mt-0">
+                  <div className="w-full sm:w-[120%] max-w-[540px] h-14 sm:h-24 md:h-28 rounded-[100%] border-t-[2px] border-[#145BFF]/30 shadow-[0_-10px_35px_rgba(20,91,255,0.15)] bg-gradient-to-b from-[#145BFF]/15 via-[#145BFF]/5 to-transparent relative -mb-5 sm:-mb-7 pointer-events-none" />
 
-                {/* 3. Validation (Middle Right) */}
-                <div className="absolute top-[34%] sm:top-[35%] md:top-[36%] right-[-5%] sm:right-[-4%] md:right-[-3%] lg:right-[-4%] z-20 pointer-events-none">
-                  <motion.div
-                    className="pointer-events-auto flex flex-col items-center justify-center bg-white border border-[#DCE5F5] rounded-xl p-2.5 sm:p-3 md:p-3.5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] min-w-[125px] sm:min-w-[150px] md:min-w-[168px] text-center"
-                    animate={{ y: [4, -4, 4] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 text-[#145BFF] mb-1.5 sm:mb-2 shrink-0" />
-                    <h3 className="text-[#0B1638] font-bold aqe-caption tracking-wider uppercase whitespace-nowrap">Validation</h3>
-                  </motion.div>
+                  {/* Small Base Cards */}
+                  <div className="relative z-20 flex flex-wrap justify-center gap-1.5 sm:gap-3 md:gap-3.5 whitespace-nowrap pointer-events-auto">
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-white border border-[#DCE5F5] rounded-md sm:rounded px-2.5 py-1.5 sm:px-4 sm:py-2 shadow-sm">
+                      <FileCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#145BFF] shrink-0" />
+                      <span className="text-[#0B1638] font-bold aqe-caption uppercase tracking-wider sm:tracking-widest">Evidence</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-white border border-[#DCE5F5] rounded-md sm:rounded px-2.5 py-1.5 sm:px-4 sm:py-2 shadow-sm">
+                      <Landmark className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#145BFF] shrink-0" />
+                      <span className="text-[#0B1638] font-bold aqe-caption uppercase tracking-wider sm:tracking-widest">Governance</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-white border border-[#DCE5F5] rounded-md sm:rounded px-2.5 py-1.5 sm:px-4 sm:py-2 shadow-sm">
+                      <ClipboardList className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#145BFF] shrink-0" />
+                      <span className="text-[#0B1638] font-bold aqe-caption uppercase tracking-wider sm:tracking-widest">Decisions</span>
+                    </div>
+                  </div>
                 </div>
 
               </div>
@@ -261,7 +232,7 @@ export function MyTEVVPage() {
               </div>
             </div>
           </Reveal>
-        </DarkSection>
+        </ProductHeroSection>
 
         {/* ── SECTION 1.5: THE PLATFORM FLOW (LIGHT) ── */}
         <section className="relative bg-[#f9fafb] py-16 lg:py-20 overflow-hidden border-b border-gray-100 w-full">
@@ -379,48 +350,56 @@ export function MyTEVVPage() {
 
               {/* Left Column: Image & Floating Labels */}
               <Reveal delay={0.2} className="relative w-full min-w-0 flex justify-center">
-                <div className="relative w-full max-w-[340px] xs:max-w-[400px] sm:max-w-[480px] md:max-w-[520px] lg:max-w-[540px] xl:max-w-[600px] aspect-[4/3] flex items-center justify-center my-6 sm:my-8 lg:my-0">
-                  <img
-                    src={effortSavingImage}
-                    alt="Effort Savings - Less Manual Effort"
-                    className="w-full h-full object-contain object-center scale-100 sm:scale-[1.05]"
-                  />
+                <div className="relative w-full max-w-[360px] xs:max-w-[400px] sm:max-w-[480px] md:max-w-[520px] lg:max-w-[540px] xl:max-w-[600px] sm:aspect-[4/3] flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-0 my-4 sm:my-8 lg:my-0">
+                  {/* Top Cards on Mobile (Faster Audits & Continuous Evaluation) */}
+                  <div className="grid grid-cols-2 gap-3 w-full max-w-[310px] sm:max-w-none sm:contents z-20">
+                    {/* Floating Label 1: Faster Audits (Top Left) */}
+                    <motion.div
+                      className="relative sm:absolute sm:top-[12%] sm:left-[0%] flex flex-col items-center justify-center bg-white backdrop-blur-md rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 md:p-4 shadow-[0_8px_30px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center mb-1.5 sm:mb-2">
+                        <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#145BFF]" />
+                      </div>
+                      <span className="text-[#0B1638] text-[10px] sm:text-[11px] font-bold text-center leading-tight">Faster<br />Audits</span>
+                    </motion.div>
 
-                  {/* Floating Label 1: Faster Audits (Top Left) */}
-                  <motion.div
-                    className="absolute top-[10%] sm:top-[12%] left-[0%] flex flex-col items-center bg-white backdrop-blur-md rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 md:p-4 shadow-[0_8px_30px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center mb-1.5 sm:mb-2">
-                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#145BFF]" />
-                    </div>
-                    <span className="text-[#0B1638] text-[9.5px] sm:text-[11px] font-bold text-center leading-tight">Faster<br />Audits</span>
-                  </motion.div>
+                    {/* Floating Label 2: Continuous Evaluation (Top Center on sm+, moved above image on mobile) */}
+                    <motion.div
+                      className="relative sm:absolute sm:top-[-10%] sm:right-[28%] flex flex-col items-center justify-center bg-white backdrop-blur-md rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 md:p-4 shadow-[0_8px_30px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
+                      animate={{ y: [0, 12, 0] }}
+                      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    >
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center mb-1.5 sm:mb-2">
+                        <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[#145BFF]" />
+                      </div>
+                      <span className="text-[#0B1638] text-[10px] sm:text-[11px] font-bold text-center leading-tight">Continuous<br />Evaluation</span>
+                    </motion.div>
+                  </div>
 
-                  {/* Floating Label 2: Continuous Evaluation (Top Center) */}
-                  <motion.div
-                    className="absolute top-[-8%] sm:top-[-10%] right-[26%] sm:right-[28%] flex flex-col items-center bg-white backdrop-blur-md rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 md:p-4 shadow-[0_8px_30px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
-                    animate={{ y: [0, 12, 0] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  >
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center mb-1.5 sm:mb-2">
-                      <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[#145BFF]" />
-                    </div>
-                    <span className="text-[#0B1638] text-[9.5px] sm:text-[11px] font-bold text-center leading-tight">Continuous<br />Evaluation</span>
-                  </motion.div>
+                  {/* Center Illustration */}
+                  <div className="w-full aspect-[4/3] flex items-center justify-center sm:contents">
+                    <img
+                      src={effortSavingImage}
+                      alt="Effort Savings - Less Manual Effort"
+                      className="w-full h-full object-contain object-center scale-100 sm:scale-[1.05]"
+                    />
+                  </div>
 
-                  {/* Floating Label 3: Governance Ready (Middle Right) */}
-                  <motion.div
-                    className="absolute top-[38%] sm:top-[40%] right-[0%] sm:right-[-2%] flex flex-col items-center bg-white backdrop-blur-md rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 md:p-4 shadow-[0_8px_30px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
-                    animate={{ y: [0, -12, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  >
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center mb-1.5 sm:mb-2">
-                      <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-[#145BFF]" />
-                    </div>
-                    <span className="text-[#0B1638] text-[9.5px] sm:text-[11px] font-bold text-center leading-tight">Governance<br />Ready</span>
-                  </motion.div>
+                  {/* Floating Label 3: Governance Ready (Middle Right on sm+, moved below image on mobile) */}
+                  <div className="flex justify-center w-full sm:contents z-20">
+                    <motion.div
+                      className="relative sm:absolute sm:top-[40%] sm:right-[-2%] flex flex-col items-center justify-center bg-white backdrop-blur-md rounded-xl sm:rounded-2xl px-5 py-2.5 sm:p-3.5 md:p-4 shadow-[0_8px_30px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
+                      animate={{ y: [0, -12, 0] }}
+                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    >
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center mb-1.5 sm:mb-2">
+                        <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-[#145BFF]" />
+                      </div>
+                      <span className="text-[#0B1638] text-[10px] sm:text-[11px] font-bold text-center leading-tight">Governance<br />Ready</span>
+                    </motion.div>
+                  </div>
                 </div>
               </Reveal>
 
@@ -529,65 +508,74 @@ export function MyTEVVPage() {
 
               {/* Right Column: Image & Floating Labels */}
               <Reveal delay={0.4} className="relative w-full min-w-0 h-full flex flex-col justify-center order-1 lg:order-2 items-center lg:items-end">
-                <div className="relative w-full max-w-[340px] xs:max-w-[400px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[560px] xl:max-w-[640px] aspect-[4/3] flex items-center justify-center mt-8 lg:mt-0">
-                  <img
-                    src={financialImpactImage}
-                    alt="Financial Impact - Lower Costs, Higher Returns"
-                    className="w-full h-full object-contain object-center scale-105 sm:scale-[1.12]"
-                  />
+                <div className="relative w-full max-w-[380px] xs:max-w-[420px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-[560px] xl:max-w-[640px] sm:aspect-[4/3] flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-0 mt-4 sm:mt-8 lg:mt-0">
+                  {/* Top 2 Floating Cards on Mobile */}
+                  <div className="grid grid-cols-2 gap-2 sm:gap-0 w-full sm:contents z-20">
+                    {/* Floating Card 2: Lower Breach Costs (Top Left on sm+) */}
+                    <motion.div
+                      className="relative sm:absolute sm:top-[10%] sm:left-[5%] flex items-center gap-2 sm:gap-3.5 md:gap-4 bg-white backdrop-blur-md rounded-xl p-2.5 sm:p-3 sm:px-4 md:px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5] h-full sm:h-auto"
+                      animate={{ y: [0, 12, 0] }}
+                      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                    >
+                      <ShieldCheck className="w-5 h-5 sm:w-7 sm:h-7 text-[#145BFF] shrink-0" strokeWidth={1.5} />
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[#64748B] text-[10px] sm:text-[11px] font-medium leading-tight mb-0.5 sm:mb-1">Lower<br />Breach Costs</span>
+                        <span className="text-[#145BFF] text-[12px] sm:text-[14px] font-bold leading-tight">~$1.9M <span className="text-[9px] sm:text-[10px]">↓</span></span>
+                      </div>
+                    </motion.div>
 
-                  {/* Floating Card 1: Avoided Enforcement Risk (Top Right) */}
-                  <motion.div
-                    className="absolute top-[-10%] right-[0%] flex items-center gap-4 bg-white backdrop-blur-md rounded-xl p-3 px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <FileCheck className="w-7 h-7 text-[#145BFF]" strokeWidth={1.5} />
-                    <div className="flex flex-col">
-                      <span className="text-[#64748B] text-[11px] font-medium leading-tight mb-1">Avoided<br />Enforcement Risk</span>
-                      <span className="text-[#0B1638] text-[12px] font-bold leading-tight">10+ Years</span>
-                      <span className="text-[#64748B] aqe-caption">of Investment Value</span>
-                    </div>
-                  </motion.div>
+                    {/* Floating Card 1: Avoided Enforcement Risk (Top Right on sm+) */}
+                    <motion.div
+                      className="relative sm:absolute sm:top-[-10%] sm:right-[0%] flex items-center gap-2 sm:gap-3.5 md:gap-4 bg-white backdrop-blur-md rounded-xl p-2.5 sm:p-3 sm:px-4 md:px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5] h-full sm:h-auto"
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                      <FileCheck className="w-5 h-5 sm:w-7 sm:h-7 text-[#145BFF] shrink-0" strokeWidth={1.5} />
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[#64748B] text-[10px] sm:text-[11px] font-medium leading-tight mb-0.5 sm:mb-1">Avoided<br />Enforcement Risk</span>
+                        <span className="text-[#0B1638] text-[11px] sm:text-[12px] font-bold leading-tight">10+ Years</span>
+                        <span className="text-[#64748B] text-[9.5px] sm:text-[11.5px] leading-tight">of Investment Value</span>
+                      </div>
+                    </motion.div>
+                  </div>
 
-                  {/* Floating Card 2: Lower Breach Costs (Top Left) */}
-                  <motion.div
-                    className="absolute top-[10%] left-[5%] flex items-center gap-4 bg-white backdrop-blur-md rounded-xl p-3 px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
-                    animate={{ y: [0, 12, 0] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                  >
-                    <ShieldCheck className="w-7 h-7 text-[#145BFF]" strokeWidth={1.5} />
-                    <div className="flex flex-col">
-                      <span className="text-[#64748B] text-[11px] font-medium leading-tight mb-1">Lower<br />Breach Costs</span>
-                      <span className="text-[#145BFF] text-[14px] font-bold leading-tight">~$1.9M <span className="text-[10px]">↓</span></span>
-                    </div>
-                  </motion.div>
+                  {/* Center Illustration */}
+                  <div className="w-full aspect-[4/3] flex items-center justify-center sm:contents">
+                    <img
+                      src={financialImpactImage}
+                      alt="Financial Impact - Lower Costs, Higher Returns"
+                      className="w-full h-full object-contain object-center scale-100 sm:scale-[1.12]"
+                    />
+                  </div>
 
-                  {/* Floating Card 3: Faster Containment (Middle Left) */}
-                  <motion.div
-                    className="absolute top-[50%] left-[0%] flex items-center gap-4 bg-white backdrop-blur-md rounded-xl p-3 px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
-                    animate={{ y: [0, -12, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  >
-                    <Clock className="w-7 h-7 text-[#145BFF]" strokeWidth={1.5} />
-                    <div className="flex flex-col">
-                      <span className="text-[#64748B] text-[11px] font-medium leading-tight mb-1">Faster<br />Containment</span>
-                      <span className="text-[#145BFF] text-[14px] font-bold leading-tight">80 Days <span className="text-[10px]">↓</span></span>
-                    </div>
-                  </motion.div>
+                  {/* Bottom 2 Floating Cards on Mobile */}
+                  <div className="grid grid-cols-2 gap-2 sm:gap-0 w-full sm:contents z-20">
+                    {/* Floating Card 3: Faster Containment (Middle Left on sm+) */}
+                    <motion.div
+                      className="relative sm:absolute sm:top-[50%] sm:left-[0%] flex items-center gap-2 sm:gap-3.5 md:gap-4 bg-white backdrop-blur-md rounded-xl p-2.5 sm:p-3 sm:px-4 md:px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5] h-full sm:h-auto"
+                      animate={{ y: [0, -12, 0] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    >
+                      <Clock className="w-5 h-5 sm:w-7 sm:h-7 text-[#145BFF] shrink-0" strokeWidth={1.5} />
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[#64748B] text-[10px] sm:text-[11px] font-medium leading-tight mb-0.5 sm:mb-1">Faster<br />Containment</span>
+                        <span className="text-[#145BFF] text-[12px] sm:text-[14px] font-bold leading-tight">80 Days <span className="text-[9px] sm:text-[10px]">↓</span></span>
+                      </div>
+                    </motion.div>
 
-                  {/* Floating Card 4: Reduced Advisory Spend (Middle Right) */}
-                  <motion.div
-                    className="absolute top-[40%] right-[-5%] flex items-center gap-4 bg-white backdrop-blur-md rounded-xl p-3 px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5]"
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                  >
-                    <Users className="w-7 h-7 text-[#145BFF]" strokeWidth={1.5} />
-                    <div className="flex flex-col">
-                      <span className="text-[#64748B] text-[11px] font-medium leading-tight mb-1">Reduced<br />Advisory Spend</span>
-                      <span className="text-[#145BFF] text-[14px] font-bold leading-tight">~30% <span className="text-[10px]">↓</span></span>
-                    </div>
-                  </motion.div>
+                    {/* Floating Card 4: Reduced Advisory Spend (Middle Right on sm+) */}
+                    <motion.div
+                      className="relative sm:absolute sm:top-[40%] sm:right-[-5%] flex items-center gap-2 sm:gap-3.5 md:gap-4 bg-white backdrop-blur-md rounded-xl p-2.5 sm:p-3 sm:px-4 md:px-5 shadow-[0_8px_24px_rgba(11,22,56,0.08)] border border-[#DCE5F5] h-full sm:h-auto"
+                      animate={{ y: [0, 10, 0] }}
+                      transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                    >
+                      <Users className="w-5 h-5 sm:w-7 sm:h-7 text-[#145BFF] shrink-0" strokeWidth={1.5} />
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-[#64748B] text-[10px] sm:text-[11px] font-medium leading-tight mb-0.5 sm:mb-1">Reduced<br />Advisory Spend</span>
+                        <span className="text-[#145BFF] text-[12px] sm:text-[14px] font-bold leading-tight">~30% <span className="text-[9px] sm:text-[10px]">↓</span></span>
+                      </div>
+                    </motion.div>
+                  </div>
 
                 </div>
               </Reveal>

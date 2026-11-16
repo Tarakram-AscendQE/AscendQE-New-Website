@@ -111,7 +111,7 @@ export const FinOpsHubPage: React.FC = () => {
                 </button>
 
                 <Link
-                  to="/start"
+                  to="/contact"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-[#1257f0] hover:bg-[#eff4ff] transition-colors"
                 >
                   <span>Start with 100 free tests</span>
@@ -460,7 +460,7 @@ export const FinOpsHubPage: React.FC = () => {
               </button>
 
               <Link
-                to="/start"
+                to="/contact"
                 className="inline-flex items-center gap-1.5 px-5 py-3.5 rounded-xl font-semibold text-[#1257f0] hover:bg-[#eff4ff] transition-colors"
               >
                 <span>Start with 100 free tests</span>

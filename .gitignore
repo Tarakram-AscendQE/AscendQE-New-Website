@@ -35,3 +35,14 @@ vite.config.js
 .env
 .env.*
 !.env.example
+
+# Local coding-rules & lint tooling (not pushed)
+CLAUDE.md
+eslint.config.mjs
+.prettierrc.json
+.prettierignore
+
+# Built frontend is produced by `npm run build` (frontend/dist) — never commit copies into backend/public.
+# Only blog uploads live there.
+backend/public/*
+!backend/public/uploads/
