@@ -20,13 +20,16 @@ try {
   // Ignore if exists
 }
 
-// Locate static frontend assets (e.g. backend/public)
+// Locate the built frontend. GoDaddy runs `npm run build` on deploy, which produces frontend/dist,
+// so that is served first. backend/public is only a legacy fallback (it now holds just blog uploads).
 const candidatePublicPaths = [
+  path.resolve(__dirname, '../../frontend/dist'),
+  path.join(process.cwd(), 'frontend/dist'),
+  path.join(process.cwd(), '../frontend/dist'),
   path.join(__dirname, 'public'),
   path.join(__dirname, '../public'),
   path.join(process.cwd(), 'public'),
   path.join(process.cwd(), 'backend/public'),
-  path.resolve(__dirname, '../../frontend/dist'),
 ]
 
 let publicDir = path.join(__dirname, 'public')
