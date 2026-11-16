@@ -50,11 +50,14 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.ascendqe.com') || origin === 'https://ascendqe.com') {
-        callback(null, true)
-      } else {
-        callback(null, true)
-      }
+      // Same-origin requests (including GoDaddy preview URLs) are not subject to CORS,
+      // so only genuinely cross-site origins are affected by this allow-list.
+      const allowed =
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        origin === 'https://ascendqe.com' ||
+        /^https:\/\/[a-z0-9-]+\.ascendqe\.com$/i.test(origin)
+      callback(null, allowed)
     },
     credentials: true,
   })
@@ -97,6 +100,11 @@ app.post('/apply-job.php', resumeUpload.single('resume'), handleJobApplication)
 
 // Mount Central API Router
 app.use('/api', apiRouter)
+
+// Never serve legacy PHP mailer source files as static downloads (form POSTs are handled above)
+app.all(/\.php$/i, (_req, res) => {
+  res.status(404).end()
+})
 
 // Serve the production React frontend from public folder
 app.use(express.static(publicDir))

@@ -2,6 +2,7 @@
 
 import path from 'path'
 import fs from 'fs'
+import crypto from 'crypto'
 import dotenv from 'dotenv'
 
 // Candidate paths to search for .env files in different container setups
@@ -38,9 +39,14 @@ export function getEnvValue(name: string, fallback = ''): string {
   return fallback
 }
 
-// Default verified credentials for sandbox/preview containers without injected secrets
-const defaultAwsKey = ['AK', 'IA', 'Y3ZEVC', 'J4MWWX', '6ZMN'].join('')
-const defaultAwsSecret = ['qqs/qat', 'cyxopvLh', 'CGb/Ibo', 'NYzHMzE6', 'Nqf37WdCS6'].join('')
+// JWT signing secret. Must come from the environment; if it is missing we use a random
+// per-process secret so tokens can never be forged (sessions simply reset on restart).
+function resolveJwtSecret(): string {
+  const secret = getEnvValue('JWT_SECRET')
+  if (secret) return secret
+  console.warn('[Config] JWT_SECRET is not set. Using a temporary random secret; studio logins will reset on every restart.')
+  return crypto.randomBytes(48).toString('hex')
+}
 
 // Safely resolve upload directory ensuring it exists within the application root
 function resolveUploadDir(): string {
@@ -84,19 +90,20 @@ function resolveUploadDir(): string {
 export const config = {
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 5000,
   nodeEnv: getEnvValue('NODE_ENV', 'development'),
-  jwtSecret: getEnvValue('JWT_SECRET', 'ascendqe_dev_secret_key_2026'),
+  jwtSecret: resolveJwtSecret(),
+  jwtExpiresIn: getEnvValue('JWT_EXPIRES_IN', '7d'),
   corsOrigin: getEnvValue('CORS_ORIGIN', 'http://localhost:3001'),
   databaseUrl: getEnvValue('DATABASE_URL', ''),
-  dbHost: getEnvValue('DB_HOST', '184.168.113.192'),
+  dbHost: getEnvValue('DB_HOST'),
   dbPort: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,
-  dbUser: getEnvValue('DB_USER', 'ascendqe_admin'),
-  dbPassword: getEnvValue('DB_PASSWORD', ']~4ueRo9XMAEYf-P'),
+  dbUser: getEnvValue('DB_USER'),
+  dbPassword: getEnvValue('DB_PASSWORD'),
   dbName: getEnvValue('DB_NAME', 'ascendqe_blogs'),
   uploadDir: resolveUploadDir(),
   uploadBaseUrl: process.env.UPLOAD_BASE_URL || '/uploads/blogs',
   awsRegion: getEnvValue('AWS_REGION', 'ap-south-1'),
-  awsAccessKeyId: getEnvValue('AWS_ACCESS_KEY_ID', defaultAwsKey),
-  awsSecretAccessKey: getEnvValue('AWS_SECRET_ACCESS_KEY', defaultAwsSecret),
+  awsAccessKeyId: getEnvValue('AWS_ACCESS_KEY_ID'),
+  awsSecretAccessKey: getEnvValue('AWS_SECRET_ACCESS_KEY'),
   senderMail: getEnvValue('SENDER_MAIL', 'hello@ascendqe.com'),
   recipientMail: getEnvValue('RECIPIENT_MAIL', 'hello@ascendqe.com'),
 }

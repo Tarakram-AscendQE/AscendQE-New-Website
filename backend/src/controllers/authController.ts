@@ -3,7 +3,9 @@
 
 import { Request, Response } from 'express'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import { pool } from '../config/database.js'
+import { config } from '../config/index.js'
 
 export async function login(req: Request, res: Response): Promise<void> {
   const { username, password } = req.body || {}
@@ -70,7 +72,11 @@ export async function login(req: Request, res: Response): Promise<void> {
     }
 
     // Success: generate authenticated session token
-    const token = `aqe_jwt_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+    const token = jwt.sign(
+      { sub: dbUser.user_id, username: dbUser.username },
+      config.jwtSecret,
+      { expiresIn: config.jwtExpiresIn } as jwt.SignOptions
+    )
     const rawName = dbUser.username.includes('@') ? dbUser.username.split('@')[0] : dbUser.username
     const displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1)
 
@@ -106,12 +112,15 @@ export async function logout(req: Request, res: Response): Promise<void> {
   })
 }
 
-export async function getMe(req: Request, res: Response): Promise<void> {
+export async function getMe(_req: Request, res: Response): Promise<void> {
+  const username: string = res.locals.user?.username || 'admin'
+  const rawName = username.includes('@') ? username.split('@')[0] : username
   res.status(200).json({
     success: true,
     data: {
-      username: 'admin',
-      displayName: 'AscendQE Admin',
+      id: res.locals.user?.sub,
+      username,
+      displayName: rawName.charAt(0).toUpperCase() + rawName.slice(1),
       role: 'admin',
     },
     timestamp: Date.now(),
