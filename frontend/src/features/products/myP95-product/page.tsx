@@ -15,38 +15,6 @@ import { MYP95_FAQS } from "./myP95-faqs";
 import { InteractivePlatformFlow } from "@/shared/flows/InteractivePlatformFlow";
 import { MYP95_FLOW_CONFIG } from "@/shared/flows/flowConfigs";
 
-function MetricCard({ value, title, source }: { value: string; title: string; source: string }) {
-  return (
-    <Reveal className="h-full">
-      <div className="flex h-full flex-col justify-center rounded-2xl border border-[#DCE5F5] bg-white p-8 text-center shadow-sm transition-all hover:border-[#145BFF] hover:shadow-[0_12px_32px_-12px_rgba(20,91,255,0.15)]">
-        <div className="text-[#145BFF] font-black" style={{ fontSize: "2.8rem", lineHeight: 1 }}>{value}</div>
-        <div className="mt-4 font-bold italic text-[#0B1638]" style={{ fontSize: "1.05rem", lineHeight: 1.4 }}>{title}</div>
-        <div className="mt-auto pt-6 text-xs font-medium italic text-[#64748B]">{source}</div>
-      </div>
-    </Reveal>
-  );
-}
-
-function DarkSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5]">
-      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function LightSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f9fafb] py-16 sm:py-24 lg:py-32">
-      <div className="mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
 export function MyP95Page() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,14 +32,14 @@ export function MyP95Page() {
         
         {/* ── SECTION 1: HERO (LIGHT) ── */}
         <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 overflow-hidden border-b border-[#DCE5F5]">
-          <div className="relative z-10 mx-auto w-full px-12 md:px-[88px] lg:px-24">
+          <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
             
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-12 items-center">
               
               {/* Left Column */}
-              <Reveal className="flex flex-col justify-center text-center lg:text-left">
+              <Reveal className="flex flex-col justify-center">
                 {/* Breadcrumb */}
-                <p className="mb-4 sm:mb-6 text-xs text-[#64748B] text-center lg:text-left">
+                <p className="mb-4 sm:mb-6 text-xs text-[#64748B]">
                   <a href="/" className="hover:text-[#145BFF] transition-colors">Home</a>
                   <span className="mx-1.5">›</span>
                   <a href="/products" className="hover:text-[#145BFF] transition-colors">Products</a>
@@ -79,8 +47,8 @@ export function MyP95Page() {
                   <span className="text-[#145BFF] font-medium">myP95</span>
                 </p>
 
-                <div className="mb-8 flex flex-col items-center lg:items-start">
-                  <div className="flex items-center justify-center lg:justify-start gap-4">
+                <div className="mb-8 flex flex-col items-start">
+                  <div className="flex items-center gap-4">
                     <img src={myP95Logo} alt="myP95 Logo" className="h-14 sm:h-16 md:h-20 lg:h-[84px] w-auto object-contain shrink-0" />
                     <span className="font-bold text-[#0B1638] text-3xl sm:text-4xl lg:text-5xl leading-none">myP95</span>
                   </div>
@@ -97,15 +65,15 @@ export function MyP95Page() {
                   Purpose-built for performance engineering.
                 </h2>
                 
-                <p className="aqe-intro mt-8 text-[#263653] max-w-[600px] mx-auto lg:mx-0 font-medium">
+                <p className="aqe-intro mt-8 text-[#263653] max-w-[600px] font-medium">
                   From performance objectives to workload models, execution, telemetry and optimization — performance as a governed agent mission.
                 </p>
                 
-                <p className="aqe-paragraph mt-6 text-[#64748B] max-w-[600px] mx-auto lg:mx-0 italic font-medium">
+                <p className="aqe-paragraph mt-6 text-[#64748B] max-w-[600px] italic font-medium">
                   Specialised facilities behind it: load generators, APM connectors, p95/p99 analytics, capacity modelling.
                 </p>
 
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-5 mt-10">
+                <div className="flex flex-wrap items-center gap-5 mt-10">
                   <a href="/contact" className="aqe-btn-text flex items-center justify-center gap-2 bg-[#145BFF] hover:bg-[#0B49D6] text-white px-8 py-3.5 rounded-xl font-bold transition-transform hover:scale-105 shadow-[0_12px_24px_-10px_rgba(20,91,255,0.4)]">
                     Request a Demo
                     <ArrowRight className="w-5 h-5 ml-1" />
@@ -118,95 +86,99 @@ export function MyP95Page() {
               </Reveal>
 
               {/* Right Column: Interactive Diagram */}
-              <Reveal delay={0.3} className="relative mt-20 lg:mt-0 h-[450px] md:h-[500px] lg:h-[650px] w-full flex items-center justify-center">
+              <Reveal delay={0.3} className="relative mt-10 md:mt-16 lg:mt-0 md:h-[500px] lg:h-[650px] w-full flex flex-col md:flex-row items-center justify-center gap-3 md:gap-0">
                 
                 {/* Background connecting arc (SVG) */}
-                <svg className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[120%] h-[80%] pointer-events-none opacity-30" viewBox="0 0 1000 600" fill="none">
+                <svg className="hidden md:block absolute top-[10%] left-1/2 -translate-x-1/2 w-[120%] h-[80%] pointer-events-none opacity-30" viewBox="0 0 1000 600" fill="none">
                   <path d="M50,400 Q500,-100 950,400" stroke="#145BFF" strokeWidth="2" strokeDasharray="4 6" />
                 </svg>
 
-                {/* Central Laptop/Server Image */}
-                <img 
-                  src={myP95HeroImage} 
-                  alt="myP95 Platform Dashboard" 
-                  className="relative z-10 w-[85%] lg:w-[90%] h-auto object-contain drop-shadow-[0_20px_50px_rgba(20,91,255,0.15)] mt-12" 
-                />
-
-                {/* Floating Cards */}
                 {/* Top Center: Performance Objectives */}
-                <motion.div 
-                  className="absolute z-20 flex items-center gap-3 bg-white border border-[#DCE5F5] rounded-xl p-3 pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF]"
-                  style={{ top: "0%", left: "50%", x: "-50%" }}
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5]">
-                    <Target className="w-5 h-5 text-[#145BFF]" />
-                  </div>
-                  <div>
-                    <p className="text-[#0B1638] aqe-caption font-bold tracking-wider uppercase leading-tight">PERFORMANCE<br/>OBJECTIVES</p>
-                  </div>
-                </motion.div>
+                <div className="flex justify-center w-full md:w-auto md:absolute md:top-[0%] md:left-1/2 md:-translate-x-1/2 z-20">
+                  <motion.div
+                    className="flex items-center gap-2.5 md:gap-3 bg-white border border-[#DCE5F5] rounded-xl px-3.5 py-2 md:p-3 md:pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF]"
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5] shrink-0">
+                      <Target className="w-4 h-4 md:w-5 md:h-5 text-[#145BFF]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[#0B1638] text-[10.5px] sm:text-[11.5px] md:text-[13px] font-bold tracking-wider uppercase leading-tight">PERFORMANCE<br/>OBJECTIVES</p>
+                    </div>
+                  </motion.div>
+                </div>
 
-                {/* Top Left: Workload Models */}
-                <motion.div 
-                  className="absolute z-20 flex items-center gap-3 bg-white border border-[#DCE5F5] rounded-xl p-3 pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF]"
-                  style={{ top: "15%", left: "0%" }}
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5]">
-                    <BarChart className="w-5 h-5 text-[#145BFF]" />
-                  </div>
-                  <div>
-                    <p className="text-[#0B1638] aqe-caption font-bold tracking-wider uppercase leading-tight">WORKLOAD<br/>MODELS</p>
-                  </div>
-                </motion.div>
+                {/* Mobile Row 2: Workload Models + Telemetry (above image on mobile, absolute left/right on md+) */}
+                <div className="grid grid-cols-2 gap-2.5 w-full max-w-[380px] md:max-w-none md:contents z-20">
+                  {/* Top Left: Workload Models */}
+                  <motion.div
+                    className="relative md:absolute md:top-[15%] md:left-[0%] z-20 flex items-center gap-2 md:gap-3 bg-white border border-[#DCE5F5] rounded-xl p-2 md:p-3 md:pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] w-full md:w-auto"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  >
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5] shrink-0">
+                      <BarChart className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#145BFF]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[#0B1638] text-[10px] sm:text-[11px] md:text-[13px] font-bold tracking-wider uppercase leading-tight">WORKLOAD<br/>MODELS</p>
+                    </div>
+                  </motion.div>
 
-                {/* Bottom Left: Execution */}
-                <motion.div 
-                  className="absolute z-20 flex items-center gap-3 bg-white border border-[#DCE5F5] rounded-xl p-3 pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF]"
-                  style={{ top: "45%", left: "-10%" }}
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5]">
-                    <Play className="w-5 h-5 text-[#145BFF]" fill="currentColor" />
-                  </div>
-                  <div>
-                    <p className="text-[#0B1638] aqe-caption font-bold tracking-wider uppercase leading-tight">EXECUTION</p>
-                  </div>
-                </motion.div>
+                  {/* Top Right: Telemetry */}
+                  <motion.div
+                    className="relative md:absolute md:top-[15%] md:right-[0%] z-20 flex items-center gap-2 md:gap-3 bg-white border border-[#DCE5F5] rounded-xl p-2 md:p-3 md:pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] w-full md:w-auto"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                  >
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5] shrink-0">
+                      <Activity className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#145BFF]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[#0B1638] text-[10px] sm:text-[11px] md:text-[13px] font-bold tracking-wider uppercase leading-tight">TELEMETRY</p>
+                    </div>
+                  </motion.div>
+                </div>
 
-                {/* Top Right: Telemetry */}
-                <motion.div 
-                  className="absolute z-20 flex items-center gap-3 bg-white border border-[#DCE5F5] rounded-xl p-3 pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF]"
-                  style={{ top: "15%", right: "0%" }}
-                  animate={{ y: [0, -8, 0] }}
-                  transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5]">
-                    <Activity className="w-5 h-5 text-[#145BFF]" />
-                  </div>
-                  <div>
-                    <p className="text-[#0B1638] aqe-caption font-bold tracking-wider uppercase leading-tight">TELEMETRY</p>
-                  </div>
-                </motion.div>
+                {/* Central Laptop/Server Image */}
+                <div className="w-full max-w-[340px] sm:max-w-[400px] md:max-w-none md:contents flex items-center justify-center my-2 md:my-0">
+                  <img 
+                    src={myP95HeroImage} 
+                    alt="myP95 Platform Dashboard" 
+                    className="relative z-10 w-full md:w-[85%] lg:w-[90%] h-auto object-contain drop-shadow-[0_20px_50px_rgba(20,91,255,0.15)] md:mt-12" 
+                  />
+                </div>
 
-                {/* Bottom Right: Optimization */}
-                <motion.div 
-                  className="absolute z-20 flex items-center gap-3 bg-white border border-[#DCE5F5] rounded-xl p-3 pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF]"
-                  style={{ top: "45%", right: "-10%" }}
-                  animate={{ y: [0, -6, 0] }}
-                  transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-                >
-                  <div className="w-10 h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5]">
-                    <Settings className="w-5 h-5 text-[#145BFF]" />
-                  </div>
-                  <div>
-                    <p className="text-[#0B1638] aqe-caption font-bold tracking-wider uppercase leading-tight">OPTIMIZATION</p>
-                  </div>
-                </motion.div>
+                {/* Mobile Row 3: Execution + Optimization (below image on mobile, absolute left/right on md+) */}
+                <div className="grid grid-cols-2 gap-2.5 w-full max-w-[380px] md:max-w-none md:contents z-20">
+                  {/* Bottom Left: Execution */}
+                  <motion.div
+                    className="relative md:absolute md:top-[45%] md:left-[-10%] z-20 flex items-center gap-2 md:gap-3 bg-white border border-[#DCE5F5] rounded-xl p-2 md:p-3 md:pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] w-full md:w-auto"
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  >
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5] shrink-0">
+                      <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#145BFF]" fill="currentColor" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[#0B1638] text-[10px] sm:text-[11px] md:text-[13px] font-bold tracking-wider uppercase leading-tight">EXECUTION</p>
+                    </div>
+                  </motion.div>
+
+                  {/* Bottom Right: Optimization */}
+                  <motion.div
+                    className="relative md:absolute md:top-[45%] md:right-[-10%] z-20 flex items-center gap-2 md:gap-3 bg-white border border-[#DCE5F5] rounded-xl p-2 md:p-3 md:pr-5 shadow-[0_4px_16px_rgba(20,91,255,0.1)] hover:border-[#145BFF] w-full md:w-auto"
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                  >
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-[#EAF1FF] flex items-center justify-center border border-[#DCE5F5] shrink-0">
+                      <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-[#145BFF]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-[#0B1638] text-[10px] sm:text-[11px] md:text-[13px] font-bold tracking-wider uppercase leading-tight">OPTIMIZATION</p>
+                    </div>
+                  </motion.div>
+                </div>
 
               </Reveal>
 

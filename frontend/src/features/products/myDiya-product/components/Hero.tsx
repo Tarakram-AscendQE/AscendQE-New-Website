@@ -23,7 +23,6 @@ import {
   Settings,
 } from "lucide-react";
 import myDiyaLogo from "../../../../assets/logo-images/myDiya-logo.webp";
-import myDiyaDarkLogo from "../../../../assets/logo-images/myDiya-dark.webp";
 
 
 // Orbit geometry constants: 37% percentage radius guarantees all nodes and labels stay inside stage
@@ -103,25 +102,6 @@ const VALUE_METRICS = [
     label: "Enterprise Ready",
   },
 ];
-
-export function DarkSection({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <section
-      id="top"
-      className={`relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5] text-[#0B1638] overflow-hidden w-full ${className}`}
-    >
-      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
 
 export function Hero() {
   const reduce = useReducedMotion();
@@ -210,7 +190,7 @@ export function Hero() {
             <span className="text-[#145BFF] font-medium">myDiya</span>
           </p>
           {/*<img
-  src={myDiyaDarkLogo}
+  src={myDiyaLogo}
   alt="myDiya Dark Logo"
   //className="mt-4 sm:mt-6 h-10 sm:h-12 lg:h-14 object-contain"
   className="mt-4 sm:mt-6 mb-4 sm:mb-6 ml-2 sm:ml-8 lg:ml-6 h-20 sm:h-20 lg:h-20 object-contain"
@@ -218,7 +198,7 @@ export function Hero() {
 />*/}
 <div className="flex items-center gap-2 sm:gap-3 mt-4 sm:mt-6">
   <img
-    src={myDiyaDarkLogo}
+    src={myDiyaLogo}
     alt="myDiya Dark Logo"
     className="h-20 sm:h-20 lg:h-20 object-contain"
   />

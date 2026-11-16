@@ -15,6 +15,7 @@ import rocketImage from "../../../assets/mySTLC-assets/rocket-image.webp";
 import { FAQAccordion } from "@/shared/faq's accordians/page";
 import { StillHaveQuestionsBanner } from "@/shared/StillHaveQuestionsBanner";
 import { MYSTLC_FAQS } from "./mySTLC-faqs";
+import { ProductHeroSection, ProductContentSection } from "@/shared/ProductSections";
 
 const ORBIT_NODES = [
   { Icon: FileText, label: "Requirements" },
@@ -137,38 +138,6 @@ function BrainOrbit() {
   );
 }
 
-function MetricCard({ value, title, source }: { value: string; title: string; source: string }) {
-  return (
-    <Reveal className="h-full">
-      <div className="flex h-full flex-col justify-center rounded-2xl border border-[#DCE5F5] bg-white p-8 text-center shadow-sm transition-all hover:border-[#145BFF] hover:shadow-[0_12px_32px_-12px_rgba(20,91,255,0.15)]">
-        <div className="text-[#145BFF] font-black" style={{ fontSize: "2.8rem", lineHeight: 1 }}>{value}</div>
-        <div className="mt-4 font-bold italic text-[#0B1638]" style={{ fontSize: "1.05rem", lineHeight: 1.4 }}>{title}</div>
-        <div className="mt-auto pt-6 text-xs font-medium italic text-[#64748B]">{source}</div>
-      </div>
-    </Reveal>
-  );
-}
-
-function DarkSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5] overflow-hidden w-full">
-      <div className="relative z-10 mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
-function LightSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f9fafb] py-16 lg:py-20 overflow-hidden w-full">
-      <div className="mx-auto w-full px-6 sm:px-12 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
-
 export function MySTLCPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -185,7 +154,7 @@ export function MySTLCPage() {
         />
 
         {/* ── SECTION 1: HERO (LIGHT) ── */}
-        <DarkSection>
+        <ProductHeroSection innerClassName="px-6 sm:px-12 md:px-[88px] lg:px-24">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center w-full min-w-0">
 
             {/* Left: Copy */}
@@ -281,12 +250,12 @@ export function MySTLCPage() {
             </div>
           </Reveal>
 
-        </DarkSection>
+        </ProductHeroSection>
 
         {/* ── SECTION 2: PLATFORM FLOW (LIGHT) ── */}
-        <LightSection>
+        <ProductContentSection>
           <InteractivePlatformFlow config={MYSTLC_FLOW_CONFIG} />
-        </LightSection>
+        </ProductContentSection>
 
         {/* ── SECTION 3: VALUE MODEL (LIGHT) ── */}
         <section className="relative bg-gradient-to-b from-[#f8faff] via-[#ffffff] to-[#f4f7fe] py-14 lg:py-20 overflow-hidden border-t border-slate-200/80 text-[#0f172a]">
@@ -711,7 +680,7 @@ export function MySTLCPage() {
                   READY TO <span className="font-bold text-[#145BFF]">TRANSFORM YOUR TESTING</span>?
                 </p>
                 {/* Glowing underline */}
-                <div className="mt-3 h-[2px] w-72 bg-gradient-to-r from-transparent via-[#145BFF] to-transparent shadow-[0_0_8px_rgba(20,91,255,0.4)]" />
+                <div className="mt-3 h-[2px] w-56 sm:w-72 max-w-full bg-gradient-to-r from-transparent via-[#145BFF] to-transparent shadow-[0_0_8px_rgba(20,91,255,0.4)]" />
               </div>
 
               {/* Headings */}
@@ -725,10 +694,10 @@ export function MySTLCPage() {
 
             <Reveal delay={0.1}>
               {/* CTA Button */}
-              <div className="mt-12 flex justify-center">
+              <div className="mt-10 sm:mt-12 flex justify-center">
                 <a
                   href="/contact"
-                  className="aqe-btn-text group relative inline-flex items-center gap-2 rounded-2xl bg-[#145BFF] hover:bg-[#0B49D6] px-10 py-4 text-white shadow-[0_8px_24px_rgba(20,91,255,0.3)] transition-all hover:scale-[1.03] active:scale-95 hover:shadow-[0_12px_28px_rgba(20,91,255,0.4)]"
+                  className="aqe-btn-text group relative inline-flex items-center gap-2 rounded-2xl bg-[#145BFF] hover:bg-[#0B49D6] px-8 sm:px-10 py-4 text-white shadow-[0_8px_24px_rgba(20,91,255,0.3)] transition-all hover:scale-[1.03] active:scale-95 hover:shadow-[0_12px_28px_rgba(20,91,255,0.4)]"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     Request a Demo <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -737,14 +706,14 @@ export function MySTLCPage() {
               </div>
             </Reveal>
 
-          </div>
-
-          <div className="absolute bottom-8 lg:bottom-12 left-1/2 -translate-x-1/2 w-full px-4 text-center z-20">
             <Reveal delay={0.2}>
-              <p className="aqe-paragraph text-[#263653] font-medium tracking-wide">
-                Experience fixed internal agents. Governed testing. Actionable quality intelligence.
-              </p>
+              <div className="mt-10 sm:mt-14 w-full text-center">
+                <p className="aqe-paragraph text-[#263653] font-medium tracking-wide max-w-2xl mx-auto">
+                  Experience fixed internal agents. Governed testing. Actionable quality intelligence.
+                </p>
+              </div>
             </Reveal>
+
           </div>
         </section>
 

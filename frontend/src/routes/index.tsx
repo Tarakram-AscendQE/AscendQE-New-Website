@@ -5,7 +5,6 @@ import { HomePage } from '../pages/home-page';
 import { ProofPage } from '../pages/proof-page';
 import { PayoffPage } from '../pages/payoff-page';
 import { PricingPage } from '../pages/pricing-page';
-//import { StartPage } from '../pages/start-page';
 import { StartPage1 } from '../pages/start-page1';
 
 import { DocsPage } from '../pages/docs-page';

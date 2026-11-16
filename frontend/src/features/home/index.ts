@@ -7,7 +7,6 @@ export * from './journey-section';
 export * from './ai-modes-section';
 export * from './control-boundaries-section';
 export * from './coffee-challenge-section';
-export * from './proof-faq-section';
 export * from './final-cta-section';
 export * from './trailer-dialog';
 export * from './motion-toggle';

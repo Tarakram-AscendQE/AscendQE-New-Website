@@ -47,16 +47,7 @@ import { StillHaveQuestionsBanner } from "@/shared/StillHaveQuestionsBanner";
 import { MYTDM_FAQS } from "./myTDM-faqs";
 import { InteractivePlatformFlow } from "@/shared/flows/InteractivePlatformFlow";
 import { MYTDM_FLOW_CONFIG } from "@/shared/flows/flowConfigs";
-
-function DarkSection({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="relative bg-[#f7f9fd] bg-[radial-gradient(ellipse_at_80%_45%,#dceeff66,transparent_50%)] pb-8 pt-8 sm:pt-9 lg:pb-10 lg:pt-10 border-b border-[#DCE5F5] overflow-hidden w-full text-[#0B1638]">
-      <div className="relative z-10 mx-auto w-full px-4 sm:px-8 md:px-[88px] lg:px-24">
-        {children}
-      </div>
-    </section>
-  );
-}
+import { ProductHeroSection } from "@/shared/ProductSections";
 
 const LEFT_SOURCE_NODES = [
   { icon: Database, label: "Databases", y: 68, cy: 205, color: "#145BFF" },
@@ -168,7 +159,7 @@ export function MyTDMPage() {
         {/* ══════════════════════════════════════════════════════════════════
             SECTION 1: HERO (DARK) — Exact UX Layout + Site Color System
            ══════════════════════════════════════════════════════════════════ */}
-        <DarkSection>
+        <ProductHeroSection className="overflow-hidden w-full text-[#0B1638]">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.88fr_1.18fr] xl:grid-cols-[0.84fr_1.22fr] lg:items-center relative z-10 pt-2 pb-4">
             {/* ── Left Column: Brand Header, Headlines, Copy & CTAs ── */}
             <Reveal delay={0.1} className="w-full min-w-0">
@@ -487,7 +478,7 @@ export function MyTDMPage() {
               })}
             </div>
           </Reveal>
-        </DarkSection>
+        </ProductHeroSection>
 
         {/* ══════════════════════════════════════════════════════════════════
             SECTION 2: PLATFORM FLOW (LIGHT)

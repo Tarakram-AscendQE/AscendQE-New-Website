@@ -6,7 +6,7 @@ import {
   type CSSProperties,
 } from "react";
 import { motion, useReducedMotion, useInView } from "motion/react";
-import logoDark from "@/assets/logo-images/AscendQE-logo-new-dark-theme.webp";
+import logoDark from "@/assets/brand-logos/AscendQE-dark-logo.webp";
 
 function motionOK() {
   if (typeof window === "undefined") return false;

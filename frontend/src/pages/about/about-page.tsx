@@ -30,7 +30,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { Reveal } from "@/components/ui/shared";
-import aqShortLogo from "@/assets/about-page-images/AQ-short-logo.webp";
+import aqShortLogo from "@/assets/brand-logos/AQ-short-logo.webp";
 import aboutBelieveImage from "@/assets/about-page-images/AscendQE-about-page.webp";
 import nagFounderImage from "@/assets/about-page-images/Nag-image-2.webp";
 import nagAvatarImage from "@/assets/about-page-images/Nag.webp";

@@ -10,7 +10,6 @@ import {
   AiModesSection,
   ControlBoundariesSection,
   CoffeeChallengeSection,
-  //ProofFaqSection,
   //ProofFaqSection1,
   FinalCtaSection,
   TrailerDialog,

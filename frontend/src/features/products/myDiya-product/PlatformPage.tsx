@@ -1,6 +1,7 @@
 import { ScrollToTop } from "@/shared/ScrollToTop";
 import { HeadMeta } from "@/components/seo/HeadMeta";
-import { Hero, DarkSection } from "./components/Hero";
+import { Hero } from "./components/Hero";
+import { ProductHeroSection } from "@/shared/ProductSections";
 import { WhySection } from "./components/WhySection";
 import { AgentShowcase } from "./components/AgentShowcase";
 import { Workflow } from "./components/Workflow";
@@ -25,9 +26,9 @@ export function PlatformPage() {
           canonicalPath="/mydiya"
         />
         {/*<h1 className="aqe-hero-heading text-[#0B1638]">myDiya – AI-Powered Quality Engineering Platform</h1> */}
-        <DarkSection>
+        <ProductHeroSection id="top" className="text-[#0B1638] overflow-hidden w-full">
           <Hero />
-        </DarkSection>
+        </ProductHeroSection>
         <WhySection />
         <AgentShowcase />
         <Workflow />
