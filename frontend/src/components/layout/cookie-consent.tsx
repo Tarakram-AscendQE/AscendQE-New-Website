@@ -89,7 +89,7 @@ export function CookieConsent() {
         <aside
           aria-labelledby="cookie-banner-title"
           /*className="fixed top-1/2 left-1/2 z-[100] -translate-x-1/2 -translate-y-1/2 w-[480px] max-w-full max-h-none overflow-visible rounded-2xl border border-[#dce5f5] bg-white p-6 sm:p-8 shadow-[0_20px_60px_rgba(11,24,49,0.2)] text-center")*/
-          className="fixed  top-[57%] right-11 z-[90] -translate-y-1/2 w-[405px] max-w-full max-h-none overflow-visible rounded-2xl border border-[#dce5f5] bg-white p-4 sm:p-6 shadow-[0_20px_60px_rgba(11,24,49,0.2)] text-center"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[90] w-[calc(100%-2rem)] sm:w-[405px] max-w-full max-h-none overflow-visible rounded-2xl border border-[#dce5f5] bg-white p-4 sm:p-6 shadow-[0_20px_60px_rgba(11,24,49,0.2)] text-center"
 
         >
           <div className="flex flex-col gap-4 items-center">

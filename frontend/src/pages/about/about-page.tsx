@@ -1144,13 +1144,13 @@ export function AboutUsPage() {
             </Reveal>
 
             <Reveal delay={0.2} className="w-full mb-10 sm:mb-12">
-              <div className="flex flex-wrap md:flex-nowrap items-center justify-start gap-2.5 sm:gap-3 lg:gap-4 w-full">
+              <div className="flex flex-col items-center sm:flex-row sm:flex-wrap xl:flex-nowrap justify-start gap-2.5 sm:gap-3 lg:gap-4 w-full">
                 {DIRECTION_PILLARS.map((item, idx) => {
                   const Icon = item.icon;
                   const isLast = idx === DIRECTION_PILLARS.length - 1;
 
                   return (
-                    <div key={item.label} className="flex items-center gap-2.5 sm:gap-3 lg:gap-4">
+                    <div key={item.label} className="flex flex-col sm:flex-row items-center gap-2.5 sm:gap-3 lg:gap-4">
                       <motion.div
                         initial={{ opacity: 0, y: 18 }}
                         whileInView={{ opacity: 1, y: 0 }}

@@ -254,7 +254,7 @@ export const StartPage1: React.FC = () => {
           </div>
           </div>
 
-          <div className="flex flex-col">
+          <div className="flex flex-col order-first lg:order-none">
             <Reveal>
               <form id="brief-form" className="brief-panel !mt-0 !p-6 sm:!p-8" ref={formRef} onSubmit={handleSubmit} noValidate>
                 {/* Row 1: First Name & Last Name */}
