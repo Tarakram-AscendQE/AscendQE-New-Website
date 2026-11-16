@@ -289,7 +289,7 @@ export function BlogDashboard({ onWriteNew, onEditBlog, onViewBlog, onLogout }: 
                 </article>
               )
             })}
-                      <div className="mt-8 flex w-full justify-end" style={{ gridColumn: '1 / -1' }}>
+                      <div className="mt-8 flex w-full justify-center sm:justify-end" style={{ gridColumn: '1 / -1' }}>
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

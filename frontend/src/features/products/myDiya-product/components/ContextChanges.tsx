@@ -79,7 +79,7 @@ export function ContextChanges() {
       </div>
 
       {/* ── Main Container: Edge-Aligned Width ── */}
-      <div className="relative z-10 w-full px-4 sm:px-8 md:px-[88px] lg:px-16 xl:px-24">
+      <div className="relative z-10 w-full px-3 xs:px-4 sm:px-8 md:px-12 lg:px-16 xl:px-24">
         
         {/* ════════ TOP SECTION: Headline (Left) & Hub Diagram (Right) ════════ */}
         <div className="grid items-center gap-10 lg:gap-12 xl:gap-14 lg:grid-cols-12">
@@ -108,29 +108,6 @@ export function ContextChanges() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="mt-4 sm:mt-5 text-3xl sm:text-4xl lg:text-[2.5rem] xl:text-[3.1rem] font-extrabold tracking-tight leading-[1.12]"
             >
-              {/*<span className="block text-[#0f172a]">Agents Work Better When</span>
-              <span
-                className="block"
-                style={{
-                  background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  color: "#145BFF",
-                }}
-              >
-                They Understand the Same
-              </span>
-              <span
-                className="block"
-                style={{
-                  background: "linear-gradient(90deg, #145BFF 0%, #0284c7 50%, #7c3aed 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  color: "#0284c7",
-                }}
-              >
-                Enterprise Reality.
-              </span>*/}
               <span className="block text-[#0f172a] mb-1">
                 Agents Work Better When
               </span>
@@ -187,28 +164,34 @@ export function ContextChanges() {
           </div>
 
           {/* Right Hub Diagram Column */}
-          <div className="lg:col-span-7 xl:col-span-7 relative flex items-center justify-center w-full pb-4 pt-1 px-1">
-            <div className="relative w-full min-w-0 max-w-[620px] xl:max-w-[680px] grid grid-cols-12 gap-2 sm:gap-3 items-center select-none">
+          <div className="lg:col-span-7 xl:col-span-7 relative flex items-center justify-center w-full pb-4 pt-1 px-0 xs:px-1">
+            <div className="relative w-full min-w-0 max-w-[580px] sm:max-w-[640px] md:max-w-[700px] lg:max-w-[640px] xl:max-w-[720px] mx-auto flex items-stretch justify-between gap-1 xs:gap-2 sm:gap-3 md:gap-4 select-none">
               
               {/* Left 5 Inputs */}
-              <div className="col-span-4 flex flex-col gap-2.5 sm:gap-3 z-10">
+              <div className="flex-1 min-w-0 flex flex-col justify-between gap-1.5 xs:gap-2 sm:gap-2.5 md:gap-3 z-10">
                 {LEFT_INPUTS.map((item, i) => {
                   const Icon = item.icon;
                   return (
                     <motion.div
                       key={item.title}
-                      initial={reduce ? false : { opacity: 0, x: -15 }}
+                      initial={reduce ? false : { opacity: 0, x: -14 }}
                       whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.35, delay: 0.1 + i * 0.05 }}
-                      className="flex items-center gap-2 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl border border-blue-200/90 bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(20,91,255,0.06)] group hover:border-blue-400 hover:shadow-md transition-all"
+                      transition={{ duration: 0.35, delay: 0.05 + i * 0.04 }}
+                      className="flex items-center gap-1.5 xs:gap-2 sm:gap-2.5 p-1.5 xs:p-2 sm:p-2.5 md:p-3 rounded-lg xs:rounded-xl border border-blue-200/90 bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(20,91,255,0.06)] group hover:border-blue-400 hover:shadow-md transition-all min-h-[48px] xs:min-h-[52px] sm:min-h-[56px] md:min-h-[60px] min-w-0"
                     >
-                      <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 border border-blue-200 text-[#145BFF]">
-                        <Icon className="h-4 w-4 stroke-[2.2]" />
+                      <div className="flex h-6 w-6 xs:h-7 xs:w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-md sm:rounded-lg bg-blue-50 border border-blue-200 text-[#145BFF]">
+                        <Icon className="h-3.5 w-3.5 xs:h-4 xs:w-4 stroke-[2.2]" />
                       </div>
-                      <div className="aqe-caption leading-tight text-[#0f172a] font-semibold text-left">
-                        <div>{item.title}</div>
-                        {item.subtitle && <div className="text-slate-500 font-normal">{item.subtitle}</div>}
+                      <div className="min-w-0 flex-1 text-left flex flex-col justify-center">
+                        <div className="text-[9.5px] xs:text-[10.5px] sm:text-xs md:text-[12.5px] lg:text-[13px] font-bold text-[#0f172a] leading-tight break-words">
+                          {item.title}
+                        </div>
+                        {item.subtitle && (
+                          <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px] text-slate-500 font-normal leading-tight break-words mt-0.5">
+                            {item.subtitle}
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   );
@@ -216,7 +199,7 @@ export function ContextChanges() {
               </div>
 
               {/* Center Holographic Shared Context Hub */}
-              <div className="col-span-4 flex items-center justify-center relative z-20">
+              <div className="shrink-0 flex items-center justify-center relative z-20 w-[84px] xs:w-[96px] sm:w-[130px] md:w-[150px] lg:w-[160px]">
                 {/* SVG Circuit Connectors */}
                 <svg
                   className="absolute inset-0 w-full h-full pointer-events-none -z-10"
@@ -239,39 +222,58 @@ export function ContextChanges() {
                 </svg>
 
                 {/* 3D Stepped Disc Core */}
-                <div className="relative flex flex-col items-center">
-                  <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-2 border-blue-300 bg-gradient-to-b from-white via-blue-50/40 to-sky-50 shadow-[0_8px_30px_rgba(20,91,255,0.15),inset_0_0_20px_rgba(20,91,255,0.08)] flex flex-col items-center justify-center p-3 text-center">
-                    <Database className="h-6 w-6 sm:h-7 sm:w-7 text-[#145BFF] mb-1" />
-                    <span className="text-xs sm:text-sm font-bold text-[#0f172a] leading-tight">Shared</span>
-                    <span className="text-xs sm:text-sm font-bold text-[#0f172a] leading-tight">Context</span>
-                    <span className="mt-1 text-[7.5px] sm:text-[8.5px] font-medium text-slate-500 tracking-tight leading-tight">
+                <motion.div
+                  initial={reduce ? false : { opacity: 0, scale: 0.9 }}
+                  whileInView={reduce ? undefined : { opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: 0.12 }}
+                  className="relative flex flex-col items-center"
+                >
+                  <div className="w-[74px] h-[74px] xs:w-[86px] xs:h-[86px] sm:w-28 sm:h-28 md:w-32 md:h-32 lg:w-36 lg:h-36 rounded-full border-2 border-blue-300 bg-gradient-to-b from-white via-blue-50/50 to-sky-50 shadow-[0_8px_30px_rgba(20,91,255,0.15),inset_0_0_20px_rgba(20,91,255,0.08)] flex flex-col items-center justify-center p-1.5 xs:p-2 sm:p-2.5 md:p-3 text-center relative z-10">
+                    {/* Subtle pulsing ring animation */}
+                    <div className="absolute inset-0 rounded-full border border-blue-400/30 animate-pulse pointer-events-none" />
+                    
+                    <Database className="h-4 w-4 xs:h-4.5 xs:w-4.5 sm:h-5 sm:w-5 md:h-6 md:w-6 text-[#145BFF] mb-0.5 sm:mb-1 shrink-0" />
+                    <span className="text-[8.5px] xs:text-[9.5px] sm:text-xs md:text-sm font-bold text-[#0f172a] leading-[1.15]">
+                      Shared
+                    </span>
+                    <span className="text-[8.5px] xs:text-[9.5px] sm:text-xs md:text-sm font-bold text-[#0f172a] leading-[1.15]">
+                      Context
+                    </span>
+                    <span className="mt-0.5 sm:mt-1 text-[6px] xs:text-[7px] sm:text-[7.5px] md:text-[8.5px] font-medium text-slate-500 tracking-tight leading-tight px-1">
                       Enterprise Knowledge &amp; Intelligence
                     </span>
                   </div>
                   {/* Purple glow bottom tier rim */}
-                  <div className="w-36 sm:w-42 h-6 rounded-[100%] bg-gradient-to-b from-purple-200/60 via-indigo-100/40 to-transparent -mt-3.5 -z-10 blur-[2px]" />
-                </div>
+                  <div className="w-[82px] xs:w-[94px] sm:w-32 md:w-36 lg:w-40 xl:w-44 h-3.5 sm:h-5 md:h-6 rounded-[100%] bg-gradient-to-b from-purple-200/60 via-indigo-100/40 to-transparent -mt-2 xs:-mt-2.5 sm:-mt-3 md:-mt-3.5 -z-10 blur-[2px]" />
+                </motion.div>
               </div>
 
               {/* Right 5 Outputs */}
-              <div className="col-span-4 flex flex-col gap-2.5 sm:gap-3 z-10">
+              <div className="flex-1 min-w-0 flex flex-col justify-between gap-1.5 xs:gap-2 sm:gap-2.5 md:gap-3 z-10">
                 {RIGHT_OUTPUTS.map((item, i) => {
                   const Icon = item.icon;
                   return (
                     <motion.div
                       key={item.title}
-                      initial={reduce ? false : { opacity: 0, x: 15 }}
+                      initial={reduce ? false : { opacity: 0, x: 14 }}
                       whileInView={reduce ? undefined : { opacity: 1, x: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.35, delay: 0.1 + i * 0.05 }}
-                      className="flex items-center gap-2 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl border border-purple-200/90 bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(147,51,234,0.06)] group hover:border-purple-400 hover:shadow-md transition-all"
+                      transition={{ duration: 0.35, delay: 0.05 + i * 0.04 }}
+                      className="flex items-center gap-1.5 xs:gap-2 sm:gap-2.5 p-1.5 xs:p-2 sm:p-2.5 md:p-3 rounded-lg xs:rounded-xl border border-purple-200/90 bg-white/95 backdrop-blur-md shadow-[0_2px_12px_rgba(147,51,234,0.06)] group hover:border-purple-400 hover:shadow-md transition-all min-h-[48px] xs:min-h-[52px] sm:min-h-[56px] md:min-h-[60px] min-w-0"
                     >
-                      <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-purple-50 border border-purple-200 text-[#9333ea]">
-                        <Icon className="h-4 w-4 stroke-[2.2]" />
+                      <div className="flex h-6 w-6 xs:h-7 xs:w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-md sm:rounded-lg bg-purple-50 border border-purple-200 text-[#9333ea]">
+                        <Icon className="h-3.5 w-3.5 xs:h-4 xs:w-4 stroke-[2.2]" />
                       </div>
-                      <div className="aqe-caption leading-tight text-[#0f172a] font-semibold text-left">
-                        <div>{item.title}</div>
-                        {item.subtitle && <div className="text-slate-500 font-normal">{item.subtitle}</div>}
+                      <div className="min-w-0 flex-1 text-left flex flex-col justify-center">
+                        <div className="text-[9.5px] xs:text-[10.5px] sm:text-xs md:text-[12.5px] lg:text-[13px] font-bold text-[#0f172a] leading-tight break-words">
+                          {item.title}
+                        </div>
+                        {item.subtitle && (
+                          <div className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px] text-slate-500 font-normal leading-tight break-words mt-0.5">
+                            {item.subtitle}
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   );

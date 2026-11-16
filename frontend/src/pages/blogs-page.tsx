@@ -404,7 +404,7 @@ export function BlogsPage() {
             )}
 
             {!loading && filteredBlogs.length > 0 && (
-              <div className="mt-10 flex w-full justify-end">
+              <div className="mt-10 flex w-full justify-center sm:justify-end">
                 <Pagination
                   currentPage={currentPage}
                   totalPages={totalPages}

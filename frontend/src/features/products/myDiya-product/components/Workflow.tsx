@@ -153,8 +153,10 @@ export function Workflow() {
           
           {/* ════════ LEFT COLUMN: 3D Agentic QE Cycle Diagram ════════ */}
           <div className="lg:col-span-6 xl:col-span-6 flex items-center justify-center relative w-full">
-            <div className="relative w-full max-w-[420px] sm:max-w-[480px] md:max-w-[520px] lg:max-w-[540px] xl:max-w-[580px] aspect-square flex items-center justify-center select-none">
+            <div className="relative w-full max-w-[420px] sm:max-w-[480px] md:max-w-[520px] lg:max-w-[540px] xl:max-w-[580px] flex flex-col items-center gap-8 lg:gap-0 lg:flex-row lg:aspect-square lg:justify-center select-none">
               
+              {/* Rings + sphere: own square above the cards on mobile/tablet, full-size overlay on desktop */}
+              <div className="relative w-64 h-64 sm:w-72 sm:h-72 shrink-0 lg:absolute lg:inset-0 lg:w-auto lg:h-auto">
               {/* SVG Circular Orbit Track & Ambient Glow Rings */}
               <svg
                 className="absolute inset-0 w-full h-full pointer-events-none"
@@ -219,7 +221,7 @@ export function Workflow() {
                 >
                   {/* Top Glowing Gradient Sphere matching Image 2 */}
                   <div
-                    className="relative w-22 h-22 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full border-[3px] border-white shadow-[0_12px_36px_rgba(99,102,241,0.45),inset_0_3px_14px_rgba(255,255,255,0.85),inset_0_-8px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center text-center p-2 sm:p-3 overflow-hidden"
+                    className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-full border-[3px] border-white shadow-[0_12px_36px_rgba(99,102,241,0.45),inset_0_3px_14px_rgba(255,255,255,0.85),inset_0_-8px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center text-center p-2 sm:p-3 overflow-hidden"
                     style={{
                       background: "linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #a855f7 100%)",
                     }}
@@ -246,9 +248,10 @@ export function Workflow() {
                   <div className="w-26 sm:w-34 md:w-42 lg:w-48 h-5 sm:h-6 md:h-8 rounded-[100%] bg-gradient-to-b from-[#94a3b8]/40 via-[#cbd5e1]/25 to-transparent blur-[3px] -mt-3.5 sm:-mt-4 md:-mt-5 -z-20" />
                 </motion.div>
               </div>
+              </div>
 
               {/* ── 6 Cycle Step Cards (Hexagon on desktop, stacked list on mobile) ── */}
-              <div className="relative w-full aspect-square max-w-[420px] sm:max-w-[480px] md:max-w-[520px] lg:max-w-[540px] xl:max-w-[580px] mx-auto">
+              <div className="relative w-full lg:aspect-square max-w-[420px] sm:max-w-[480px] md:max-w-[520px] lg:max-w-[540px] xl:max-w-[580px] mx-auto">
                 {/* Desktop: Hexagon layout with absolute positioning */}
                 <div className="hidden lg:block">
                   {CYCLE_STEPS.map((step, idx) => {
@@ -287,7 +290,7 @@ export function Workflow() {
                 </div>
 
                 {/* Mobile: Stacked vertical list of cycle steps */}
-                <div className="lg:hidden flex flex-col items-center gap-4 sm:gap-6 w-full px-4 sm:px-6 mt-8">
+                <div className="lg:hidden grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 w-full">
                   {CYCLE_STEPS.map((step, idx) => {
                     const Icon = step.icon;
                     return (
@@ -297,15 +300,16 @@ export function Workflow() {
                         whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.4, delay: 0.1 + idx * 0.05 }}
+                        className="h-full"
                       >
                         <div
-                          className={`group flex flex-col items-center justify-center rounded-2xl sm:rounded-3xl border p-1.5 sm:p-2 xl:p-3 text-center transition-all duration-300 hover:scale-105 hover:shadow-xl cursor-default w-full sm:w-[280px] md:w-[320px] lg:w-[340px] min-h-[64px] sm:min-h-[78px] md:min-h-[92px] lg:min-h-[104px] ${step.bgClass}`}
+                          className={`group flex h-full w-full flex-col items-center justify-center rounded-2xl border p-3 sm:p-4 text-center cursor-default min-h-[112px] ${step.bgClass}`}
                         >
-                          <Icon className={`h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 ${step.iconColor} mb-0.5 sm:mb-1 transition-transform duration-200 group-hover:scale-110`} />
-                          <h4 className="text-[10px] sm:text-xs md:text-[13px] lg:text-[13.5px] font-bold text-[#0f172a] leading-tight">
+                          <Icon className={`h-5 w-5 ${step.iconColor} mb-1.5`} />
+                          <h4 className="text-[15px] font-bold text-[#0f172a] leading-tight">
                             {step.title}
                           </h4>
-                          <p className="mt-0.5 text-[7px] sm:text-[8px] md:text-[10px] lg:text-[11px] text-slate-500 leading-tight text-center font-normal max-w-[85px] sm:max-w-[105px] md:max-w-[125px]">
+                          <p className="mt-1 text-fine text-slate-500 leading-snug text-center font-normal">
                             {step.subtext}
                           </p>
                         </div>
@@ -324,7 +328,7 @@ export function Workflow() {
                     top: badge.pos.top,
                     transform: "translate(-50%, -50%)",
                   }}
-                  className="absolute z-10 hidden md:flex flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-sm px-3 sm:px-3.5 py-1.5 sm:py-2 shadow-[0_4px_16px_rgba(0,0,0,0.05)] min-w-[72px] sm:min-w-[82px] text-center select-none"
+                  className="absolute z-10 hidden lg:flex flex-col items-center justify-center rounded-2xl border border-slate-200/90 bg-white/95 backdrop-blur-sm px-3 sm:px-3.5 py-1.5 sm:py-2 shadow-[0_4px_16px_rgba(0,0,0,0.05)] min-w-[72px] sm:min-w-[82px] text-center select-none"
                 >
                   <span className="text-[9px] sm:text-[10px] font-bold text-slate-700 tracking-wider">
                     {badge.label1}
@@ -339,6 +343,18 @@ export function Workflow() {
                   </span>
                 </div>
               ))}
+
+              {/* Mobile/tablet: corner tags as a chip row below the cards */}
+              <div className="lg:hidden flex flex-wrap justify-center gap-2">
+                {CORNER_BADGES.map((badge) => (
+                  <span
+                    key={badge.label1}
+                    className="rounded-full border border-slate-200/90 bg-white px-3 py-1.5 text-fine font-semibold text-slate-700 shadow-[0_4px_16px_rgba(0,0,0,0.05)]"
+                  >
+                    {[badge.label1, badge.label3].map((l) => l.charAt(0) + l.slice(1).toLowerCase()).join(badge.label2 ? " + " : " ")}
+                  </span>
+                ))}
+              </div>
 
             </div>
           </div>

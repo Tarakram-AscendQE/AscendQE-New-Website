@@ -647,7 +647,7 @@ export const Header: React.FC = () => {
 
           {isMobileWhoWeAreOpen && (
             <div className="pl-3 pr-2 py-2 flex flex-col gap-1">
-              <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-2">
+              <div className="aqe-caption text-[12px] font-bold tracking-wider text-[#69758a] uppercase px-2 pt-2 pb-1">
                 COMPANY
               </div>
               {companyItems.map((item) => {
@@ -657,10 +657,10 @@ export const Header: React.FC = () => {
                     key={item.name}
                     to={item.to}
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-2 py-1.5 px-2 text-[13px] text-[#0b1831] hover:text-[#1763ff]"
+                    className="flex items-center gap-3 py-2 px-2.5 rounded-lg text-[13.5px] font-medium text-[#0b1831] hover:text-[#1763ff] hover:bg-[#f2f6ff] transition-colors"
                   >
-                    <IconComponent className="h-4 w-4 text-[#1763ff]" />
-                    <span>{item.name}</span>
+                    <IconComponent className="h-4 w-4 text-[#1763ff] shrink-0" />
+                    <span className="leading-snug">{item.name}</span>
                   </Link>
                 );
               })}
