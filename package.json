@@ -6,18 +6,17 @@
     "backend"
   ],
   "scripts": {
-    "dev": "concurrently --kill-others-on-fail --names backend,frontend --prefix-colors cyan,magenta \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:all": "npm run dev",
-    "dev:frontend": "npm run dev --prefix frontend",
-    "dev:backend": "npm run dev --prefix backend",
-    "prebuild": "npm install --prefix frontend && npm install --prefix backend",
-    "build": "npm run build --prefix frontend && npm run build --prefix backend",
-    "build:frontend": "npm run build --prefix frontend",
-    "build:backend": "npm run build --prefix backend",
-    "start": "npm run start --prefix backend",
-    "lint": "eslint frontend/src backend/src",
-    "lint:fix": "eslint frontend/src backend/src --fix",
-    "format:check": "prettier --check frontend/src backend/src"
+    "dev": "npm run dev --prefix leansite/react-app",
+    "prebuild": "npm ci --include=dev --prefix leansite/react-app",
+    "build": "npm run build --prefix leansite/react-app",
+    "start": "npm run start --prefix leansite/react-app",
+    "lint": "npm run lint --prefix leansite/react-app",
+    "format:check": "npm run format:check --prefix leansite/react-app",
+    "dev:legacy": "concurrently --kill-others-on-fail --names backend,frontend --prefix-colors cyan,magenta \"npm run dev:legacy:backend\" \"npm run dev:legacy:frontend\"",
+    "dev:legacy:frontend": "npm run dev --prefix frontend",
+    "dev:legacy:backend": "npm run dev --prefix backend",
+    "build:legacy": "npm install --prefix frontend && npm install --prefix backend && npm run build --prefix frontend && npm run build --prefix backend",
+    "start:legacy": "npm run start --prefix backend"
   },
   "dependencies": {
     "@primer/octicons-react": "^19.42.0"

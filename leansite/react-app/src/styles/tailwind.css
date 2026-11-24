@@ -1,0 +1,4 @@
+/* Tailwind utilities for new components. Preflight is off (tailwind.config.js), so site.css owns the base styles. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
