@@ -14,6 +14,18 @@ npm run lint           # ESLint
 npm run format:check   # Prettier
 ```
 
+## Production / GoDaddy
+
+GoDaddy runs the repo-root scripts, which point here:
+
+- `npm run build` (root) → installs this app (`npm ci`) and builds it into `dist/`.
+- `npm start` (root) → `node server.mjs`: serves `dist/` on `PORT`, sends page URLs to `index.html`
+  (with the right canonical URL), 301-redirects old URLs (`*.html`, previous site pages) to the closest page,
+  and returns 404 for unknown pages. `/health` answers `{"status":"healthy"}`.
+
+No environment variables are needed (only `PORT`, which GoDaddy sets). The previous site's commands are still in
+the root `package.json` as `build:legacy` / `start:legacy` / `dev:legacy`.
+
 ## Structure
 
 ```
@@ -30,6 +42,7 @@ src/
   styles/                 site.css + lean.css (the original stylesheets, unchanged) and tailwind.css
   assets/                 images
 public/                   favicons
+server.mjs                production server (no dependencies)
 ```
 
 ## Notes
@@ -38,4 +51,3 @@ public/                   favicons
   covers the TypeScript files so they stay that way. Prettier settings are in `package.json`.
 - The Start page form works like the HTML version: it validates the fields and prepares an email draft for the
   visitor to copy. Nothing is sent from the website.
-- When deployed behind a server, all routes must fall back to `index.html` (single-page app).
