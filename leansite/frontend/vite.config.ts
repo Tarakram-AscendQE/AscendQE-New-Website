@@ -12,5 +12,9 @@ export default defineConfig({
   },
   server: {
     port: 3001,
+    // The backend (leansite/backend, `npm run dev` there) answers /api on :5000.
+    proxy: {
+      '/api': 'http://localhost:5000',
+    },
   },
 });

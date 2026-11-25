@@ -7,7 +7,6 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "start": "node server.mjs",
     "lint": "eslint .",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
   },

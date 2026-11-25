@@ -16,14 +16,15 @@ npm run format:check   # Prettier
 
 ## Production / GoDaddy
 
-GoDaddy runs the repo-root scripts, which point here:
+The site is served by the backend in `../backend` (Express + TypeScript). GoDaddy runs the repo-root scripts:
 
-- `npm run build` (root) → installs this app (`npm ci`) and builds it into `dist/`.
-- `npm start` (root) → `node server.mjs`: serves `dist/` on `PORT`, sends page URLs to `index.html`
-  (with the right canonical URL), 301-redirects old URLs (`*.html`, previous site pages) to the closest page,
-  and returns 404 for unknown pages. `/health` answers `{"status":"healthy"}`.
+- `npm run build` (root) → installs and builds this app into `dist/`, then builds the backend.
+- `npm start` (root) → the backend serves `dist/` on `PORT`: page URLs get `index.html` (with the right canonical
+  URL), old URLs (`*.html`, previous site pages) 301-redirect to the closest page, unknown pages return 404,
+  `/health` answers `{"status":"healthy"}`, and `/api/send-mail` / `/api/apply-job` send email through AWS SES.
 
-No environment variables are needed (only `PORT`, which GoDaddy sets). The previous site's commands are still in
+In development, run `npm run dev` at the repo root (backend on :5000, this app on :3001; Vite proxies `/api`).
+Environment variables (AWS SES) are listed in `../backend/.env.example`. The previous site's commands are still in
 the root `package.json` as `build:legacy` / `start:legacy` / `dev:legacy`.
 
 ## Structure
@@ -42,12 +43,11 @@ src/
   styles/                 site.css + lean.css (the original stylesheets, unchanged) and tailwind.css
   assets/                 images
 public/                   favicons
-server.mjs                production server (no dependencies)
 ```
 
 ## Notes
 
 - `styles/site.css` and `styles/lean.css` are the original Lean site stylesheets, unchanged; `format:check` only
   covers the TypeScript files so they stay that way. Prettier settings are in `package.json`.
-- The Start page form works like the HTML version: it validates the fields and prepares an email draft for the
-  visitor to copy. Nothing is sent from the website.
+- The Start page form (`features/start/ProofSprintForm`) emails the enquiry to hello@ascendqe.com through
+  `services/contactService` → backend `POST /api/send-mail`. If sending fails, it shows the message as a draft to copy.
