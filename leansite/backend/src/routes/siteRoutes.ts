@@ -1,9 +1,10 @@
-// Serves the React build (leansite/frontend/dist): page routes, old-URL redirects, static files and 404s.
+// Serves the React build (leansite/frontend/dist): page routes (incl. Insights articles), old-URL redirects,
+// static files and 404s.
 import fs from 'node:fs';
 import path from 'node:path';
 import express, { Router, type Request, type Response } from 'express';
 import { config } from '../config/index.js';
-import { PAGE_ROUTES, REDIRECT_PREFIXES, REDIRECTS } from '../config/siteRoutes.js';
+import { ARTICLE_PREFIXES, ARTICLE_ROUTE, PAGE_ROUTES, REDIRECT_PREFIXES, REDIRECTS } from '../config/siteRoutes.js';
 
 export const siteRouter = Router();
 
@@ -31,6 +32,8 @@ function sendPage(res: Response, status: number, pathname: string): void {
 function redirectTarget(pathname: string): string | null {
   const lower = pathname.toLowerCase();
   if (REDIRECTS[lower]) return REDIRECTS[lower];
+  const articlePrefix = ARTICLE_PREFIXES.find((from) => lower.startsWith(from));
+  if (articlePrefix) return `/blogs/${pathname.slice(articlePrefix.length)}`;
   const prefix = REDIRECT_PREFIXES.find(([from]) => lower.startsWith(from));
   return prefix ? prefix[1] : null;
 }
@@ -66,7 +69,7 @@ siteRouter.use((req, res, next) => {
     return;
   }
 
-  if (PAGE_ROUTES.has(pathname)) {
+  if (PAGE_ROUTES.has(pathname) || ARTICLE_ROUTE.test(pathname)) {
     sendPage(res, 200, pathname);
     return;
   }

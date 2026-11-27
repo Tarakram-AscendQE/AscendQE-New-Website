@@ -2,6 +2,7 @@
 import type { Request, Response } from 'express';
 import multer from 'multer';
 import { sendSesEmail } from '../services/emailService.js';
+import { sendJson } from './respond.js';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const SEND_FAILED_MESSAGE = 'We could not send your message. Please email hello@ascendqe.com directly.';
@@ -35,10 +36,6 @@ function field(body: Record<string, unknown>, ...names: string[]): string {
     if (value) return value;
   }
   return '';
-}
-
-function sendJson(res: Response, status: number, success: boolean, message: string, data?: object): void {
-  res.status(status).json({ success, message, ...(data ? { data } : {}), timestamp: Date.now() });
 }
 
 /** One table row of the email. `valueHtml` must already be escaped. */

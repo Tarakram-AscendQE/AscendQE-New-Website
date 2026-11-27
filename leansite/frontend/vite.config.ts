@@ -12,9 +12,10 @@ export default defineConfig({
   },
   server: {
     port: 3001,
-    // The backend (leansite/backend, `npm run dev` there) answers /api on :5000.
+    // The backend (leansite/backend, `npm run dev` there) answers /api and serves article images on :5000.
     proxy: {
       '/api': 'http://localhost:5000',
+      '/uploads': 'http://localhost:5000',
     },
   },
 });
