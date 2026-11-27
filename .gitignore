@@ -37,6 +37,8 @@ vite.config.js
 !.env.example
 
 # Local coding-rules & lint tooling (not pushed)
+.gemini/
+.impeccable/
 CLAUDE.md
 eslint.config.mjs
 .prettierrc.json

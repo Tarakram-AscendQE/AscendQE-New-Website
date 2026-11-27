@@ -1,4 +1,4 @@
-// Serves the React build (leansite/frontend/dist): page routes (incl. Insights articles), old-URL redirects,
+// Serves the React build (frontend/dist): page routes (incl. Insights articles), old-URL redirects,
 // static files and 404s.
 import fs from 'node:fs';
 import path from 'node:path';

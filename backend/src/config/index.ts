@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dotenv from 'dotenv';
 
-// Local development reads leansite/backend/.env; in production GoDaddy provides the variables.
+// Local development reads backend/.env; in production GoDaddy provides the variables.
 const candidateEnvPaths = [path.resolve(__dirname, '../../.env'), path.resolve(process.cwd(), '.env')];
 for (const envPath of candidateEnvPaths) {
   if (fs.existsSync(envPath)) dotenv.config({ path: envPath });
@@ -33,14 +33,14 @@ function resolveJwtSecret(): string {
   return crypto.randomBytes(48).toString('hex');
 }
 
-/** leansite/backend (same depth from src/config and dist/config). */
+/** The backend folder (same depth from src/config and dist/config). */
 const BACKEND_ROOT = path.resolve(__dirname, '../..');
 
 export const config = {
   port: Number(getEnvValue('PORT')) || 5000,
   nodeEnv: getEnvValue('NODE_ENV', 'development'),
   siteOrigin: 'https://ascendqe.com',
-  /** The React build served by this server (leansite/frontend/dist). */
+  /** The React build served by this server (frontend/dist, next to the backend folder). */
   frontendDistDir: path.resolve(BACKEND_ROOT, '../frontend/dist'),
   email: {
     awsRegion: getEnvValue('AWS_REGION', 'ap-south-1'),

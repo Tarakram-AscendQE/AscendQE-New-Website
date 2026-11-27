@@ -1,4 +1,4 @@
-// Client for the backend email API (leansite/backend, POST /api/send-mail).
+// Client for the backend email API (backend/, POST /api/send-mail).
 import { jsonBody, requestJson } from '@/services/http';
 
 export interface ContactEnquiry {
