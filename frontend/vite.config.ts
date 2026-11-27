@@ -1,289 +1,128 @@
-// @ts-nocheck
-import { defineConfig, Plugin } from 'vite';
-import react from '@vitejs/plugin-react';
-import crypto from 'node:crypto';
-import https from 'node:https';
 import fs from 'node:fs';
 import path from 'node:path';
+import react from '@vitejs/plugin-react';
+import { defineConfig, type Plugin } from 'vite';
+import pageSeo from './src/data/pageSeo.json';
 
-// Load backend .env variables for local dev email proxy
-const backendEnvPath = path.resolve(__dirname, '../backend/.env');
-if (fs.existsSync(backendEnvPath)) {
-  const envContent = fs.readFileSync(backendEnvPath, 'utf8');
-  for (const line of envContent.split('\n')) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#') || !trimmed.includes('=')) continue;
-    const [k, ...vParts] = trimmed.split('=');
-    const v = vParts.join('=').trim().replace(/^['"]|['"]$/g, '');
-    if (!process.env[k.trim()]) {
-      process.env[k.trim()] = v;
-    }
-  }
+const SITE_ORIGIN = 'https://ascendqe.com';
+
+function routePathname(requestUrl: string | undefined): string {
+  const pathname = new URL(requestUrl ?? '/', 'http://localhost').pathname;
+  return pathname.length > 1 ? pathname.replace(/\/+$/, '') : '/';
 }
 
-function getSignatureKey(key: string, dateStamp: string, regionName: string, serviceName: string) {
-  const kSecret = Buffer.from('AWS4' + key, 'utf8');
-  const kDate = crypto.createHmac('sha256', kSecret).update(dateStamp, 'utf8').digest();
-  const kRegion = crypto.createHmac('sha256', kDate).update(regionName, 'utf8').digest();
-  const kService = crypto.createHmac('sha256', kRegion).update(serviceName, 'utf8').digest();
-  return crypto.createHmac('sha256', kService).update('aws4_request', 'utf8').digest();
-}
-
-async function sendAwsSesNode(data: any): Promise<{ success: boolean; error?: string }> {
-  return new Promise((resolve) => {
-    try {
-      const region = process.env.AWS_REGION || 'ap-south-1';
-      const accessKey = process.env.AWS_ACCESS_KEY_ID || '';
-      const secretKey = process.env.AWS_SECRET_ACCESS_KEY || '';
-      const sender = process.env.SENDER_MAIL || 'hello@ascendqe.com';
-      const recipient = process.env.RECIPIENT_MAIL || 'hello@ascendqe.com';
-
-      if (!accessKey || !secretKey) {
-        console.warn('[Email Service] AWS credentials missing from backend/.env.');
-      }
-
-      const subject = `New Contact Enquiry - ${data.firstName} ${data.lastName}${data.company ? ` (${data.company})` : ''}`;
-      const htmlBody = `<!DOCTYPE html><html><body><h2>New Contact Enquiry</h2><p>Submitted on ascendqe.com</p><hr/><p><strong>Name:</strong> ${data.firstName} ${data.lastName}</p><p><strong>Work Email:</strong> ${data.email}</p><p><strong>Company:</strong> ${data.company}</p><p><strong>Job Title:</strong> ${data.jobTitle || 'N/A'}</p><p><strong>Application / Project:</strong> ${data.application || 'N/A'}</p><p><strong>Interest:</strong> ${data.interest || 'N/A'}</p><p><strong>Test Cases / Scope:</strong><br/>${(data.scope || '').replace(/\n/g, '<br/>')}</p></body></html>`;
-      const textBody = `New Contact Enquiry\nName: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nCompany: ${data.company}\nJob Title: ${data.jobTitle}\nApplication: ${data.application}\nInterest: ${data.interest}\nScope:\n${data.scope}`;
-
-      const params = new URLSearchParams({
-        Action: 'SendEmail',
-        Version: '2010-12-01',
-        Source: sender,
-        'Destination.ToAddresses.member.1': recipient,
-        'Message.Subject.Data': subject,
-        'Message.Subject.Charset': 'UTF-8',
-        'Message.Body.Html.Data': htmlBody,
-        'Message.Body.Html.Charset': 'UTF-8',
-        'Message.Body.Text.Data': textBody,
-        'Message.Body.Text.Charset': 'UTF-8',
-        'ReplyToAddresses.member.1': data.email,
-      });
-
-      const postBody = params.toString();
-      const host = `email.${region}.amazonaws.com`;
-      const amzDate = new Date().toISOString().replace(/[:-]|\.\d{3}/g, '');
-      const dateStamp = amzDate.slice(0, 8);
-
-      const canonicalHeaders = `content-type:application/x-www-form-urlencoded; charset=utf-8\nhost:${host}\nx-amz-date:${amzDate}\n`;
-      const signedHeaders = 'content-type;host;x-amz-date';
-      const payloadHash = crypto.createHash('sha256').update(postBody, 'utf8').digest('hex');
-      const canonicalRequest = `POST\n/\n\n${canonicalHeaders}\n${signedHeaders}\n${payloadHash}`;
-
-      const credentialScope = `${dateStamp}/${region}/ses/aws4_request`;
-      const stringToSign = `AWS4-HMAC-SHA256\n${amzDate}\n${credentialScope}\n${crypto.createHash('sha256').update(canonicalRequest, 'utf8').digest('hex')}`;
-      const signingKey = getSignatureKey(secretKey, dateStamp, region, 'ses');
-      const signature = crypto.createHmac('sha256', signingKey).update(stringToSign, 'utf8').digest('hex');
-
-      const authHeader = `AWS4-HMAC-SHA256 Credential=${accessKey}/${credentialScope}, SignedHeaders=${signedHeaders}, Signature=${signature}`;
-
-      const req = https.request(
-        {
-          hostname: host,
-          port: 443,
-          path: '/',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-            Host: host,
-            'X-Amz-Date': amzDate,
-            Authorization: authHeader,
-            'Content-Length': Buffer.byteLength(postBody),
-          },
-          timeout: 8000,
-        },
-        (res: any) => {
-          let resData = '';
-          res.on('data', (d: any) => {
-            resData += d;
-          });
-          res.on('end', () => {
-            if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
-              resolve({ success: true });
-            } else {
-              resolve({ success: false, error: `AWS SES status ${res.statusCode}: ${resData}` });
-            }
-          });
-        }
-      );
-
-      req.on('error', (e: any) => {
-        resolve({ success: false, error: e.message });
-      });
-
-      req.on('timeout', () => {
-        req.destroy();
-        resolve({ success: false, error: 'AWS SES request timeout' });
-      });
-
-      req.write(postBody);
-      req.end();
-    } catch (err: any) {
-      resolve({ success: false, error: err.message });
-    }
+function escapeHtmlAttribute(value: string): string {
+  return value.replace(/[&<>"']/g, (character) => {
+    const entities: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    };
+    return entities[character];
   });
 }
 
-function devPhpMailPlugin(): Plugin {
+function setMetaContent(html: string, attribute: 'name' | 'property', key: string, content: string): string {
+  const tag = new RegExp(`<meta\\s+${attribute}="${key}"\\s+content="[^"]*"\\s*\\/?>`, 'i');
+  if (!tag.test(html)) throw new Error(`Missing ${attribute}="${key}" metadata in frontend/index.html`);
+  return html.replace(tag, `<meta ${attribute}="${key}" content="${escapeHtmlAttribute(content)}">`);
+}
+
+function applyPageSeo(html: string, page: (typeof pageSeo)[keyof typeof pageSeo]): string {
+  const titleTag = /<title>[\s\S]*?<\/title>/i;
+  const canonicalTag = /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i;
+
+  if (!titleTag.test(html)) throw new Error('Missing title metadata in frontend/index.html');
+  if (!canonicalTag.test(html)) throw new Error('Missing canonical metadata in frontend/index.html');
+
+  let result = html
+    .replace(titleTag, `<title>${escapeHtmlAttribute(page.title)}</title>`)
+    .replace(canonicalTag, `<link rel="canonical" href="${SITE_ORIGIN}${page.canonicalPath}">`);
+  result = setMetaContent(result, 'name', 'description', page.description);
+  result = setMetaContent(result, 'property', 'og:description', page.description);
+  result = setMetaContent(result, 'name', 'twitter:description', page.description);
+  return result.replace(
+    /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:url" content="${SITE_ORIGIN}${page.canonicalPath}">`,
+  );
+}
+
+function routeSeoPlugin(): Plugin {
   return {
-    name: 'dev-php-mail-plugin',
+    name: 'route-specific-html-seo',
     configureServer(server) {
-      server.middlewares.use(async (req: any, res: any, next: any) => {
-        const url = req.url?.split('?')[0];
-        if (url === '/send-mail.php' && req.method === 'POST') {
-          let body = '';
-          req.on('data', (chunk: any) => {
-            body += chunk;
-          });
-          req.on('end', async () => {
-            res.setHeader('Content-Type', 'application/json; charset=utf-8');
-            try {
-              const data = JSON.parse(body || '{}');
-              const firstName = (data.firstName || data.first_name || '').trim();
-              const lastName = (data.lastName || data.last_name || '').trim();
-              const email = (data.email || data.workEmail || data.work_email || '').trim();
-              const company = (data.company || '').trim();
-              const jobTitle = (data.jobTitle || data.job_title || '').trim();
-              const application = (data.application || data.product || '').trim();
-              const interest = (data.interest || data.offer || '').trim();
-              const scope = (data.scope || '').trim();
-              const message = (data.message || data.comments || '').trim();
+      server.middlewares.use((request, response, next) => {
+        if (request.method !== 'GET' && request.method !== 'HEAD') return next();
 
-              if (!firstName || !lastName || !email || !company) {
-                res.statusCode = 422;
-                res.end(JSON.stringify({ success: false, message: 'Please complete all required fields.' }));
-                return;
-              }
+        const requestUrl = request.url ?? '/';
+        const pathname = routePathname(requestUrl);
+        if (!pageSeo[pathname as keyof typeof pageSeo]) return next();
 
-              // Send to AWS SES
-              const sendResult = await sendAwsSesNode({
-                firstName,
-                lastName,
-                email,
-                company,
-                jobTitle,
-                application,
-                interest,
-                scope,
-                message,
-              });
+        const indexPath = path.resolve(__dirname, 'index.html');
+        fs.readFile(indexPath, 'utf8', (error, html) => {
+          if (error) return next(error);
+          void server
+            .transformIndexHtml(requestUrl, html, request.originalUrl)
+            .then((transformedHtml) => {
+              response.statusCode = 200;
+              response.setHeader('Content-Type', 'text/html; charset=utf-8');
+              response.end(request.method === 'HEAD' ? undefined : transformedHtml);
+            })
+            .catch(next);
+        });
+      });
+    },
+    transformIndexHtml(html, context) {
+      const pathname = routePathname(context.originalUrl ?? context.path);
+      const page = pageSeo[pathname as keyof typeof pageSeo];
+      return page ? applyPageSeo(html, page) : html;
+    },
+    configurePreviewServer(server) {
+      server.middlewares.use((request, response, next) => {
+        const pathname = routePathname(request.url);
+        const page = pageSeo[pathname as keyof typeof pageSeo];
+        if (!page) return next();
 
-              if (sendResult.success) {
-                console.log(`[Email Service] Successfully sent enquiry from ${firstName} ${lastName} (${email}) to hello@ascendqe.com`);
-                res.statusCode = 200;
-                res.end(JSON.stringify({ success: true, message: 'Thank you! We will be in touch within 24 hours.' }));
-              } else {
-                console.warn('[Email Service] AWS SES call result:', sendResult.error);
-                // In local development, if network/SES is unreachable, simulate success so local testing succeeds
-                res.statusCode = 200;
-                res.end(
-                  JSON.stringify({
-                    success: true,
-                    message: 'Thank you! We will be in touch within 24 hours.',
-                  })
-                );
-              }
-            } catch (err: any) {
-              console.error('[dev-php-mail-plugin] Error:', err);
-              res.statusCode = 500;
-              res.end(JSON.stringify({ success: false, message: err.message || 'Server error' }));
-            }
-          });
-          return;
-        }
-        next();
+        const routeIndexPath = path.join(__dirname, 'dist', pathname.slice(1), 'index.html');
+        fs.readFile(routeIndexPath, 'utf8', (error, html) => {
+          if (error) return next(error);
+          response.statusCode = 200;
+          response.setHeader('Content-Type', 'text/html; charset=utf-8');
+          response.end(request.method === 'HEAD' ? undefined : html);
+        });
+      });
+    },
+    closeBundle() {
+      const outputDirectory = path.resolve(__dirname, 'dist');
+      const indexPath = path.join(outputDirectory, 'index.html');
+      const html = fs.readFileSync(indexPath, 'utf8');
+
+      Object.entries(pageSeo).forEach(([route, page]) => {
+        if (route === '/') return;
+        const routeIndexPath = path.join(outputDirectory, route.slice(1), 'index.html');
+        fs.mkdirSync(path.dirname(routeIndexPath), { recursive: true });
+        fs.writeFileSync(routeIndexPath, applyPageSeo(html, page), 'utf8');
       });
     },
   };
 }
 
 // https://vitejs.dev/config/
-const seoHtmlPlugin = (): Plugin => ({
-  name: 'ascendqe-route-seo',
-  configureServer(server) {
-    server.middlewares.use((req, res, next) => {
-      if (
-        req.method !== 'GET'
-        || !req.url
-        || req.url.includes('.')
-        || req.url.startsWith('/api/')
-        || req.url.startsWith('/uploads/')
-        || req.url.startsWith('/@vite/')
-        || req.url.startsWith('/@react-refresh')
-        || req.url.startsWith('/node_modules/')
-      ) {
-        next()
-        return
-      }
-
-      const requestUrl = (req as any).originalUrl || req.url
-      const pathname = new URL(requestUrl, 'http://localhost').pathname
-      const route = pathname === '/' || pathname === '/index.html' ? '/' : pathname.replace(/\/$/, '')
-      let html = fs.readFileSync(path.resolve(__dirname, 'index.html'), 'utf8')
-      const canonicalUrl = `https://ascendqe.com${route}`
-      html = html.replace(/<link rel="canonical" href="[^"]*"[^>]*>/, `<link rel="canonical" href="${canonicalUrl}" />`)
-
-      if (route !== '/') {
-        const socialTags = [
-          'property="og:site_name"', 'property="og:url"', 'property="og:description"',
-          'property="og:type"', 'property="og:image"', 'name="twitter:card"',
-          'name="twitter:site"', 'name="twitter:creator"', 'name="twitter:title"',
-          'name="twitter:description"', 'name="twitter:image"',
-        ]
-        socialTags.forEach((selector) => {
-          html = html.replace(new RegExp(`<meta\\s+[^>]*${selector}[^>]*>`, 'gi'), '')
-        })
-      }
-
-      server.transformIndexHtml(requestUrl, html).then((transformedHtml) => {
-        res.statusCode = 200
-        res.setHeader('Content-Type', 'text/html')
-        res.end(transformedHtml)
-      }).catch(next)
-    })
-  },
-  transformIndexHtml(html, ctx) {
-    const requestUrl = ctx.originalUrl || ctx.path || '/'
-    const pathname = new URL(requestUrl, 'http://localhost').pathname
-    const route = pathname === '/' || pathname === '/index.html' ? '/' : pathname.replace(/\/$/, '')
-    const canonicalUrl = `https://ascendqe.com${route}`
-    let output = html.replace(/<link rel="canonical" href="[^"]*"[^>]*>/, `<link rel="canonical" href="${canonicalUrl}" />`)
-
-    if (route !== '/') {
-      const socialTags = [
-        'property="og:site_name"', 'property="og:url"', 'property="og:description"',
-        'property="og:type"', 'property="og:image"', 'name="twitter:card"',
-        'name="twitter:site"', 'name="twitter:creator"', 'name="twitter:title"',
-        'name="twitter:description"', 'name="twitter:image"',
-      ]
-      socialTags.forEach((selector) => {
-        output = output.replace(new RegExp(`<meta\\s+[^>]*${selector}[^>]*>`, 'gi'), '')
-      })
-    }
-
-    return output
-  },
-})
-
 export default defineConfig({
-  plugins: [react(), devPhpMailPlugin(), seoHtmlPlugin()],
+  plugins: [react(), routeSeoPlugin()],
   resolve: {
     alias: {
-      '@': '/src',
-      'motion/react': 'framer-motion',
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   server: {
-    port: 3000,
+    port: 3001,
+    // The backend (backend/, `npm run dev` there) answers /api and serves article images on :5000.
     proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:5000',
-        changeOrigin: true,
-      },
-      '/uploads': {
-        target: 'http://127.0.0.1:5000',
-        changeOrigin: true,
-      },
+      '/api': 'http://localhost:5000',
+      '/uploads': 'http://localhost:5000',
     },
   },
 });

@@ -1,162 +1,55 @@
-// AscendQE Backend Server Entry Point
-import fs from 'node:fs'
-import path from 'node:path'
-import 'dotenv/config'
-import express from 'express'
-import cors from 'cors'
-import { config } from './config/index.js'
-import { connectDatabase } from './config/database.js'
-import { apiRouter } from './routes/index.js'
-import { errorHandler } from './middleware/errorHandler.js'
-import { handleContactEnquiry, handleJobApplication, resumeUpload } from './controllers/contactController.js'
+// AscendQE Lean site server (used by `npm start` on GoDaddy): the API under /api, article images under
+// /uploads/blogs, and the React build for everything else.
+import express from 'express';
+import { config, isEmailConfigured } from './config/index.js';
+import { connectDatabase } from './config/database.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { apiRouter } from './routes/apiRoutes.js';
+import { siteRouter } from './routes/siteRoutes.js';
 
-const app = express()
-const currentDir = typeof __dirname !== 'undefined' ? __dirname : process.cwd()
+const app = express();
+app.disable('x-powered-by');
 
-// Ensure upload directory exists
-try {
-  fs.mkdirSync(config.uploadDir, { recursive: true })
-} catch (e) {
-  // Ignore if exists
-}
+app.use((_req, res, next) => {
+  res.set({
+    'X-Content-Type-Options': 'nosniff',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+    'X-Frame-Options': 'SAMEORIGIN',
+  });
+  next();
+});
 
-// Locate the built frontend. GoDaddy runs `npm run build` on deploy, which produces frontend/dist,
-// so that is served first. backend/public is only a legacy fallback (it now holds just blog uploads).
-const candidatePublicPaths = [
-  path.resolve(__dirname, '../../frontend/dist'),
-  path.join(process.cwd(), 'frontend/dist'),
-  path.join(process.cwd(), '../frontend/dist'),
-  path.join(__dirname, 'public'),
-  path.join(__dirname, '../public'),
-  path.join(process.cwd(), 'public'),
-  path.join(process.cwd(), 'backend/public'),
-]
-
-let publicDir = path.join(__dirname, 'public')
-for (const p of candidatePublicPaths) {
-  if (fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))) {
-    publicDir = p
-    break
-  }
-}
-
-// Allowed origins
-const allowedOrigins = [
-  config.corsOrigin,
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://127.0.0.1:3000',
-  'http://127.0.0.1:3001',
-]
-
-// Security & Parsing Middleware
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Same-origin requests (including GoDaddy preview URLs) are not subject to CORS,
-      // so only genuinely cross-site origins are affected by this allow-list.
-      const allowed =
-        !origin ||
-        allowedOrigins.includes(origin) ||
-        origin === 'https://ascendqe.com' ||
-        /^https:\/\/[a-z0-9-]+\.ascendqe\.com$/i.test(origin)
-      callback(null, allowed)
-    },
-    credentials: true,
-  })
-)
-app.use(express.json({ limit: '10mb' }))
-app.use(express.urlencoded({ extended: true, limit: '10mb' }))
-
-// Dedicated health check for hosting platforms (GoDaddy, AWS, Render)
+// Health check for the hosting platform.
 app.get('/health', (_req, res) => {
-  res.status(200).json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
+  res.set('Cache-Control', 'no-store').json({ status: 'healthy' });
+});
+
+// Article content can carry compressed images (data URLs) when an image upload fails, hence 10 MB.
+app.use('/api', express.json({ limit: '10mb' }), express.urlencoded({ extended: true, limit: '1mb' }), apiRouter);
+app.use('/api', (_req, res) => {
+  res.status(404).json({ success: false, message: 'Not Found', timestamp: Date.now() });
+});
+
+// Article images stored on local disk (when R2/S3 is not configured). Missing images are a plain 404.
+// Browsers revalidate every time (ETag → 304 when unchanged), so a cover replaced under the same file name
+// shows up at once instead of after a 30-day cache.
+app.use(
+  config.uploads.baseUrl,
+  express.static(config.uploads.dir, {
+    index: false,
+    redirect: false,
+    fallthrough: false,
+    setHeaders: (res) => res.setHeader('Cache-Control', 'no-cache'),
   })
-})
+);
 
-// Static file serving for uploaded blog images (serve from configured uploadDir and all public candidates)
-const uploadStaticDirs = [
-  config.uploadDir,
-  path.join(publicDir, 'uploads/blogs'),
-  path.resolve(process.cwd(), 'backend/public/uploads/blogs'),
-  path.resolve(process.cwd(), 'public/uploads/blogs'),
-  path.resolve(process.cwd(), 'frontend/public/uploads/blogs'),
-  path.resolve(__dirname, '../public/uploads/blogs'),
-]
+app.use(siteRouter);
+app.use(errorHandler);
 
-for (const dir of Array.from(new Set(uploadStaticDirs))) {
-  try {
-    if (fs.existsSync(dir)) {
-      app.use('/uploads/blogs', express.static(dir))
-    }
-  } catch {}
-}
+app.listen(config.port, '0.0.0.0', () => {
+  console.warn(`AscendQE Lean site running on port ${config.port} (serving ${config.frontendDistDir})`);
+  if (!isEmailConfigured()) console.warn('[Email] AWS SES credentials are not set; form emails will fail.');
+});
 
-// Form submission endpoints (handles both /send-mail, /send-mail.php, /apply-job, and /apply-job.php)
-app.post('/send-mail', handleContactEnquiry)
-app.post('/send-mail.php', handleContactEnquiry)
-app.post('/apply-job', resumeUpload.single('resume'), handleJobApplication)
-app.post('/apply-job.php', resumeUpload.single('resume'), handleJobApplication)
-
-// Mount Central API Router
-app.use('/api', apiRouter)
-
-// Never serve legacy PHP mailer source files as static downloads (form POSTs are handled above)
-app.all(/\.php$/i, (_req, res) => {
-  res.status(404).end()
-})
-
-// Serve the production React frontend from public folder
-app.use(express.static(publicDir))
-
-// React Router fallback: send the frontend for website routes
-app.get('*', (req, res, next) => {
-  if (req.path === '/api' || req.path.startsWith('/api/')) {
-    return next()
-  }
-
-  const indexPath = path.join(publicDir, 'index.html')
-  if (fs.existsSync(indexPath)) {
-    let html = fs.readFileSync(indexPath, 'utf8')
-    const pathname = req.path === '/' ? '/' : req.path.replace(/\/$/, '')
-    html = html.replace(/<link rel="canonical" href="[^"]*"[^>]*>/, `<link rel="canonical" href="https://ascendqe.com${pathname}" />`)
-    if (pathname !== '/') {
-      const socialSelectors = [
-        'property="og:site_name"', 'property="og:url"', 'property="og:description"',
-        'property="og:type"', 'property="og:image"', 'name="twitter:card"',
-        'name="twitter:site"', 'name="twitter:creator"', 'name="twitter:title"',
-        'name="twitter:description"', 'name="twitter:image"',
-      ]
-      socialSelectors.forEach((selector) => {
-        html = html.replace(new RegExp(`<meta\\s+[^>]*${selector}[^>]*>`, 'gi'), '')
-      })
-    }
-    res.type('html').send(html)
-    return
-  }
-
-  res.status(200).send('AscendQE Application Server is active and healthy.')
-})
-
-// Global Error Handler
-app.use(errorHandler)
-
-// Bind strictly to process.env.PORT provided by the host platform (GoDaddy, Render, Heroku)
-const port = process.env.PORT ? parseInt(process.env.PORT, 10) : config.port || 5000
-
-// Listen on 0.0.0.0 immediately so platform health checks pass
-app.listen(port, '0.0.0.0', () => {
-  console.log(`🚀 AscendQE Server running on port ${port} (0.0.0.0)`)
-  console.log(`📡 Health Check: http://localhost:${port}/health`)
-  console.log(`📂 Serving Frontend from: ${publicDir}`)
-})
-
-// Connect to database in the background so slow connection doesn't block server startup
-connectDatabase().catch((err: any) => {
-  console.warn('[Database] Background connection error:', err?.message || err)
-})
-
-export default app
+// Connect in the background so a slow database never delays startup or health checks.
+void connectDatabase();

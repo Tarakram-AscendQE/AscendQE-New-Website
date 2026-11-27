@@ -1,8 +1,14 @@
+// Cookie consent (from the previous AscendQE site): stores the visitor's choice and loads Google Tag Manager
+// only after Analytics or Marketing is allowed. Google Consent Mode signals are sent before any tag loads.
+
 export const COOKIE_CONSENT_POLICY_VERSION = '1.0';
+/** An "accept" choice is kept for 180 days; a "reject" lasts for this browser session only. */
 export const COOKIE_CONSENT_MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
 
-const CONSENT_STORAGE_KEY = 'ascendqe.cookie-consent';
-const SESSION_REJECTION_KEY = 'ascendqe.cookie-rejection';
+export const CONSENT_STORAGE_KEY = 'ascendqe.cookie-consent';
+export const SESSION_REJECTION_KEY = 'ascendqe.cookie-rejection';
+/** Fired by the footer "Cookie settings" link to show the consent banner again. */
+export const OPEN_COOKIE_SETTINGS_EVENT = 'ascendqe:open-cookie-settings';
 const GTM_CONTAINER_ID = 'GTM-PS92RJ6D';
 
 export interface CookieCategories {
@@ -38,6 +44,13 @@ const deniedCategories = (): CookieCategories => ({
   marketing: false,
 });
 
+export const ALL_CATEGORIES: CookieCategories = {
+  strictlyNecessary: true,
+  functional: true,
+  analytics: true,
+  marketing: true,
+};
+
 function isConsentRecord(value: unknown): value is CookieConsentRecord {
   if (!value || typeof value !== 'object') return false;
   const record = value as Partial<CookieConsentRecord>;
@@ -58,34 +71,24 @@ function isConsentRecord(value: unknown): value is CookieConsentRecord {
     return false;
   }
 
-  if (record.status === 'accepted') {
-    return categories.functional && categories.analytics && categories.marketing;
-  }
-  if (record.status === 'rejected') {
-    return !categories.functional && !categories.analytics && !categories.marketing;
-  }
+  if (record.status === 'accepted') return categories.functional && categories.analytics && categories.marketing;
+  if (record.status === 'rejected') return !categories.functional && !categories.analytics && !categories.marketing;
   return true;
 }
 
 function readStorageRecord(storage: Storage, key: string): CookieConsentRecord | null {
   const raw = storage.getItem(key);
   if (!raw) return null;
-
   try {
     const parsed: unknown = JSON.parse(raw);
     if (!isConsentRecord(parsed)) {
       storage.removeItem(key);
       return null;
     }
-
-    if (
-      parsed.status !== 'rejected' &&
-      Date.now() - Date.parse(parsed.timestamp) > COOKIE_CONSENT_MAX_AGE_MS
-    ) {
+    if (parsed.status !== 'rejected' && Date.now() - Date.parse(parsed.timestamp) > COOKIE_CONSENT_MAX_AGE_MS) {
       storage.removeItem(key);
       return null;
     }
-
     return parsed;
   } catch (error) {
     storage.removeItem(key);
@@ -97,18 +100,11 @@ function readStorageRecord(storage: Storage, key: string): CookieConsentRecord |
 export function readCookieConsent(): ConsentReadResult {
   try {
     const persistent = readStorageRecord(window.localStorage, CONSENT_STORAGE_KEY);
-    if (persistent && persistent.status !== 'rejected') {
-      return { consent: persistent, error: null };
-    }
-    if (persistent?.status === 'rejected') {
-      window.localStorage.removeItem(CONSENT_STORAGE_KEY);
-    }
+    if (persistent && persistent.status !== 'rejected') return { consent: persistent, error: null };
+    if (persistent?.status === 'rejected') window.localStorage.removeItem(CONSENT_STORAGE_KEY);
 
     const session = readStorageRecord(window.sessionStorage, SESSION_REJECTION_KEY);
-    return {
-      consent: session?.status === 'rejected' ? session : null,
-      error: null,
-    };
+    return { consent: session?.status === 'rejected' ? session : null, error: null };
   } catch (error) {
     console.error('[Cookie consent] Unable to read browser storage:', error);
     return {
@@ -118,16 +114,8 @@ export function readCookieConsent(): ConsentReadResult {
   }
 }
 
-function createRecord(
-  status: CookieConsentRecord['status'],
-  categories: CookieCategories
-): CookieConsentRecord {
-  return {
-    status,
-    categories,
-    timestamp: new Date().toISOString(),
-    policyVersion: COOKIE_CONSENT_POLICY_VERSION,
-  };
+function createRecord(status: CookieConsentRecord['status'], categories: CookieCategories): CookieConsentRecord {
+  return { status, categories, timestamp: new Date().toISOString(), policyVersion: COOKIE_CONSENT_POLICY_VERSION };
 }
 
 export function savePersistentConsent(
@@ -157,19 +145,15 @@ export function saveSessionRejection(): CookieConsentRecord {
   }
 }
 
-export function withdrawCookieConsent(): void {
-  try {
-    window.localStorage.removeItem(CONSENT_STORAGE_KEY);
-    window.sessionStorage.removeItem(SESSION_REJECTION_KEY);
-  } catch (error) {
-    console.error('[Cookie consent] Unable to withdraw saved preferences:', error);
-    throw new Error('Your saved choice could not be removed. Please check your browser storage settings.');
-  }
-}
+let gtmLoadStarted = false;
+let gtmConsentDefaultsSet = false;
+let gtmStartEventQueued = false;
 
 function pushGtmConsent(consent: CookieConsentRecord | null): void {
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
+  // gtag must push the `arguments` object itself (Google's snippet), not an array copy.
+  window.gtag = function gtag() {
+    // eslint-disable-next-line prefer-rest-params
     window.dataLayer?.push(arguments);
   };
 
@@ -199,10 +183,6 @@ function pushGtmConsent(consent: CookieConsentRecord | null): void {
   });
 }
 
-let gtmLoadStarted = false;
-let gtmConsentDefaultsSet = false;
-let gtmStartEventQueued = false;
-
 function loadGoogleTagManager(): void {
   if (gtmLoadStarted || document.getElementById('ascendqe-gtm')) return;
   gtmLoadStarted = true;
@@ -223,7 +203,7 @@ function loadGoogleTagManager(): void {
   document.head.appendChild(script);
 }
 
-const trackingCookieCategories: Array<{ pattern: RegExp; category: keyof CookieCategories }> = [
+const TRACKING_COOKIES: Array<{ pattern: RegExp; category: keyof CookieCategories }> = [
   { pattern: /^(_ga|_gid|_gat|_gac|_clck|_clsk|_hj)/i, category: 'analytics' },
   { pattern: /^(_gcl_|_fbp|_fbc|IDE$|test_cookie$|__gads|__gpi)/i, category: 'marketing' },
 ];
@@ -232,23 +212,18 @@ function removeCookiesForCategory(category: keyof CookieCategories): void {
   const names = document.cookie
     .split(';')
     .map((cookie) => cookie.trim().split('=')[0])
-    .filter((name) =>
-      trackingCookieCategories.some(
-        (item) => item.category === category && item.pattern.test(name)
-      )
-    );
+    .filter((name) => TRACKING_COOKIES.some((item) => item.category === category && item.pattern.test(name)));
 
   const paths = new Set(['/']);
-  const currentPathParts = window.location.pathname.split('/').filter(Boolean);
-  while (currentPathParts.length) {
-    paths.add(`/${currentPathParts.join('/')}`);
-    currentPathParts.pop();
+  const pathParts = window.location.pathname.split('/').filter(Boolean);
+  while (pathParts.length) {
+    paths.add(`/${pathParts.join('/')}`);
+    pathParts.pop();
   }
 
-  const domains = new Set<string | undefined>([undefined, window.location.hostname]);
-  if (window.location.hostname === 'ascendqe.com' || window.location.hostname.endsWith('.ascendqe.com')) {
-    domains.add('.ascendqe.com');
-  }
+  const host = window.location.hostname;
+  const domains = new Set<string | undefined>([undefined, host]);
+  if (host === 'ascendqe.com' || host.endsWith('.ascendqe.com')) domains.add('.ascendqe.com');
 
   for (const name of names) {
     for (const path of paths) {
@@ -260,25 +235,15 @@ function removeCookiesForCategory(category: keyof CookieCategories): void {
   }
 }
 
+/** Sends the consent signals, removes cookies of refused categories and loads GTM when allowed. */
 export function applyCookieConsent(consent: CookieConsentRecord | null): void {
   pushGtmConsent(consent);
-
-  if (!consent?.categories.analytics) {
-    removeCookiesForCategory('analytics');
-  }
-  if (!consent?.categories.marketing) {
-    removeCookiesForCategory('marketing');
-  }
-
-  if (consent?.categories.analytics || consent?.categories.marketing) {
-    loadGoogleTagManager();
-  }
+  if (!consent?.categories.analytics) removeCookiesForCategory('analytics');
+  if (!consent?.categories.marketing) removeCookiesForCategory('marketing');
+  if (consent?.categories.analytics || consent?.categories.marketing) loadGoogleTagManager();
 }
 
-export function createOpenCookieSettingsEvent(): Event {
-  return new Event('ascendqe:open-cookie-settings');
-}
-
-export function getDeniedCookieCategories(): CookieCategories {
-  return deniedCategories();
+/** Opens the consent banner from anywhere (footer "Cookie settings"). */
+export function openCookieSettings(): void {
+  window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS_EVENT));
 }

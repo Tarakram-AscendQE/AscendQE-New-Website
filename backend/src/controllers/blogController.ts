@@ -1,696 +1,149 @@
-// Blog Controller
-// Handles full CRUD operations on GoDaddy MySQL `blogs` table using parameterized queries
+// Insights articles API: public reads, studio-only writes.
+import type { Request, Response } from 'express';
+import type { Pool } from 'mysql2/promise';
+import { pool } from '../config/database.js';
+import { currentUser } from '../middleware/authMiddleware.js';
+import type { BlogInput } from '../models/Blog.js';
+import * as blogs from '../services/blogService.js';
+import { deleteLocalArticleImages } from '../services/storageService.js';
+import { sendJson, sendServerError } from './respond.js';
 
-import fs from 'fs'
-import path from 'path'
-import { Request, Response } from 'express'
-import { pool } from '../config/database.js'
-import { config } from '../config/index.js'
-import {
-  IBlogRow,
-  IBlogResponse,
-  ICreateBlogDTO,
-  IUpdateBlogDTO,
-} from '../models/Blog.js'
+/** `blogs.title` is VARCHAR(255) in the production database. */
+const TITLE_MAX = 255;
 
-// Helper: Safely delete an uploaded image file by filename from upload directory
-async function deleteUploadedFile(filename: string): Promise<boolean> {
-  try {
-    const safeFilename = path.basename(filename)
-    if (!safeFilename) return false
-
-    const filePath = path.join(config.uploadDir, safeFilename)
-    if (fs.existsSync(filePath)) {
-      await fs.promises.unlink(filePath)
-      console.log(`[Blog Cleanup] Deleted image file: ${filePath}`)
-      return true
-    }
-  } catch (err: any) {
-    console.error(`[Blog Cleanup] Failed to delete image file ${filename}:`, err.message)
-  }
-  return false
+/** The pool, or answers 503 when the database is not configured. */
+function database(res: Response): Pool | null {
+  if (!pool) sendJson(res, 503, false, 'Insights are unavailable right now. Please try again later.');
+  return pool;
 }
 
-// Helper: Extract all local /uploads/blogs/ filenames from a blog's cover and content
-function extractBlogImageFilenames(coverImageUrl?: string | null, content?: any): string[] {
-  const filenames = new Set<string>()
-
-  // 1. Check cover_image_url
-  if (coverImageUrl && typeof coverImageUrl === 'string') {
-    if (coverImageUrl.includes('/uploads/blogs/')) {
-      const match = coverImageUrl.match(/\/uploads\/blogs\/([a-zA-Z0-9_\-\.]+\.(?:png|jpe?g|webp|gif|svg))/i)
-      if (match && match[1]) {
-        filenames.add(path.basename(match[1]))
-      } else {
-        const base = path.basename(coverImageUrl.split('?')[0])
-        if (base && /\.(png|jpe?g|webp|gif|svg)$/i.test(base)) {
-          filenames.add(base)
-        }
-      }
-    }
+function blogId(req: Request, res: Response): number | null {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id) || id <= 0) {
+    sendJson(res, 400, false, 'A valid article ID is required.');
+    return null;
   }
-
-  // 2. Check content (whether JSON object or string)
-  if (content) {
-    try {
-      const contentStr = typeof content === 'string' ? content : JSON.stringify(content)
-      const matches = contentStr.matchAll(/\/uploads\/blogs\/([a-zA-Z0-9_\-\.]+\.(?:png|jpe?g|webp|gif|svg))/gi)
-      for (const m of matches) {
-        if (m[1]) {
-          filenames.add(path.basename(m[1]))
-        }
-      }
-    } catch {
-      // Ignore serialization issues
-    }
-  }
-
-  return Array.from(filenames)
+  return id;
 }
 
-// Helper: Slugify string
-function slugify(text: string): string {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/[\s_-]+/g, '-') // Replace spaces/underscores with single dash
-    .replace(/^-+|-+$/g, '') // Trim dashes from start and end
+function queryString(value: unknown): string | undefined {
+  return typeof value === 'string' ? value : undefined;
 }
 
-// Helper: Ensure slug is unique in `blogs` table
-async function getUniqueSlug(baseSlug: string, excludeBlogId?: number): Promise<string> {
-  if (!pool) return baseSlug
-
-  let candidate = baseSlug || `blog-${Date.now()}`
-  let counter = 1
-
-  while (true) {
-    let query = 'SELECT blog_id FROM blogs WHERE slug = ?'
-    const params: any[] = [candidate]
-
-    if (excludeBlogId) {
-      query += ' AND blog_id != ?'
-      params.push(excludeBlogId)
-    }
-
-    query += ' LIMIT 1'
-
-    const [rows]: any = await pool.execute(query, params)
-    if (!rows || rows.length === 0) {
-      return candidate
-    }
-
-    const suffix = Math.random().toString(36).substring(2, 6)
-    candidate = `${baseSlug}-${suffix}`
-    counter++
-    if (counter > 10) {
-      candidate = `${baseSlug}-${Date.now()}`
-      return candidate
-    }
+/** Only the known fields, with the right types (the request body is untrusted). */
+function readInput(body: unknown): BlogInput {
+  const data = (typeof body === 'object' && body !== null ? body : {}) as Record<string, unknown>;
+  const text = (key: string) => (typeof data[key] === 'string' ? (data[key] as string) : undefined);
+  const input: BlogInput = {
+    title: text('title'),
+    slug: text('slug'),
+    excerpt: data.excerpt === null ? null : text('excerpt'),
+    cover_image_url: data.cover_image_url === null ? null : text('cover_image_url'),
+    topic: text('topic'),
+    type: text('type'),
+  };
+  if (typeof data.content === 'string' || (typeof data.content === 'object' && data.content !== null)) {
+    input.content = data.content as BlogInput['content'];
   }
+  if (Array.isArray(data.tags)) input.tags = data.tags.filter((tag): tag is string => typeof tag === 'string');
+  else if (typeof data.tags === 'string') input.tags = data.tags;
+  return input;
 }
 
-// Helper: Format raw MySQL row into client-friendly blog object
-function parseBlogRow(row: IBlogRow): IBlogResponse {
-  let parsedContent: any = null
-  let topic = ''
-  let type = ''
-
-  if (row.content) {
-    if (typeof row.content === 'object') {
-      parsedContent = row.content
-    } else {
-      try {
-        parsedContent = JSON.parse(row.content)
-      } catch {
-        parsedContent = row.content
-      }
-    }
-
-    if (parsedContent && typeof parsedContent === 'object') {
-      topic = parsedContent.topic || ''
-      const candidateType = parsedContent.blogType || (parsedContent.type !== 'doc' ? parsedContent.type : '') || ''
-      type = candidateType.toLowerCase() === 'doc' ? '' : candidateType
-    }
-  }
-
-  let parsedTags: string[] = []
-  if (row.tags) {
-    if (Array.isArray(row.tags)) {
-      parsedTags = row.tags
-    } else {
-      try {
-        const decoded = JSON.parse(row.tags)
-        if (Array.isArray(decoded)) {
-          parsedTags = decoded
-        }
-      } catch {
-        parsedTags = typeof row.tags === 'string' ? [row.tags] : []
-      }
-    }
-  }
-  parsedTags = parsedTags.filter((t) => t && typeof t === 'string' && t.toLowerCase() !== 'doc')
-
-  return {
-    blog_id: Number(row.blog_id),
-    author_id: row.author_id ? Number(row.author_id) : null,
-    title: row.title || '',
-    slug: row.slug || '',
-    excerpt: row.excerpt || '',
-    content: parsedContent,
-    cover_image_url: row.cover_image_url || null,
-    tags: parsedTags,
-    topic,
-    type,
-    created_at: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at || ''),
-    updated_at: row.updated_at instanceof Date ? row.updated_at.toISOString() : String(row.updated_at || ''),
-    published_at: row.published_at instanceof Date ? row.published_at.toISOString() : String(row.published_at || ''),
-    author_name: row.author_name || 'Admin',
-  }
+function titleError(title: string | undefined, required: boolean): string | null {
+  if (title === undefined) return required ? 'Please add a title.' : null;
+  if (!title.trim()) return 'Please add a title.';
+  if (title.trim().length > TITLE_MAX) return `Title must be ${TITLE_MAX} characters or fewer.`;
+  return null;
 }
 
-// 1. GET /api/blogs (List all blogs)
+/** GET /api/blogs?search=&topic=&type= */
 export async function getBlogs(req: Request, res: Response): Promise<void> {
-  if (!pool) {
-    res.status(503).json({
-      success: false,
-      message: 'Database connection is unavailable.',
-      timestamp: Date.now(),
-    })
-    return
-  }
-
+  const db = database(res);
+  if (!db) return;
   try {
-    const { search, topic, type } = req.query
-
-    let sql = `
-      SELECT 
-        b.blog_id,
-        b.author_id,
-        b.title,
-        b.slug,
-        b.excerpt,
-        b.content,
-        b.cover_image_url,
-        b.tags,
-        b.created_at,
-        b.updated_at,
-        b.published_at,
-        COALESCE(u.username, 'Admin') AS author_name
-      FROM blogs b
-      LEFT JOIN admin_users u ON b.author_id = u.user_id
-    `
-
-    const whereClauses: string[] = []
-    const params: any[] = []
-
-    if (search && typeof search === 'string' && search.trim()) {
-      const term = `%${search.trim().toLowerCase()}%`
-      whereClauses.push('(LOWER(b.title) LIKE ? OR LOWER(b.slug) LIKE ? OR LOWER(b.excerpt) LIKE ?)')
-      params.push(term, term, term)
-    }
-
-    if (whereClauses.length > 0) {
-      sql += ' WHERE ' + whereClauses.join(' AND ')
-    }
-
-    sql += ' ORDER BY b.created_at DESC'
-
-    const [rows]: any = await pool.execute(sql, params)
-    let items: IBlogResponse[] = (rows || []).map(parseBlogRow)
-
-    // Optional topic/type filters
-    if (topic && typeof topic === 'string') {
-      items = items.filter((item) => item.topic?.toLowerCase() === topic.toLowerCase())
-    }
-    if (type && typeof type === 'string') {
-      items = items.filter((item) => item.type?.toLowerCase() === type.toLowerCase())
-    }
-
-    res.status(200).json({
-      success: true,
-      data: items,
-      total: items.length,
-      timestamp: Date.now(),
-    })
-  } catch (err: any) {
-    console.error('[Blog Controller - getBlogs Error]:', err)
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Failed to fetch blogs from database.',
-      timestamp: Date.now(),
-    })
+    const items = await blogs.listBlogs(db, {
+      search: queryString(req.query.search),
+      topic: queryString(req.query.topic),
+      type: queryString(req.query.type),
+    });
+    sendJson(res, 200, true, `${items.length} articles.`, items);
+  } catch (err) {
+    sendServerError(res, 'Blogs - list', err, 'Could not load articles.');
   }
 }
 
-// 2. GET /api/blogs/:idOrSlug (Get single blog)
-export async function getBlogByIdOrSlug(req: Request, res: Response): Promise<void> {
-  if (!pool) {
-    res.status(503).json({
-      success: false,
-      message: 'Database connection is unavailable.',
-      timestamp: Date.now(),
-    })
-    return
-  }
-
+/** GET /api/blogs/:idOrSlug */
+export async function getBlog(req: Request, res: Response): Promise<void> {
+  const db = database(res);
+  if (!db) return;
   try {
-    const idOrSlug = String(req.params.idOrSlug || '')
-    const isNumeric = /^\d+$/.test(idOrSlug)
-
-    let sql = `
-      SELECT 
-        b.blog_id,
-        b.author_id,
-        b.title,
-        b.slug,
-        b.excerpt,
-        b.content,
-        b.cover_image_url,
-        b.tags,
-        b.created_at,
-        b.updated_at,
-        b.published_at,
-        COALESCE(u.username, 'Admin') AS author_name
-      FROM blogs b
-      LEFT JOIN admin_users u ON b.author_id = u.user_id
-    `
-
-    if (isNumeric) {
-      sql += ' WHERE b.blog_id = ? LIMIT 1'
-    } else {
-      sql += ' WHERE b.slug = ? LIMIT 1'
+    const blog = await blogs.findBlog(db, String(req.params.idOrSlug));
+    if (!blog) {
+      sendJson(res, 404, false, 'Article not found.');
+      return;
     }
-
-    const [rows]: any = await pool.execute(sql, [isNumeric ? Number(idOrSlug) : idOrSlug])
-
-    if (!rows || rows.length === 0) {
-      res.status(404).json({
-        success: false,
-        message: `Blog "${idOrSlug}" not found.`,
-        timestamp: Date.now(),
-      })
-      return
-    }
-
-    const blog = parseBlogRow(rows[0])
-    res.status(200).json({
-      success: true,
-      data: blog,
-      timestamp: Date.now(),
-    })
-  } catch (err: any) {
-    console.error('[Blog Controller - getBlogByIdOrSlug Error]:', err)
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Failed to fetch blog details.',
-      timestamp: Date.now(),
-    })
+    sendJson(res, 200, true, 'Article found.', blog);
+  } catch (err) {
+    sendServerError(res, 'Blogs - get', err, 'Could not load the article.');
   }
 }
 
-// 3. POST /api/blogs (Create blog)
+/** POST /api/blogs (requireAuth). The author is the signed-in user. */
 export async function createBlog(req: Request, res: Response): Promise<void> {
-  if (!pool) {
-    res.status(503).json({
-      success: false,
-      message: 'Database connection is unavailable.',
-      timestamp: Date.now(),
-    })
-    return
+  const db = database(res);
+  if (!db) return;
+  const input = readInput(req.body);
+  const error = titleError(input.title, true);
+  if (error) {
+    sendJson(res, 422, false, error);
+    return;
   }
-
   try {
-    const body: ICreateBlogDTO = req.body || {}
-    const {
-      title,
-      slug: customSlug,
-      excerpt,
-      content,
-      cover_image_url,
-      topic,
-      type,
-      tags,
-      author_id,
-    } = body
-
-    if (!title || !String(title).trim()) {
-      res.status(400).json({
-        success: false,
-        message: 'Blog title is required.',
-        timestamp: Date.now(),
-      })
-      return
-    }
-
-    const cleanTitle = String(title).trim()
-    const rawSlug = customSlug && String(customSlug).trim()
-      ? slugify(customSlug)
-      : slugify(cleanTitle)
-
-    const finalSlug = await getUniqueSlug(rawSlug)
-
-    // Build structured content JSON
-    let contentObj: any = content || {}
-    if (typeof contentObj === 'string') {
-      try {
-        contentObj = JSON.parse(contentObj)
-      } catch {
-        contentObj = { type: 'doc', content: [{ type: 'paragraph', text: contentObj }] }
-      }
-    }
-
-    if (typeof contentObj === 'object' && contentObj !== null) {
-      if (topic) contentObj.topic = topic
-      if (type) contentObj.blogType = type
-    }
-
-    const contentJson = JSON.stringify(contentObj)
-
-    // Process tags
-    const tagList: string[] = []
-    if (Array.isArray(tags)) {
-      tagList.push(...tags.map(String))
-    } else if (tags && typeof tags === 'string') {
-      tagList.push(tags)
-    }
-    if (topic && !tagList.includes(topic)) tagList.push(topic)
-    if (type && !tagList.includes(type)) tagList.push(type)
-    const tagsJson = JSON.stringify(tagList)
-
-    const finalAuthorId = author_id && Number(author_id) > 0 ? Number(author_id) : 1
-    const cleanExcerpt = excerpt ? String(excerpt).trim() : null
-    const cleanCoverUrl = cover_image_url ? String(cover_image_url).trim() : null
-    const now = new Date()
-
-    // Parameterized INSERT into `blogs`
-    const insertSql = `
-      INSERT INTO blogs (
-        author_id,
-        title,
-        slug,
-        excerpt,
-        content,
-        cover_image_url,
-        tags,
-        created_at,
-        updated_at,
-        published_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `
-
-    const [result]: any = await pool.execute(insertSql, [
-      finalAuthorId,
-      cleanTitle,
-      finalSlug,
-      cleanExcerpt,
-      contentJson,
-      cleanCoverUrl,
-      tagsJson,
-      now,
-      now,
-      now,
-    ])
-
-    const newBlogId = result.insertId
-
-    // Fetch newly created blog
-    const [createdRows]: any = await pool.execute(
-      `
-      SELECT 
-        b.blog_id,
-        b.author_id,
-        b.title,
-        b.slug,
-        b.excerpt,
-        b.content,
-        b.cover_image_url,
-        b.tags,
-        b.created_at,
-        b.updated_at,
-        b.published_at,
-        COALESCE(u.username, 'Admin') AS author_name
-      FROM blogs b
-      LEFT JOIN admin_users u ON b.author_id = u.user_id
-      WHERE b.blog_id = ?
-      LIMIT 1
-      `,
-      [newBlogId]
-    )
-
-    const createdBlog = createdRows && createdRows.length > 0 ? parseBlogRow(createdRows[0]) : null
-
-    res.status(201).json({
-      success: true,
-      message: 'Blog published successfully!',
-      data: createdBlog,
-      timestamp: Date.now(),
-    })
-  } catch (err: any) {
-    console.error('[Blog Controller - createBlog Error]:', err)
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Failed to create blog in database.',
-      timestamp: Date.now(),
-    })
+    const blog = await blogs.createBlog(db, { ...input, title: input.title ?? '' }, currentUser(res).sub);
+    sendJson(res, 201, true, 'Article published.', blog);
+  } catch (err) {
+    sendServerError(res, 'Blogs - create', err, 'Could not publish the article.');
   }
 }
 
-// 4. PUT /api/blogs/:id (Update blog)
+/** PUT /api/blogs/:id (requireAuth) */
 export async function updateBlog(req: Request, res: Response): Promise<void> {
-  if (!pool) {
-    res.status(503).json({
-      success: false,
-      message: 'Database connection is unavailable.',
-      timestamp: Date.now(),
-    })
-    return
+  const db = database(res);
+  const id = db && blogId(req, res);
+  if (!db || !id) return;
+  const input = readInput(req.body);
+  const error = titleError(input.title, false);
+  if (error) {
+    sendJson(res, 422, false, error);
+    return;
   }
-
   try {
-    const { id } = req.params
-    const blogId = Number(id)
-
-    if (!blogId || isNaN(blogId)) {
-      res.status(400).json({
-        success: false,
-        message: 'Valid numeric blog ID is required.',
-        timestamp: Date.now(),
-      })
-      return
+    const blog = await blogs.updateBlog(db, id, input);
+    if (!blog) {
+      sendJson(res, 404, false, 'Article not found.');
+      return;
     }
-
-    // Check if blog exists
-    const [existingRows]: any = await pool.execute(
-      'SELECT * FROM blogs WHERE blog_id = ? LIMIT 1',
-      [blogId]
-    )
-
-    if (!existingRows || existingRows.length === 0) {
-      res.status(404).json({
-        success: false,
-        message: `Blog with ID ${blogId} not found.`,
-        timestamp: Date.now(),
-      })
-      return
-    }
-
-    const existing = existingRows[0]
-    const body: IUpdateBlogDTO = req.body || {}
-
-    const newTitle = body.title !== undefined ? String(body.title).trim() : existing.title
-
-    let newSlug = existing.slug
-    if (body.slug && String(body.slug).trim() && slugify(body.slug) !== existing.slug) {
-      newSlug = await getUniqueSlug(slugify(body.slug), blogId)
-    }
-
-    const newExcerpt = body.excerpt !== undefined ? (body.excerpt ? String(body.excerpt).trim() : null) : existing.excerpt
-    const newCover = body.cover_image_url !== undefined ? (body.cover_image_url ? String(body.cover_image_url).trim() : null) : existing.cover_image_url
-
-    // Process updated content
-    let contentObj: any
-    if (body.content !== undefined) {
-      contentObj = body.content
-      if (typeof contentObj === 'string') {
-        try {
-          contentObj = JSON.parse(contentObj)
-        } catch {
-          contentObj = { type: 'doc', content: [{ type: 'paragraph', text: contentObj }] }
-        }
-      }
-    } else {
-      try {
-        contentObj = JSON.parse(existing.content)
-      } catch {
-        contentObj = existing.content
-      }
-    }
-
-    if (typeof contentObj === 'object' && contentObj !== null) {
-      if (body.topic !== undefined) contentObj.topic = body.topic
-      if (body.type !== undefined) contentObj.blogType = body.type
-    }
-
-    const contentJson = JSON.stringify(contentObj)
-
-    // Process updated tags
-    let tagsList: string[] = []
-    if (body.tags !== undefined) {
-      if (Array.isArray(body.tags)) {
-        tagsList = body.tags.map(String)
-      } else if (body.tags) {
-        tagsList = [String(body.tags)]
-      }
-    } else {
-      try {
-        const decoded = JSON.parse(existing.tags)
-        if (Array.isArray(decoded)) tagsList = decoded
-      } catch {
-        tagsList = []
-      }
-    }
-
-    if (body.topic && !tagsList.includes(body.topic)) tagsList.push(body.topic)
-    if (body.type && !tagsList.includes(body.type)) tagsList.push(body.type)
-    const tagsJson = JSON.stringify(tagsList)
-    const now = new Date()
-
-    const updateSql = `
-      UPDATE blogs SET
-        title = ?,
-        slug = ?,
-        excerpt = ?,
-        content = ?,
-        cover_image_url = ?,
-        tags = ?,
-        updated_at = ?
-      WHERE blog_id = ?
-    `
-
-    await pool.execute(updateSql, [
-      newTitle,
-      newSlug,
-      newExcerpt,
-      contentJson,
-      newCover,
-      tagsJson,
-      now,
-      blogId,
-    ])
-
-    // Fetch updated blog
-    const [updatedRows]: any = await pool.execute(
-      `
-      SELECT 
-        b.blog_id,
-        b.author_id,
-        b.title,
-        b.slug,
-        b.excerpt,
-        b.content,
-        b.cover_image_url,
-        b.tags,
-        b.created_at,
-        b.updated_at,
-        b.published_at,
-        COALESCE(u.username, 'Admin') AS author_name
-      FROM blogs b
-      LEFT JOIN admin_users u ON b.author_id = u.user_id
-      WHERE b.blog_id = ?
-      LIMIT 1
-      `,
-      [blogId]
-    )
-
-    const updatedBlog = updatedRows && updatedRows.length > 0 ? parseBlogRow(updatedRows[0]) : null
-
-    res.status(200).json({
-      success: true,
-      message: 'Blog updated successfully.',
-      data: updatedBlog,
-      timestamp: Date.now(),
-    })
-  } catch (err: any) {
-    console.error('[Blog Controller - updateBlog Error]:', err)
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Failed to update blog.',
-      timestamp: Date.now(),
-    })
+    sendJson(res, 200, true, 'Article updated.', blog);
+  } catch (err) {
+    sendServerError(res, 'Blogs - update', err, 'Could not update the article.');
   }
 }
 
-// 5. DELETE /api/blogs/:id (Delete blog and cleanup associated uploaded images)
+/** DELETE /api/blogs/:id (requireAuth). Also removes the article's locally stored images. */
 export async function deleteBlog(req: Request, res: Response): Promise<void> {
-  if (!pool) {
-    res.status(503).json({
-      success: false,
-      message: 'Database connection is unavailable.',
-      timestamp: Date.now(),
-    })
-    return
-  }
-
+  const db = database(res);
+  const id = db && blogId(req, res);
+  if (!db || !id) return;
   try {
-    const { id } = req.params
-    const blogId = Number(id)
-
-    if (!blogId || isNaN(blogId)) {
-      res.status(400).json({
-        success: false,
-        message: 'Valid numeric blog ID is required for deletion.',
-        timestamp: Date.now(),
-      })
-      return
+    const deleted = await blogs.deleteBlog(db, id);
+    if (!deleted) {
+      sendJson(res, 404, false, 'Article not found.');
+      return;
     }
-
-    // Check if exists and retrieve cover_image_url and content for image cleanup
-    const [existingRows]: any = await pool.execute(
-      'SELECT blog_id, title, cover_image_url, content FROM blogs WHERE blog_id = ? LIMIT 1',
-      [blogId]
-    )
-
-    if (!existingRows || existingRows.length === 0) {
-      res.status(404).json({
-        success: false,
-        message: `Blog with ID ${blogId} not found.`,
-        timestamp: Date.now(),
-      })
-      return
-    }
-
-    const blog = existingRows[0]
-    const blogTitle = blog.title
-
-    // Extract all associated image filenames from cover_image_url and content
-    const imageFilenames = extractBlogImageFilenames(blog.cover_image_url, blog.content)
-
-    // Delete associated physical image files from disk
-    let deletedImagesCount = 0
-    for (const filename of imageFilenames) {
-      const deleted = await deleteUploadedFile(filename)
-      if (deleted) deletedImagesCount++
-    }
-
-    // Delete the blog row from the database
-    await pool.execute('DELETE FROM blogs WHERE blog_id = ?', [blogId])
-
-    res.status(200).json({
-      success: true,
-      message: `Blog "${blogTitle}" and its associated images deleted successfully.`,
-      deleted_id: blogId,
-      deleted_images_count: deletedImagesCount,
-      timestamp: Date.now(),
-    })
-  } catch (err: any) {
-    console.error('[Blog Controller - deleteBlog Error]:', err)
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Failed to delete blog from database.',
-      timestamp: Date.now(),
-    })
+    const deletedImages = await deleteLocalArticleImages(deleted.coverImageUrl, deleted.content);
+    sendJson(res, 200, true, `“${deleted.title}” deleted.`, { blog_id: id, deleted_images: deletedImages });
+  } catch (err) {
+    sendServerError(res, 'Blogs - delete', err, 'Could not delete the article.');
   }
 }

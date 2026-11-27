@@ -1,22 +1,21 @@
-// Global Error Handler Middleware for AscendQE Backend
-import { Request, Response, NextFunction } from 'express'
+// Global error handler: JSON in the standard { success, message, timestamp } shape.
+import type { NextFunction, Request, Response } from 'express';
+import multer from 'multer';
 
-export function errorHandler(
-  err: any,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-): void {
-  console.error('[AscendQE API Error]', err)
+interface HttpError extends Error {
+  status?: number;
+  statusCode?: number;
+}
 
-  const statusCode = err.statusCode || err.status || 500
-  const message = err.message || 'Internal Server Error'
+export function errorHandler(err: HttpError, _req: Request, res: Response, _next: NextFunction): void {
+  // Upload problems (file too large, wrong type: "Only … are allowed") are the visitor's input, not a server fault.
+  const isUploadError = err instanceof multer.MulterError || err.message?.startsWith('Only ');
+  const statusCode = isUploadError ? 422 : err.statusCode || err.status || 500;
+  if (statusCode >= 500) console.error('[API Error]', err);
 
   res.status(statusCode).json({
     success: false,
-    message,
+    message: statusCode >= 500 ? 'Internal Server Error' : err.message,
     timestamp: Date.now(),
-    ...(process.env.NODE_ENV === 'development' ? { stack: err.stack } : {}),
-  })
+  });
 }
-

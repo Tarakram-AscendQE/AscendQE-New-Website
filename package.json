@@ -1,34 +1,18 @@
 {
-  "name": "ascendqe-monorepo",
+  "name": "ascendqe-website",
   "private": true,
-  "workspaces": [
-    "frontend",
-    "backend"
-  ],
+  "description": "AscendQE website: frontend/ (React) and backend/ (Express)",
   "scripts": {
-    "dev": "npm run dev --prefix leansite/react-app",
-    "prebuild": "npm ci --include=dev --prefix leansite/react-app",
-    "build": "npm run build --prefix leansite/react-app",
-    "start": "npm run start --prefix leansite/react-app",
-    "lint": "npm run lint --prefix leansite/react-app",
-    "format:check": "npm run format:check --prefix leansite/react-app",
-    "dev:legacy": "concurrently --kill-others-on-fail --names backend,frontend --prefix-colors cyan,magenta \"npm run dev:legacy:backend\" \"npm run dev:legacy:frontend\"",
-    "dev:legacy:frontend": "npm run dev --prefix frontend",
-    "dev:legacy:backend": "npm run dev --prefix backend",
-    "build:legacy": "npm install --prefix frontend && npm install --prefix backend && npm run build --prefix frontend && npm run build --prefix backend",
-    "start:legacy": "npm run start --prefix backend"
-  },
-  "dependencies": {
-    "@primer/octicons-react": "^19.42.0"
+    "dev": "concurrently --kill-others-on-fail --names backend,frontend --prefix-colors cyan,magenta \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "prebuild": "npm ci --include=dev --prefix frontend && npm ci --include=dev --prefix backend",
+    "build": "npm run build --prefix frontend && npm run build --prefix backend",
+    "start": "npm run start --prefix backend",
+    "lint": "npm run lint --prefix frontend && npm run lint --prefix backend",
+    "format:check": "npm run format:check --prefix frontend && npm run format:check --prefix backend"
   },
   "devDependencies": {
-    "@eslint/js": "9.39.5",
-    "concurrently": "^10.0.6",
-    "eslint": "9.39.5",
-    "eslint-plugin-react-hooks": "7.1.1",
-    "eslint-plugin-react-refresh": "0.5.8",
-    "globals": "17.14.0",
-    "prettier": "3.10.1",
-    "typescript-eslint": "8.72.2"
+    "concurrently": "^10.0.6"
   }
 }

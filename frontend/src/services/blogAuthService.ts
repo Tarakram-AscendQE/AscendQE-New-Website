@@ -1,88 +1,47 @@
-// Blog Authentication Service
-// Authenticates exclusively against the backend API and GoDaddy MySQL database
+// Insights studio sign-in (backend /api/auth). The session lives in sessionStorage for this tab only.
+import { jsonBody, requestJson } from '@/services/http';
+import type { StudioSession } from '@/types/blog';
 
-export interface UserSession {
-  id: number
-  username: string
-  displayName: string
-  role: string
-  token: string
-  loginTime: number
+const STORAGE_KEY = 'ascendqe_blog_auth';
+
+function readSession(): StudioSession | null {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    const session = raw ? (JSON.parse(raw) as StudioSession) : null;
+    return session?.token && session.username ? session : null;
+  } catch {
+    return null;
+  }
 }
-
-export interface LoginCredentials {
-  username: string
-  password: string
-}
-
-const AUTH_STORAGE_KEY = 'ascendqe_blog_auth'
 
 export const blogAuthService = {
-  // Check if current session is authenticated
+  getSession: readSession,
+
   isAuthenticated(): boolean {
+    return readSession() !== null;
+  },
+
+  async login(username: string, password: string): Promise<{ success: boolean; message: string }> {
+    const result = await requestJson<{ session: StudioSession }>(
+      '/api/auth/login',
+      jsonBody('POST', { username: username.trim(), password })
+    );
+    if (!result.success || !result.data?.session) {
+      return { success: false, message: result.message || 'Invalid username or password. Please try again.' };
+    }
     try {
-      const data = sessionStorage.getItem(AUTH_STORAGE_KEY)
-      if (!data) return false
-      const session: UserSession = JSON.parse(data)
-      return !!session.token && !!session.username
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result.data.session));
     } catch {
-      return false
+      return { success: false, message: 'This browser blocks session storage, so you cannot stay signed in.' };
     }
+    return { success: true, message: result.message };
   },
 
-  // Get current session data
-  getSession(): UserSession | null {
-    try {
-      const data = sessionStorage.getItem(AUTH_STORAGE_KEY)
-      return data ? JSON.parse(data) : null
-    } catch {
-      return null
-    }
-  },
-
-  // Authenticate user with credentials via backend API
-  async login(username: string, password: string): Promise<{ success: boolean; message?: string; session?: UserSession }> {
-    const cleanUsername = username.trim().toLowerCase()
-    const cleanPassword = password.trim()
-
-    if (!cleanUsername || !cleanPassword) {
-      return { success: false, message: 'Please enter both username and password.' }
-    }
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: cleanUsername,
-          password: cleanPassword,
-        }),
-      })
-
-      const data = await response.json()
-
-      if (response.ok && data.success && data.session) {
-        sessionStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(data.session))
-        return { success: true, session: data.session }
-      }
-
-      return {
-        success: false,
-        message: data.message || 'Invalid username or password. Please try again.',
-      }
-    } catch (err) {
-      console.error('[blogAuthService] Login network error:', err)
-      return {
-        success: false,
-        message: 'Could not connect to authentication server. Please ensure the backend is running.',
-      }
-    }
-  },
-
-  // Clear session
   logout(): void {
-    sessionStorage.removeItem(AUTH_STORAGE_KEY)
+    try {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Nothing stored.
+    }
   },
-}
+};

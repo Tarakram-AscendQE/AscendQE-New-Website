@@ -1,0 +1,8 @@
+# Article images uploaded while developing locally are not committed. The images used by the seeded
+# articles (config/seedData.ts) are.
+public/uploads/blogs/*
+!public/uploads/blogs/blog_1793092865996_h3zp8_Atlas1.webp
+!public/uploads/blogs/blog_1793165115302_bopfi_AQ-Blog-1.jpeg
+!public/uploads/blogs/blog_1793165426787_f9lxu_AQ-blog-2.jpeg
+!public/uploads/blogs/blog_1793179310053_30ve0_Contracttestsversusend-to-endteststhefailureboundary.jpeg
+!public/uploads/blogs/blog_1793179629295_v6wo0_AscendQE_Contract_vs_E2E_Boundary_Table.png

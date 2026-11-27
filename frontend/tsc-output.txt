@@ -1,1 +1,0 @@
-﻿src/lib/trackingControl.ts(9,53): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.

@@ -1,128 +1,88 @@
-// Auth Controller
-// Authenticates users strictly against GoDaddy MySQL `admin_users` table with bcrypt hash comparison
+// Studio sign-in against the `admin_users` table (bcrypt), issuing a JWT.
+import bcrypt from 'bcryptjs';
+import type { Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import type { RowDataPacket } from 'mysql2/promise';
+import { config } from '../config/index.js';
+import { pool } from '../config/database.js';
+import { currentUser } from '../middleware/authMiddleware.js';
+import { sendJson, sendServerError } from './respond.js';
 
-import { Request, Response } from 'express'
-import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
-import { pool } from '../config/database.js'
-import { config } from '../config/index.js'
+interface AdminUserRow extends RowDataPacket {
+  user_id: number;
+  username: string;
+  password_hash: string;
+  is_active: number;
+}
 
+const INVALID_LOGIN = 'Invalid username or password. Please try again.';
+
+function displayName(username: string): string {
+  const raw = username.includes('@') ? username.split('@')[0] : username;
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+/** POST /api/auth/login */
 export async function login(req: Request, res: Response): Promise<void> {
-  const { username, password } = req.body || {}
-
+  const username = String(req.body?.username ?? '')
+    .trim()
+    .toLowerCase();
+  const password = String(req.body?.password ?? '').trim();
   if (!username || !password) {
-    res.status(400).json({
-      success: false,
-      message: 'Both username and password are required.',
-      timestamp: Date.now(),
-    })
-    return
+    sendJson(res, 400, false, 'Please enter both username and password.');
+    return;
   }
-
-  const cleanUser = String(username).trim().toLowerCase()
-  const cleanPass = String(password).trim()
-
   if (!pool) {
-    res.status(503).json({
-      success: false,
-      message: 'Database service is currently unavailable. Please contact the administrator.',
-      timestamp: Date.now(),
-    })
-    return
+    sendJson(res, 503, false, 'Sign-in is unavailable right now. Please try again later.');
+    return;
   }
 
   try {
-    // Query GoDaddy MySQL database (`admin_users` table)
-    const [rows]: any = await pool.execute(
+    const [rows] = await pool.execute<AdminUserRow[]>(
       'SELECT user_id, username, password_hash, is_active FROM admin_users WHERE LOWER(username) = ? LIMIT 1',
-      [cleanUser]
-    )
-
-    if (!rows || rows.length === 0) {
-      res.status(401).json({
-        success: false,
-        message: 'Invalid username or password. Please try again.',
-        timestamp: Date.now(),
-      })
-      return
+      [username]
+    );
+    const user = rows[0];
+    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+      sendJson(res, 401, false, INVALID_LOGIN);
+      return;
+    }
+    if (!user.is_active) {
+      sendJson(res, 403, false, 'This account is deactivated. Please contact your administrator.');
+      return;
     }
 
-    const dbUser = rows[0]
-
-    // Check if account is active
-    if (!dbUser.is_active) {
-      res.status(403).json({
-        success: false,
-        message: 'Your account is deactivated. Please contact your administrator.',
-        timestamp: Date.now(),
-      })
-      return
-    }
-
-    // Compare entered password with stored bcrypt hash
-    const isMatch = await bcrypt.compare(cleanPass, dbUser.password_hash)
-
-    if (!isMatch) {
-      res.status(401).json({
-        success: false,
-        message: 'Invalid username or password. Please try again.',
-        timestamp: Date.now(),
-      })
-      return
-    }
-
-    // Success: generate authenticated session token
-    const token = jwt.sign(
-      { sub: dbUser.user_id, username: dbUser.username },
-      config.jwtSecret,
-      { expiresIn: config.jwtExpiresIn } as jwt.SignOptions
-    )
-    const rawName = dbUser.username.includes('@') ? dbUser.username.split('@')[0] : dbUser.username
-    const displayName = rawName.charAt(0).toUpperCase() + rawName.slice(1)
-
-    res.status(200).json({
-      success: true,
-      message: `Welcome back, ${displayName}!`,
+    const token = jwt.sign({ sub: user.user_id, username: user.username }, config.auth.jwtSecret, {
+      expiresIn: config.auth.jwtExpiresIn,
+    } as jwt.SignOptions);
+    const name = displayName(user.username);
+    sendJson(res, 200, true, `Welcome back, ${name}!`, {
       session: {
-        id: dbUser.user_id,
-        username: dbUser.username,
-        displayName,
+        id: user.user_id,
+        username: user.username,
+        displayName: name,
         role: 'admin',
         token,
         loginTime: Date.now(),
       },
-      token,
-      timestamp: Date.now(),
-    })
-  } catch (dbErr: any) {
-    console.error('[Database Auth Error]', dbErr.message)
-    res.status(500).json({
-      success: false,
-      message: 'Authentication error occurred. Please try again.',
-      timestamp: Date.now(),
-    })
+    });
+  } catch (err) {
+    sendServerError(res, 'Auth', err, 'Sign-in failed. Please try again.');
   }
 }
 
-export async function logout(req: Request, res: Response): Promise<void> {
-  res.status(200).json({
-    success: true,
-    message: 'Logged out successfully.',
-    timestamp: Date.now(),
-  })
+/** GET /api/auth/me (requireAuth) */
+export function getMe(_req: Request, res: Response): void {
+  const user = currentUser(res);
+  sendJson(res, 200, true, 'Signed in.', {
+    id: user.sub,
+    username: user.username,
+    displayName: displayName(user.username),
+    role: 'admin',
+  });
 }
 
-export async function getMe(_req: Request, res: Response): Promise<void> {
-  const username: string = res.locals.user?.username || 'admin'
-  const rawName = username.includes('@') ? username.split('@')[0] : username
-  res.status(200).json({
-    success: true,
-    data: {
-      id: res.locals.user?.sub,
-      username,
-      displayName: rawName.charAt(0).toUpperCase() + rawName.slice(1),
-      role: 'admin',
-    },
-    timestamp: Date.now(),
-  })
+/** POST /api/auth/logout (tokens are stateless; the client forgets its token) */
+export function logout(_req: Request, res: Response): void {
+  sendJson(res, 200, true, 'Signed out.');
 }

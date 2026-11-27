@@ -1,14 +1,6 @@
 import { RouterProvider } from 'react-router-dom';
-import { router } from './routes';
-import { CookieConsent } from './components/layout/cookie-consent';
+import { router } from '@/routes';
 
 export function App() {
-  return (
-    <>
-      <RouterProvider router={router} />
-      <CookieConsent />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
-
-export default App;

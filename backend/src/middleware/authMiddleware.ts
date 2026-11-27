@@ -1,45 +1,41 @@
-// Authentication Guard Middleware
+// Studio authentication: verifies the JWT bearer token; the user goes into res.locals.user.
+import type { NextFunction, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
+import { config } from '../config/index.js';
 
-import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
-import { config } from '../config/index.js'
+export interface AuthUser {
+  sub: number;
+  username: string;
+}
 
-export interface AuthTokenPayload {
-  sub: number
-  username: string
+function isAuthUser(payload: unknown): payload is AuthUser {
+  if (typeof payload !== 'object' || payload === null) return false;
+  const record = payload as Record<string, unknown>;
+  return typeof record.sub === 'number' && typeof record.username === 'string';
+}
+
+function unauthorized(res: Response, message: string): void {
+  res.status(401).json({ success: false, message, timestamp: Date.now() });
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction): void {
-  const authHeader = req.headers.authorization
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    res.status(401).json({
-      success: false,
-      message: 'Unauthorized access. Please log in to AscendQE Studio.',
-      timestamp: Date.now(),
-    })
-    return
-  }
-
-  const token = authHeader.split(' ')[1]
+  const header = req.headers.authorization;
+  const token = header?.startsWith('Bearer ') ? header.slice(7).trim() : '';
   if (!token) {
-    res.status(401).json({
-      success: false,
-      message: 'Invalid or missing authentication token.',
-      timestamp: Date.now(),
-    })
-    return
+    unauthorized(res, 'Please sign in to AscendQE Studio.');
+    return;
   }
-
   try {
-    const payload = jwt.verify(token, config.jwtSecret) as unknown as AuthTokenPayload
-    res.locals.user = payload
-    next()
+    const payload = jwt.verify(token, config.auth.jwtSecret);
+    if (!isAuthUser(payload)) throw new Error('Invalid token payload');
+    res.locals.user = payload;
+    next();
   } catch {
-    res.status(401).json({
-      success: false,
-      message: 'Your session has expired. Please log in to AscendQE Studio again.',
-      timestamp: Date.now(),
-    })
+    unauthorized(res, 'Your session has expired. Please sign in to AscendQE Studio again.');
   }
+}
+
+/** The signed-in studio user (only call after requireAuth). */
+export function currentUser(res: Response): AuthUser {
+  return res.locals.user as AuthUser;
 }

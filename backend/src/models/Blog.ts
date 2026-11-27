@@ -1,58 +1,49 @@
-// Blog Model and Database Interfaces
-// Aligns directly with GoDaddy MySQL `blogs` table
+// Insights article types: the MySQL `blogs` row and the JSON shape the API returns.
+import type { RowDataPacket } from 'mysql2/promise';
 
-export interface IBlogRow {
-  blog_id: number
-  author_id: number | null
-  title: string
-  slug: string
-  excerpt: string | null
-  content: string // Stored as JSON string (LONGTEXT) in MySQL
-  cover_image_url: string | null
-  tags: string | null // Stored as JSON string (LONGTEXT) in MySQL
-  created_at: string | Date
-  updated_at: string | Date
-  published_at: string | Date
-  author_name?: string
+/** TipTap document (JSON). `topic` / `blogType` are stored inside it, as in the previous backend. */
+export type BlogContent = Record<string, unknown>;
+
+export interface BlogRow extends RowDataPacket {
+  blog_id: number;
+  author_id: number | null;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string;
+  cover_image_url: string | null;
+  tags: string | null;
+  created_at: Date | string;
+  updated_at: Date | string;
+  published_at: Date | string;
+  author_name?: string;
 }
 
-export interface IBlogResponse {
-  blog_id: number
-  author_id: number | null
-  title: string
-  slug: string
-  excerpt: string | null
-  content: any // Parsed JSON object
-  cover_image_url: string | null
-  tags: string[]
-  topic?: string
-  type?: string
-  created_at: string | Date
-  updated_at: string | Date
-  published_at: string | Date
-  author_name: string
+export interface Blog {
+  blog_id: number;
+  author_id: number | null;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: BlogContent | string | null;
+  cover_image_url: string | null;
+  tags: string[];
+  topic: string;
+  type: string;
+  created_at: string;
+  updated_at: string;
+  published_at: string;
+  author_name: string;
 }
 
-export interface ICreateBlogDTO {
-  title: string
-  slug?: string
-  excerpt?: string
-  content: any
-  cover_image_url?: string | null
-  topic?: string
-  type?: string
-  tags?: string[] | string
-  author_id?: number
+/** Fields accepted when creating or updating an article. */
+export interface BlogInput {
+  title?: string;
+  slug?: string;
+  excerpt?: string | null;
+  content?: BlogContent | string;
+  cover_image_url?: string | null;
+  topic?: string;
+  type?: string;
+  tags?: string[] | string;
 }
-
-export interface IUpdateBlogDTO {
-  title?: string
-  slug?: string
-  excerpt?: string
-  content?: any
-  cover_image_url?: string | null
-  topic?: string
-  type?: string
-  tags?: string[] | string
-}
-

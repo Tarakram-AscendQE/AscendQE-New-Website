@@ -1,207 +1,129 @@
-// Database Connection Manager
-// Supports MySQL (GoDaddy / remote / local) with connection pooling and graceful fallback
+// MySQL connection pool for the Insights module, plus schema checks and first-run seeding.
+import mysql, { type Pool, type RowDataPacket } from 'mysql2/promise';
+import { config, isDatabaseConfigured } from './index.js';
+import { seedBlogs, seedUsers } from './seedData.js';
 
-import https from 'node:https'
-import mysql, { Pool } from 'mysql2/promise'
-import { config } from './index.js'
-import { seedBlogs, seedUsers } from './seedData.js'
+/** null when DB_HOST / DB_USER are not set (the Insights API then answers 503). */
+export const pool: Pool | null = isDatabaseConfigured()
+  ? mysql.createPool({
+      host: config.database.host,
+      port: config.database.port,
+      user: config.database.user,
+      password: config.database.password,
+      database: config.database.name,
+      waitForConnections: true,
+      connectionLimit: 10,
+      connectTimeout: 10000,
+      timezone: '+00:00', // store and read TIMESTAMPs as UTC
+    })
+  : null;
 
-export let pool: Pool | null = null
+// Keep the MySQL session in UTC so TIMESTAMP columns are never shifted by the server's time zone.
+pool?.on('connection', (connection) => {
+  connection.query("SET time_zone = '+00:00'");
+});
 
-// Initialize pool if credentials are provided
-if (config.dbHost && config.dbUser) {
-  pool = mysql.createPool({
-    host: config.dbHost,
-    port: config.dbPort,
-    user: config.dbUser,
-    password: config.dbPassword,
-    database: config.dbName,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    connectTimeout: 10000, // 10s timeout
-    timezone: '+00:00', // Enforce UTC timestamps across all connections
-  })
-
-  // Ensure remote MySQL session timezone is strictly UTC (+00:00) so TIMESTAMP columns are never shifted by server's SYSTEM timezone
-  pool.on('connection', (connection) => {
-    connection.query("SET time_zone = '+00:00'")
-  })
+function errorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
 }
 
-// Fetch the container's public outbound IP so it can be whitelisted in cPanel Remote MySQL
-export function logContainerOutboundIp(): Promise<string> {
-  return new Promise((resolve) => {
-    try {
-      https.get('https://api.ipify.org', (res) => {
-        let ip = ''
-        res.on('data', (chunk) => { ip += chunk })
-        res.on('end', () => {
-          const cleanIp = ip.trim()
-          console.log(`🌐 [Container Outbound IP]: ${cleanIp}`)
-          console.log(`👉 Add "${cleanIp}" into cPanel > Remote MySQL > "Add Access Host" to allow connection!`)
-          resolve(cleanIp)
-        })
-      }).on('error', () => {
-        resolve('')
-      })
-    } catch {
-      resolve('')
+async function ensureSchema(db: Pool): Promise<void> {
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS admin_users (
+      user_id INT AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(255) NOT NULL UNIQUE,
+      password_hash VARCHAR(255) NOT NULL,
+      is_active TINYINT(1) NOT NULL DEFAULT 1,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS blogs (
+      blog_id INT AUTO_INCREMENT PRIMARY KEY,
+      author_id INT NULL,
+      title VARCHAR(500) NOT NULL,
+      slug VARCHAR(500) NOT NULL UNIQUE,
+      excerpt TEXT NULL,
+      content LONGTEXT NOT NULL,
+      cover_image_url LONGTEXT NULL,
+      tags LONGTEXT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_author_id (author_id),
+      INDEX idx_created_at (created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+
+  // Tables created by older versions may miss columns; add them (never drop or rewrite data).
+  const [columns] = await db.execute<RowDataPacket[]>('SHOW COLUMNS FROM blogs');
+  const existing = new Map(columns.map((column) => [String(column.Field), String(column.Type).toLowerCase()]));
+  if (!existing.has('excerpt')) await db.execute('ALTER TABLE blogs ADD COLUMN excerpt TEXT NULL AFTER slug');
+  if (!existing.has('cover_image_url')) {
+    await db.execute('ALTER TABLE blogs ADD COLUMN cover_image_url LONGTEXT NULL AFTER content');
+  } else if (existing.get('cover_image_url') !== 'longtext') {
+    // Covers can be compressed data URLs (fallback when image upload fails), which need LONGTEXT.
+    await db.execute('ALTER TABLE blogs MODIFY COLUMN cover_image_url LONGTEXT NULL');
+  }
+  if (!existing.has('tags')) await db.execute('ALTER TABLE blogs ADD COLUMN tags LONGTEXT NULL AFTER cover_image_url');
+  if (!existing.has('published_at')) {
+    await db.execute('ALTER TABLE blogs ADD COLUMN published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER updated_at');
+  }
+}
+
+/** First run only: an empty database gets the two studio accounts and the published articles. */
+async function seedEmptyTables(db: Pool): Promise<void> {
+  const [[users]] = await db.execute<RowDataPacket[]>('SELECT COUNT(*) AS count FROM admin_users');
+  if (Number(users.count) === 0) {
+    for (const user of seedUsers) {
+      await db.execute('INSERT INTO admin_users (user_id, username, password_hash, is_active) VALUES (?, ?, ?, 1)', [
+        user.user_id,
+        user.username,
+        user.password_hash,
+      ]);
     }
-  })
+    console.warn(`[Database] Empty admin_users table: added ${seedUsers.length} studio accounts.`);
+  }
+
+  const [[blogs]] = await db.execute<RowDataPacket[]>('SELECT COUNT(*) AS count FROM blogs');
+  if (Number(blogs.count) === 0) {
+    for (const blog of seedBlogs) {
+      await db.execute(
+        `INSERT INTO blogs (blog_id, author_id, title, slug, excerpt, content, cover_image_url, tags, created_at, published_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+          blog.blog_id,
+          blog.author_id,
+          blog.title,
+          blog.slug,
+          blog.excerpt || null,
+          typeof blog.content === 'string' ? blog.content : JSON.stringify(blog.content),
+          blog.cover_image_url || null,
+          typeof blog.tags === 'string' ? blog.tags : JSON.stringify(blog.tags ?? []),
+          new Date(blog.created_at),
+          new Date(blog.published_at),
+        ]
+      );
+    }
+    console.warn(`[Database] Empty blogs table: added ${seedBlogs.length} published articles.`);
+  }
 }
 
+/** Connects, checks the schema and seeds empty tables. Runs in the background; never throws. */
 export async function connectDatabase(): Promise<boolean> {
   if (!pool) {
-    console.log('[Database] No DB configuration provided. Running in in-memory mode.')
-    return false
+    console.warn('[Database] DB_HOST / DB_USER not set: Insights API is unavailable.');
+    return false;
   }
-
-  // Always log the container's outbound IP to assist with firewall whitelisting
-  logContainerOutboundIp().catch(() => {})
-
   try {
-    console.log(`[Database] Attempting connection to GoDaddy MySQL at ${config.dbHost}:${config.dbPort} (Database: ${config.dbName})...`)
-    const conn = await pool.getConnection()
-    console.log(`✅ [Database] Connected successfully to GoDaddy MySQL database (${config.dbName})!`)
-    conn.release()
-
-    // Ensure database table schemas exist
-    await initializeDatabaseTables()
-
-    return true
-  } catch (err: any) {
-    console.error('❌ [Database] Connection failed:', err.message)
-    if (err.code === 'ETIMEDOUT' || err.code === 'ECONNREFUSED') {
-      console.error('👉 Action required: In your cPanel "Remote MySQL" settings, add the [Container Outbound IP] shown above to the Access Hosts list.')
-    } else if (err.code === 'ER_ACCESS_DENIED_ERROR') {
-      console.error('👉 Action required: Check your DB_USER, DB_PASSWORD, and ensure the user is assigned to the database in cPanel.')
-    }
-    return false
-  }
-}
-
-export async function initializeDatabaseTables(): Promise<void> {
-  if (!pool) return
-
-  try {
-    // 1. Ensure admin_users table structure exists (uses existing users directly from ascendqe_blogs)
-    await pool.execute(`
-      CREATE TABLE IF NOT EXISTS admin_users (
-        user_id INT AUTO_INCREMENT PRIMARY KEY,
-        username VARCHAR(255) NOT NULL UNIQUE,
-        password_hash VARCHAR(255) NOT NULL,
-        is_active TINYINT(1) NOT NULL DEFAULT 1,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `)
-
-    // 2. Ensure blogs table structure exists (uses existing blogs directly from ascendqe_blogs)
-    await pool.execute(`
-      CREATE TABLE IF NOT EXISTS blogs (
-        blog_id INT AUTO_INCREMENT PRIMARY KEY,
-        author_id INT NULL,
-        title VARCHAR(500) NOT NULL,
-        slug VARCHAR(500) NOT NULL UNIQUE,
-        excerpt TEXT NULL,
-        content LONGTEXT NOT NULL,
-        cover_image_url VARCHAR(1000) NULL,
-        tags LONGTEXT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        INDEX idx_author_id (author_id),
-        INDEX idx_created_at (created_at)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `)
-
-    // 2b. Ensure all required columns exist in `blogs` table if table was created previously
-    const [cols]: any = await pool.execute('DESCRIBE blogs')
-    const existingCols = new Set(cols.map((c: any) => c.Field))
-    if (!existingCols.has('excerpt')) {
-      await pool.execute('ALTER TABLE blogs ADD COLUMN excerpt TEXT NULL AFTER slug')
-    }
-    if (!existingCols.has('cover_image_url')) {
-      await pool.execute('ALTER TABLE blogs ADD COLUMN cover_image_url LONGTEXT NULL AFTER content')
-    } else {
-      // Ensure cover_image_url is LONGTEXT to reliably support URLs and base64 payloads across container restarts
-      try {
-        await pool.execute('ALTER TABLE blogs MODIFY COLUMN cover_image_url LONGTEXT NULL')
-      } catch {}
-    }
-    if (!existingCols.has('tags')) {
-      await pool.execute('ALTER TABLE blogs ADD COLUMN tags LONGTEXT NULL AFTER cover_image_url')
-    }
-    if (!existingCols.has('published_at')) {
-      await pool.execute('ALTER TABLE blogs ADD COLUMN published_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER updated_at')
-    }
-
-    // 3. Ensure ONLY the 2 exact admin users from cPanel database exist
-    // Step 3a: Remove all other users (admin, admin@ascendqe.com, etc.)
-    await pool.execute(`
-      DELETE FROM admin_users 
-      WHERE LOWER(username) NOT IN ('nag@ascendqe.com', 'aqadmin')
-    `)
-
-    // Step 3b: Update/Insert Nag@ascendqe.com and AQadmin with their exact original hashes
-    for (const u of seedUsers) {
-      const [existing]: any = await pool.execute(
-        'SELECT user_id FROM admin_users WHERE LOWER(username) = LOWER(?) LIMIT 1',
-        [u.username]
-      )
-      if (existing && existing.length > 0) {
-        await pool.execute(
-          'UPDATE admin_users SET password_hash = ?, is_active = 1 WHERE user_id = ?',
-          [u.password_hash, existing[0].user_id]
-        )
-      } else {
-        await pool.execute(
-          'INSERT INTO admin_users (username, password_hash, is_active) VALUES (?, ?, 1)',
-          [u.username, u.password_hash]
-        )
-      }
-    }
-    console.log('✅ [Database] admin_users verified: exactly 2 users active (Nag@ascendqe.com, AQadmin) with original hashes.')
-
-    // 4. Ensure initial published blogs exist if blogs table is empty
-    const [blogRows]: any = await pool.execute('SELECT COUNT(*) as count FROM blogs')
-    const blogCount = blogRows?.[0]?.count || 0
-    if (blogCount === 0 && Array.isArray(seedBlogs) && seedBlogs.length > 0) {
-      console.log('📝 [Database] Blogs table is empty. Seeding initial published blogs from cPanel...')
-      for (const b of seedBlogs) {
-        const contentStr = typeof b.content === 'object' ? JSON.stringify(b.content) : b.content
-        const tagsStr = Array.isArray(b.tags) ? JSON.stringify(b.tags) : (b.tags || '[]')
-        await pool.execute(
-          `INSERT INTO blogs (blog_id, author_id, title, slug, excerpt, content, cover_image_url, tags, created_at, published_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-           ON DUPLICATE KEY UPDATE 
-             title = VALUES(title),
-             slug = VALUES(slug),
-             excerpt = VALUES(excerpt),
-             content = VALUES(content),
-             cover_image_url = VALUES(cover_image_url),
-             tags = VALUES(tags),
-             author_id = VALUES(author_id)`,
-          [
-            b.blog_id,
-            b.author_id || 13,
-            b.title,
-            b.slug,
-            b.excerpt || null,
-            contentStr,
-            b.cover_image_url || null,
-            tagsStr,
-            b.created_at ? new Date(b.created_at) : new Date(),
-            b.published_at ? new Date(b.published_at) : new Date(),
-          ]
-        )
-      }
-      console.log(`✅ [Database] Successfully seeded ${seedBlogs.length} published blogs.`)
-    }
-
-    console.log('✅ [Database] Schema and data verified successfully.')
-  } catch (err: any) {
-    console.error('⚠️ [Database] Schema verification notice:', err.message)
+    const connection = await pool.getConnection();
+    connection.release();
+    await ensureSchema(pool);
+    await seedEmptyTables(pool);
+    console.warn(`[Database] Connected to ${config.database.name}; schema verified.`);
+    return true;
+  } catch (err) {
+    console.error('[Database] Connection or schema check failed:', errorMessage(err));
+    return false;
   }
 }
