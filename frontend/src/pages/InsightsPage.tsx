@@ -1,13 +1,14 @@
 import { HeadMeta } from '@/components/seo/HeadMeta';
 import { InsightsListContent } from '@/features/insights/InsightsListContent';
+import pageSeo from '@/data/pageSeo.json';
 
 export function InsightsPage() {
   return (
     <>
       <HeadMeta
-        title="Insights · AscendQE"
-        description="Articles from the AscendQE team on quality engineering for the AI era: AI agents, test intelligence and release decisions."
-        canonicalPath="/blogs"
+        {...pageSeo['/blogs']}
+        ogDescription={pageSeo['/blogs'].description}
+        twitterDescription={pageSeo['/blogs'].description}
       />
       <InsightsListContent />
     </>

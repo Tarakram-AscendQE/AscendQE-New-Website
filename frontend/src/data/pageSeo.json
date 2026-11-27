@@ -1,0 +1,42 @@
+{
+  "/": {
+    "title": "AI-Powered Test Automation Platform | AI Quality Engineering | AscendQE",
+    "description": "Explore AscendQE’s agentic AI test automation, AI agents for enterprise testing, GenAI testing, and intelligent quality engineering to accelerate releases.",
+    "canonicalPath": "/"
+  },
+  "/services": {
+    "title": "Test Automation & AI Agent Assurance Services | AscendQE",
+    "description": "Accelerate software delivery with AI-powered test automation and AI agent assurance services. Improve testing efficiency, quality, reliability and enterprise readiness with AscendQE.",
+    "canonicalPath": "/services"
+  },
+  "/gcc": {
+    "title": "AI-Powered Quality Engineering for GCCs | AscendQE",
+    "description": "Empower Global Capability Centers with AI-powered Quality Engineering, test automation and intelligent assurance to improve software quality, accelerate releases and scale efficiently.",
+    "canonicalPath": "/gcc"
+  },
+  "/method": {
+    "title": "AscendQE Method | Proof-Driven Quality Engineering",
+    "description": "Discover AscendQE's proof-driven Quality Engineering approach. Automate testing, validate quality, measure outcomes, and accelerate software delivery with AI.",
+    "canonicalPath": "/method"
+  },
+  "/about": {
+    "title": "AscendQE | AI-Powered Quality Engineering Company",
+    "description": "Discover AscendQE's vision for the future of Quality Engineering. We combine AI-powered automation and engineering expertise to improve software quality and accelerate business growth.",
+    "canonicalPath": "/about"
+  },
+  "/start": {
+    "title": "Get Started with AscendQE | AI-Powered Quality Engineering",
+    "description": "Start your Quality Engineering transformation with AscendQE. Explore AI-powered testing, intelligent automation, and enterprise solutions to accelerate software delivery.",
+    "canonicalPath": "/start"
+  },
+  "/standard": {
+    "title": "AscendQE Platform | AI-Powered Quality Engineering",
+    "description": "Explore the AscendQE Platform, an AI-powered Quality Engineering ecosystem that automates testing, improves software quality, and accelerates enterprise delivery.",
+    "canonicalPath": "/standard"
+  },
+  "/blogs": {
+    "title": "Insights · AscendQE",
+    "description": "Articles from the AscendQE team on quality engineering for the AI era: AI agents, test intelligence and release decisions.",
+    "canonicalPath": "/blogs"
+  }
+}

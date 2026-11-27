@@ -118,6 +118,85 @@
 .ins-state p {
   margin-top: 8px;
 }
+.ins-pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin: 32px 0 0 auto;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 0 2px 8px rgba(13, 27, 42, 0.06);
+}
+.ins-pagination-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  max-width: 100%;
+}
+.ins-pagination button {
+  min-height: 36px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ink);
+  font: 500 13px var(--f-body);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+.ins-pagination button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.ins-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ins-pagination-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-color: var(--line) !important;
+  background: var(--bg) !important;
+  color: var(--muted) !important;
+}
+.ins-pagination-step:hover:not(:disabled) {
+  background: var(--sunk) !important;
+}
+.ins-pagination-number {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+}
+.ins-pagination-number:hover:not(.is-current) {
+  background: var(--sunk);
+  color: var(--accent);
+}
+.ins-pagination-number.is-current {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.ins-pagination-ellipsis {
+  padding: 0 4px;
+  color: var(--faint);
+  font-size: 12px;
+}
+.ins-pagination-summary {
+  margin-top: 8px;
+  color: var(--faint);
+  font: 500 12px var(--f-body);
+  text-align: center;
+}
 @media (max-width: 700px) {
   .ins-search {
     max-width: none;

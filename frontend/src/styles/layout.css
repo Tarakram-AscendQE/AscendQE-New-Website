@@ -23,9 +23,15 @@
   min-width: 0;
   margin: 0;
 }
-.crumbbar li + li::before {
+/*.crumbbar li + li::before {
   content: '/';
   color: var(--line);
+}*/
+.crumbbar li + li::before {
+  content: '>';
+  color:#647C80;
+  font-weight: 600;
+  margin-right: 2px;
 }
 .crumbbar a {
   color: var(--faint);

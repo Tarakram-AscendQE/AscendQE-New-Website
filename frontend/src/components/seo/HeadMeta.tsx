@@ -22,6 +22,19 @@ interface HeadMetaProps {
 
 const SITE_ORIGIN = 'https://ascendqe.com';
 
+function upsertMetaTag(selector: string, attributes: Record<string, string>, content: string) {
+  const matches = Array.from(document.head.querySelectorAll<HTMLMetaElement>(selector));
+  const meta = matches[0] ?? document.createElement('meta');
+
+  matches.slice(1).forEach((duplicate) => duplicate.remove());
+  Object.entries(attributes).forEach(([name, value]) => meta.setAttribute(name, value));
+  meta.content = content;
+
+  if (matches.length === 0) {
+    document.head.appendChild(meta);
+  }
+}
+
 export function HeadMeta({
   title,
   description,
@@ -45,37 +58,33 @@ export function HeadMeta({
     }
 
     if (description) {
-      let metaDesc = document.querySelector('meta[name="description"]') as HTMLMetaElement;
-      if (!metaDesc) {
-        metaDesc = document.createElement('meta');
-        metaDesc.name = 'description';
-        document.head.appendChild(metaDesc);
-      }
-      metaDesc.content = description;
+      upsertMetaTag('meta[name="description"]', { name: 'description' }, description);
     }
 
     // Robots — common on every path
-    let metaRobots = document.querySelector('meta[name="robots"]') as HTMLMetaElement;
-    if (!metaRobots) {
-      metaRobots = document.createElement('meta');
-      metaRobots.name = 'robots';
-      document.head.appendChild(metaRobots);
-    }
-    metaRobots.content = robots;
+    upsertMetaTag('meta[name="robots"]', { name: 'robots' }, robots);
 
     if (canonicalPath) {
-      let linkCanonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-      if (!linkCanonical) {
-        linkCanonical = document.createElement('link');
-        linkCanonical.rel = 'canonical';
-        document.head.appendChild(linkCanonical);
-      }
+      const canonicals = Array.from(document.head.querySelectorAll<HTMLLinkElement>('link[rel="canonical"]'));
+      const linkCanonical = canonicals[0] ?? document.createElement('link');
+      canonicals.slice(1).forEach((duplicate) => duplicate.remove());
       linkCanonical.href = canonicalPath.startsWith('http')
         ? canonicalPath
         : `${SITE_ORIGIN}${canonicalPath === '/' ? '/' : canonicalPath.replace(/\/$/, '')}`;
+      if (canonicals.length === 0) {
+        linkCanonical.rel = 'canonical';
+        document.head.appendChild(linkCanonical);
+      }
+      upsertMetaTag(
+        'meta[property="og:url"]',
+        { property: 'og:url' },
+        canonicalPath.startsWith('http')
+          ? canonicalPath
+          : `${SITE_ORIGIN}${canonicalPath === '/' ? '/' : canonicalPath.replace(/\/$/, '')}`,
+      );
     }
 
-    // Open Graph tags — set only when provided; remove otherwise (homepage only)
+    // Update provided social tags without removing unrelated document metadata.
     const ogTags: Record<string, string | undefined> = {
       'og:site_name': ogSiteName,
       'og:url': ogUrl,
@@ -84,22 +93,11 @@ export function HeadMeta({
       'og:image': ogImage,
     };
     Object.entries(ogTags).forEach(([property, value]) => {
-      const el = document.querySelector(`meta[property="${property}"]`) as HTMLMetaElement;
-      if (value) {
-        if (!el) {
-          const meta = document.createElement('meta');
-          meta.setAttribute('property', property);
-          meta.content = value;
-          document.head.appendChild(meta);
-        } else {
-          el.content = value;
-        }
-      } else if (el) {
-        el.remove();
+      if (value !== undefined) {
+        upsertMetaTag(`meta[property="${property}"]`, { property }, value);
       }
     });
 
-    // Twitter tags — set only when provided; remove otherwise (homepage only)
     const twitterTags: Record<string, string | undefined> = {
       'twitter:card': twitterCard,
       'twitter:site': twitterSite,
@@ -109,18 +107,8 @@ export function HeadMeta({
       'twitter:image': twitterImage,
     };
     Object.entries(twitterTags).forEach(([name, value]) => {
-      const el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement;
-      if (value) {
-        if (!el) {
-          const meta = document.createElement('meta');
-          meta.setAttribute('name', name);
-          meta.content = value;
-          document.head.appendChild(meta);
-        } else {
-          el.content = value;
-        }
-      } else if (el) {
-        el.remove();
+      if (value !== undefined) {
+        upsertMetaTag(`meta[name="${name}"]`, { name }, value);
       }
     });
   }, [

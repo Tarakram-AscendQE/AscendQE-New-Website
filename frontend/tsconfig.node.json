@@ -5,7 +5,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "types": ["node"]
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "outDir": "node_modules/.tmp/tsconfig.node"
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "src/data/pageSeo.json"]
 }
