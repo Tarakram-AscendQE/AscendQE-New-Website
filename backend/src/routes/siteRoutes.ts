@@ -9,17 +9,27 @@ import { ARTICLE_PREFIXES, ARTICLE_ROUTE, PAGE_ROUTES, REDIRECT_PREFIXES, REDIRE
 export const siteRouter = Router();
 
 const INDEX_PATH = path.join(config.frontendDistDir, 'index.html');
-let indexHtmlCache: string | null = null;
+const indexHtmlCache = new Map<string, string>();
 
-/** index.html of the build, read once. null when the frontend has not been built yet. */
-function readIndexHtml(): string | null {
-  if (indexHtmlCache === null && fs.existsSync(INDEX_PATH)) indexHtmlCache = fs.readFileSync(INDEX_PATH, 'utf8');
-  return indexHtmlCache;
+/** Read the route-specific prerendered page when available, falling back to the app entry point. */
+function readIndexHtml(pathname: string): string | null {
+  const routeIndexPath =
+    PAGE_ROUTES.has(pathname) && pathname !== '/'
+      ? path.join(config.frontendDistDir, pathname.slice(1), 'index.html')
+      : INDEX_PATH;
+  const htmlPath = fs.existsSync(routeIndexPath) ? routeIndexPath : INDEX_PATH;
+  const cachedHtml = indexHtmlCache.get(htmlPath);
+  if (cachedHtml !== undefined) return cachedHtml;
+  if (!fs.existsSync(htmlPath)) return null;
+
+  const html = fs.readFileSync(htmlPath, 'utf8');
+  indexHtmlCache.set(htmlPath, html);
+  return html;
 }
 
 /** index.html with this page's canonical URL (none on "Page not found", which is also noindex). */
 function sendPage(res: Response, status: number, pathname: string): void {
-  const indexHtml = readIndexHtml();
+  const indexHtml = readIndexHtml(pathname);
   if (!indexHtml) {
     res.status(503).type('text/plain').send('Frontend not built. Run `npm run build` (or use the Vite dev server).');
     return;

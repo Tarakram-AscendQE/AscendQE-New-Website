@@ -1,6 +1,7 @@
 import { HeadMeta } from '@/components/seo/HeadMeta';
 import { COMPANY_CONTACT } from '@/data/company';
 import type { LegalBlock, LegalDocumentContent } from '@/features/legal/legal-types';
+import { Mail, MapPin, Phone, ShieldCheck } from 'lucide-react';
 
 function Block({ block }: { block: LegalBlock }) {
   if (block.kind === 'h3') return <h3>{block.text}</h3>;
@@ -24,19 +25,28 @@ function ContactDetails() {
   return (
     <dl className="legal-contact">
       <div>
-        <dt>Email</dt>
+        <dt>
+          <Mail aria-hidden="true" />
+          Email
+        </dt>
         <dd>
           <a href={`mailto:${COMPANY_CONTACT.email}`}>{COMPANY_CONTACT.email}</a>
         </dd>
       </div>
       <div>
-        <dt>Phone</dt>
+        <dt>
+          <Phone aria-hidden="true" />
+          Phone
+        </dt>
         <dd>
           <a href={COMPANY_CONTACT.phoneHref}>{COMPANY_CONTACT.phoneLabel}</a>
         </dd>
       </div>
       <div>
-        <dt>Registered address</dt>
+        <dt>
+          <MapPin aria-hidden="true" />
+          Registered address
+        </dt>
         <dd>{COMPANY_CONTACT.address}</dd>
       </div>
     </dl>
@@ -55,23 +65,15 @@ export function LegalDocument({ content }: { content: LegalDocumentContent }) {
       <section className="hero legal-hero">
         <div className="wrap">
           <h1>{content.title}</h1>
-          <p className="legal-updated">Last updated {content.lastUpdated}</p>
+          <p className="legal-updated">
+            <ShieldCheck aria-hidden="true" />
+            Last updated {content.lastUpdated}
+          </p>
         </div>
       </section>
 
       <section className="band white legal-band">
-        <div className="wrap legal-layout">
-          <nav className="legal-toc" aria-label="On this page">
-            <p className="legal-toc-title">On this page</p>
-            <ol>
-              {content.sections.map((section) => (
-                <li key={section.id}>
-                  <a href={`#${section.id}`}>{section.title}</a>
-                </li>
-              ))}
-            </ol>
-          </nav>
-
+        <div className="wrap">
           <div className="legal-body">
             {content.sections.map((section, index) => (
               <section

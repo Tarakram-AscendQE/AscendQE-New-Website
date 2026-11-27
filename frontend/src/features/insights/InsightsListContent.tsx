@@ -1,9 +1,9 @@
 import { Search, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pagination } from '@/components/ui/Pagination';
 import { CardSkeletons } from '@/features/insights/CardSkeletons';
 import { InsightCard } from '@/features/insights/InsightCard';
 import { InsightsCta } from '@/features/insights/InsightsCta';
+import { InsightsPagination } from '@/features/insights/InsightsPagination';
 import { articleTopic } from '@/features/insights/insights-utils';
 import { blogService } from '@/services/blogService';
 import type { BlogItem } from '@/types/blog';
@@ -150,7 +150,13 @@ export function InsightsListContent() {
                     <InsightCard key={blog.blog_id} blog={blog} />
                   ))}
                 </div>
-                <Pagination className="mt32" page={page} totalPages={totalPages} onChange={changePage} />
+                <InsightsPagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={changePage}
+                  totalResults={filtered.length}
+                  resultsPerPage={PER_PAGE}
+                />
               </>
             )}
           </div>

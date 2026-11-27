@@ -4,9 +4,19 @@
   padding-bottom: clamp(32px, 5vw, 56px);
 }
 .legal-updated {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-top: 16px;
   color: var(--faint);
   font: 14px var(--f-mono);
+}
+.legal-updated svg,
+.legal-contact dt svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--accent);
 }
 .legal-band {
   padding-top: clamp(40px, 6vw, 72px);
@@ -134,6 +144,9 @@
   }
 }
 .legal-contact dt {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   color: var(--faint);
   font: 13px var(--f-mono);
   line-height: 1.8;

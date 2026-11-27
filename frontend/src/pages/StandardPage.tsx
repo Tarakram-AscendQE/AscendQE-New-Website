@@ -1,13 +1,14 @@
 import { HeadMeta } from '@/components/seo/HeadMeta';
 import { StandardContent } from '@/features/standard/StandardContent';
+import pageSeo from '@/data/pageSeo.json';
 
 export function StandardPage() {
   return (
     <>
       <HeadMeta
-        title={'The Proof Standard (PS-1) · AscendQE'}
-        description={"PS-1, AscendQE's published method for proving software and AI are ready to ship."}
-        canonicalPath="/standard"
+        {...pageSeo['/standard']}
+        ogDescription={pageSeo['/standard'].description}
+        twitterDescription={pageSeo['/standard'].description}
       />
       <StandardContent />
     </>

@@ -1,13 +1,14 @@
 import { HeadMeta } from '@/components/seo/HeadMeta';
 import { AboutContent } from '@/features/about/AboutContent';
+import pageSeo from '@/data/pageSeo.json';
 
 export function AboutPage() {
   return (
     <>
       <HeadMeta
-        title={'About · AscendQE'}
-        description={'AscendQE is a quality engineering firm for the AI era, founded in Hyderabad by NAG Pusuluri.'}
-        canonicalPath="/about"
+        {...pageSeo['/about']}
+        ogDescription={pageSeo['/about'].description}
+        twitterDescription={pageSeo['/about'].description}
       />
       <AboutContent />
     </>
