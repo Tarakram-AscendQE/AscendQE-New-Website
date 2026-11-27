@@ -1,12 +1,19 @@
-// Client for the backend email API (backend/, POST /api/send-mail).
+// Client for the backend email API (backend/, POST /api/send-mail). Used by the Contact page and the
+// Start page form; the backend emails the enquiry to hello@ascendqe.com.
 import { jsonBody, requestJson } from '@/services/http';
 
+/** Fields the backend accepts. Send either `name` (one field) or `firstName` + `lastName`. */
 export interface ContactEnquiry {
-  name: string;
+  name?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   company: string;
-  interest: string;
-  message: string;
+  jobTitle?: string;
+  application?: string;
+  interest?: string;
+  scope?: string;
+  message?: string;
 }
 
 export interface ApiResult {

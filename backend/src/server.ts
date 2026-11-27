@@ -31,9 +31,16 @@ app.use('/api', (_req, res) => {
 });
 
 // Article images stored on local disk (when R2/S3 is not configured). Missing images are a plain 404.
+// Browsers revalidate every time (ETag → 304 when unchanged), so a cover replaced under the same file name
+// shows up at once instead of after a 30-day cache.
 app.use(
   config.uploads.baseUrl,
-  express.static(config.uploads.dir, { index: false, redirect: false, maxAge: '30d', fallthrough: false })
+  express.static(config.uploads.dir, {
+    index: false,
+    redirect: false,
+    fallthrough: false,
+    setHeaders: (res) => res.setHeader('Cache-Control', 'no-cache'),
+  })
 );
 
 app.use(siteRouter);

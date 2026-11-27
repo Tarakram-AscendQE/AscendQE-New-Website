@@ -14,6 +14,7 @@ export const PAGE_ROUTES = new Set([
   '/privacy',
   '/terms',
   '/cookie-policy',
+  '/contact',
 ]);
 
 /** Insights article pages (/blogs/<slug>): index.html with a canonical URL; the app loads the article. */
@@ -37,7 +38,6 @@ export const REDIRECTS: Record<string, string> = {
   '/docs.html': '/standard',
   '/reference': '/standard',
   '/reference.html': '/standard',
-  '/contact': '/start',
   '/pricing': '/start',
   '/pricing.html': '/start',
   '/payoff': '/services',

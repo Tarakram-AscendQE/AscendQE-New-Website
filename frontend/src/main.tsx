@@ -6,6 +6,8 @@ import '@/styles/site.css';
 import '@/styles/lean.css';
 import '@/styles/layout.css';
 import '@/styles/legal.css';
+import '@/styles/about.css';
+import '@/styles/contact.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

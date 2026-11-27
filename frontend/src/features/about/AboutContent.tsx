@@ -1,4 +1,5 @@
-import nagPusuluriPhoto from '@/assets/about/nag-pusuluri.webp';
+import { LeaderProfile } from '@/features/about/LeaderProfile';
+import { LEADERS } from '@/features/about/leadership-data';
 import { Link } from 'react-router-dom';
 
 export function AboutContent() {
@@ -20,37 +21,10 @@ export function AboutContent() {
       </section>
       <section className="band white">
         <div className="wrap">
-          <div className="founder">
-            <div className="portrait portrait-photo">
-              <img
-                alt="NAG Pusuluri, Founder and CEO of AscendQE"
-                decoding="async"
-                loading="lazy"
-                src={nagPusuluriPhoto}
-              />
-            </div>{' '}
-            <div>
-              <p className="eyebrow">From the founder</p>
-              <h2>Why I started AscendQE.</h2>{' '}
-              <div className="mt24" style={{ maxWidth: '66ch' }}>
-                {' '}
-                <p>
-                  For most of my career I watched teams answer the wrong question. Leaders asked, “Can we ship this?”
-                  Teams answered with test counts and dashboards. Neither is a decision.
-                </p>{' '}
-                <p>
-                  AI has made that gap impossible to ignore. Code is written faster than anyone can review it, and AI
-                  agents now act inside businesses. What closes the gap is proof: a clear definition of ready, evidence
-                  anyone can check, and someone independent willing to sign the decision.
-                </p>{' '}
-                <p>That is what we do. Start with one system. I’ll be in the room for the readout.</p>{' '}
-                <p className="mt24" style={{ fontFamily: 'var(--f-head)', fontWeight: '600' }}>
-                  NAG Pusuluri
-                  <br />
-                  <span className="founder-role">Founder &amp; CEO, AscendQE</span>
-                </p>
-              </div>
-            </div>
+          <div className="leaders">
+            {LEADERS.map((person, index) => (
+              <LeaderProfile key={person.id} person={person} flip={index % 2 === 1} />
+            ))}
           </div>
         </div>
       </section>

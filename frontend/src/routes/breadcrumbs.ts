@@ -14,6 +14,7 @@ export const BREADCRUMB_LABELS: Record<string, string> = {
   '/about': 'About',
   '/standard': 'The Proof Standard',
   '/start': 'Start a Proof Sprint',
+  '/contact': 'Contact us',
   '/blogs': 'Insights',
   '/privacy': 'Privacy Policy',
   '/terms': 'Terms of Service',

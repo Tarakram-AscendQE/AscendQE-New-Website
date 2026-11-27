@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-do
 import { SiteLayout } from '@/layouts/SiteLayout';
 import { ArticleRedirect } from '@/routes/ArticleRedirect';
 import { AboutPage } from '@/pages/AboutPage';
+import { ContactPage } from '@/pages/ContactPage';
 import { CookiePolicyPage } from '@/pages/CookiePolicyPage';
 import { GccPage } from '@/pages/GccPage';
 import { HomePage } from '@/pages/HomePage';
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
       { path: 'about', element: <AboutPage /> },
       { path: 'standard', element: <StandardPage /> },
       { path: 'start', element: <StartPage /> },
+      { path: 'contact', element: <ContactPage /> },
       // Insights: the article page (TipTap) loads on demand
       { path: 'blogs', element: <InsightsPage /> },
       {
