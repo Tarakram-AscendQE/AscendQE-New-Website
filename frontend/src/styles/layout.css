@@ -1,0 +1,152 @@
+/* Site-wide layout pieces added to the Lean site: breadcrumbs, cookie consent banner, footer social links.
+   Loaded after site.css and lean.css; Lean tokens only. */
+
+/* ---------- breadcrumbs ---------- */
+.crumbbar {
+  padding-top: clamp(20px, 3vw, 32px);
+}
+.crumbbar ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--faint);
+  font: 14px var(--f-mono);
+}
+.crumbbar li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+}
+.crumbbar li + li::before {
+  content: '/';
+  color: var(--line);
+}
+.crumbbar a {
+  color: var(--faint);
+}
+.crumbbar a:hover {
+  color: var(--accent);
+}
+.crumbbar [aria-current='page'] {
+  max-width: 48ch;
+  overflow: hidden;
+  color: var(--ink);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The breadcrumb takes the place of the hero's top spacing. */
+.crumbbar + .hero {
+  padding-top: clamp(24px, 4vw, 48px);
+}
+@media (max-width: 520px) {
+  .crumbbar [aria-current='page'] {
+    max-width: 30ch;
+  }
+}
+
+/* ---------- cookie consent banner ---------- */
+.cookie {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  width: min(405px, calc(100vw - 32px));
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 24px 60px -24px rgba(13, 27, 42, 0.45);
+}
+.cookie:focus {
+  outline: none;
+}
+.cookie h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 21px;
+}
+.cookie h2 svg {
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
+}
+.cookie p {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.cookie a {
+  font-weight: 600;
+}
+.cookie .cookie-current {
+  color: var(--faint);
+  font: 13px var(--f-mono);
+}
+.cookie-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.cookie-actions .btn {
+  flex: 1;
+}
+@media (min-width: 640px) {
+  .cookie {
+    right: 24px;
+    bottom: 24px;
+    padding: 24px;
+  }
+}
+
+/* ---------- footer additions ---------- */
+.ftr .social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 20px 0 0 -8px;
+}
+.ftr .social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 40px;
+  padding: 0;
+  border-radius: 8px;
+  opacity: 0.8;
+  transition:
+    opacity 0.15s,
+    background-color 0.15s;
+}
+.ftr .social a:hover {
+  background: var(--band-line);
+  opacity: 1;
+}
+.ftr .social img {
+  /* Logos have different shapes (YouTube is wide): match their height, cap the width. */
+  width: auto;
+  height: 20px;
+  max-width: 26px;
+  object-fit: contain;
+}
+.ftr .cookie-settings {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.ftr .cookie-settings:hover {
+  color: var(--band-ink);
+}
