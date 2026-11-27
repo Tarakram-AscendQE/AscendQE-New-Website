@@ -38,5 +38,25 @@
     "title": "Insights · AscendQE",
     "description": "Articles from the AscendQE team on quality engineering for the AI era: AI agents, test intelligence and release decisions.",
     "canonicalPath": "/blogs"
+  },
+  "/contact": {
+    "title": "Contact AscendQE | AI Quality Engineering & Testing",
+    "description": "Connect with AscendQE to explore AI-powered quality engineering, test automation, GenAI testing, and intelligent software testing solutions.",
+    "canonicalPath": "/contact"
+  },
+  "/privacy": {
+    "title": "Privacy Policy · AscendQE",
+    "description": "Read the AscendQE Privacy Policy to understand how we collect, use, protect, and manage personal information and website data.",
+    "canonicalPath": "/privacy"
+  },
+  "/terms": {
+    "title": "Terms of Service · AscendQE",
+    "description": "Review the AscendQE Terms and Conditions governing the use of our website, platforms, services, and related offerings.",
+    "canonicalPath": "/terms"
+  },
+  "/cookie-policy": {
+    "title": "Cookie Policy · AscendQE",
+    "description": "Read the AscendQE Cookie Policy to understand how we use cookies and similar technologies, and how you can manage your preferences.",
+    "canonicalPath": "/cookie-policy"
   }
 }

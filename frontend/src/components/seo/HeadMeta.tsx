@@ -80,7 +80,7 @@ export function HeadMeta({
         { property: 'og:url' },
         canonicalPath.startsWith('http')
           ? canonicalPath
-          : `${SITE_ORIGIN}${canonicalPath === '/' ? '/' : canonicalPath.replace(/\/$/, '')}`,
+          : `${SITE_ORIGIN}${canonicalPath === '/' ? '/' : canonicalPath.replace(/\/$/, '')}`
       );
     }
 
